@@ -1,13 +1,32 @@
-import React from "react";
-import Button from "@src/components/ui/Button";
+import { useState, useEffect } from "react";
+import HeroSection from "@src/components/HeroSection";
+import Loader from "@src/components/ui/Loader";
+import GoToTopButton from "@src/components/ui/GoToTopButton";
 
-const HomePage = () => {
+const Home = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="container px-10 py-5 bg-amber-300 flex items-center justify-between">
-      <h2 className="font-bold text-xl">Quiz</h2>
-      <Button>Click Me</Button>
+    <div className="bg-white dark:bg-gray-900">
+      {/* Show Loader while isLoading is true */}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {/* Hero Section */}
+          <HeroSection />
+          <GoToTopButton />
+        </>
+      )}
     </div>
   );
 };
 
-export default HomePage;
+export default Home;
