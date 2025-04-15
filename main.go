@@ -3,28 +3,33 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/joho/godotenv"
+	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/pkg/log"
 )
 
 func main() {
-	mux := http.NewServeMux()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
+
+	cfg := configs.New()
 
 	serverShutdownCtx, serverShutdownCancle := context.WithTimeout(context.Background(), time.Second*5)
 	defer serverShutdownCancle()
 
 	opts := ServerOpts{
-		Address:        ":3000",
-		Handler:        mux,
-		ReadTimeout:    time.Second * 3,
-		WriteTimeout:   time.Second * 3,
-		IdleTimeout:    time.Second * 5,
-		MaxHeaderBytes: 3 << 20, // 3mb
+		Address:        cfg.Server.Address,
+		Handler:        nil,
+		ReadTimeout:    cfg.Server.ReadTimeout,
+		WriteTimeout:   cfg.Server.WriteTimeout,
+		IdleTimeout:    cfg.Server.IdleTimeout,
+		MaxHeaderBytes: cfg.Server.MaxHeaderBytes,
 		ShutdownCtx:    serverShutdownCtx,
 	}
 

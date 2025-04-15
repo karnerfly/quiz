@@ -38,3 +38,15 @@ func Error(v ...any) {
 func Errorf(format string, v ...any) {
 	defaultLogger.StderrLogger.Printf(format, v...)
 }
+
+func Fatalf(format string, v ...any) {
+	defaultLogger.StderrLogger.Fatalf(format, v...)
+}
+
+func Fatal(v ...any) {
+	defaultLogger.StderrLogger.Fatal(v...)
+}
+
+func Fatalln(v ...any) {
+	defaultLogger.StderrLogger.Fatalln(v...)
+}
