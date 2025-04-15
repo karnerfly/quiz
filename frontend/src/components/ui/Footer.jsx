@@ -76,7 +76,7 @@ export default function Footer() {
               alt="Company Logo" 
               className="h-8 mr-3"
             />
-            <span className="text-2xl font-bold text-blue-600">Logo</span>
+            <span className="text-2xl font-bold text-blue-600">VoteMaker</span>
           </div>
             </div>
             

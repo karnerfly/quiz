@@ -5,7 +5,7 @@ const HeroSection = () => {
     <section className="w-full h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-24 bg-[#f9f9f9] pt-20 md:pt-0">
       {/* Left Content */}
       <div className="flex-1 text-center md:text-left md:pl-12">
-        <h1 className="text-6xl md:text-7xl font-semibold leading-tight text-gray-900 mb-6">
+        <h1 className="text-7xl md:text-8xl font-semibold leading-tight text-gray-900 mb-6">
           Quiz Maker: Create a <br />
           quiz to challenge your <br />
           audience
@@ -21,7 +21,7 @@ const HeroSection = () => {
       {/* Right Image */}
       <div className="flex-1 mt-10 md:mt-0 flex justify-center items-center">
         <img
-          src="/hero-preview.png"
+          src="https://images.ctfassets.net/rvt0uslu5yqp/5Fkoz2vg8B856mMMmlKvDu/e92a19b31f3893aa4d55ebc3cb61fe51/Mentimeter_VisualAssets_Web_Survey_2023_03__1_.png?fm=webp&w=1920&q=75"
           alt="Quiz Maker Preview"
           className="max-w-full h-auto"
         />
