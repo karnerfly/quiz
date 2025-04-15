@@ -66,7 +66,7 @@ export default function Footer() {
       {/* Main Footer Content */}
       <div className="container mx-auto pt-20 pb-16 px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
-          {/* Company Info Column */}
+          {/* Info Column */}
           <div className="lg:col-span-4 space-y-8">
             <div className="flex items-center">
               {/* Logo */}
