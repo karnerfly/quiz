@@ -1,13 +1,13 @@
 all: clean build execute
 
 build:
-	@go build -o bin/main ./cmd/main/main.go
+	@go build -o bin/main .
 
 execute:
 	@./bin/main
 
 run:
-	@go run ./cmd/main
+	@go run .
 
 clean:
 	@$(RM) -r bin
