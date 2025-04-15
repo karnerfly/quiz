@@ -6,11 +6,10 @@ import GoToTopButton from "@src/components/ui/GoToTopButton";
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading for 2 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 
