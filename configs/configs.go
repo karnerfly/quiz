@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -14,8 +15,17 @@ type ServerConfig struct {
 	MaxHeaderBytes int
 }
 
+type RedisConfig struct {
+	Url            string
+	MaxConnections int
+	Username       string
+	Password       string
+}
+
 type Config struct {
-	Server ServerConfig
+	Server      ServerConfig
+	Redis       RedisConfig
+	Environment string
 }
 
 func New() Config {
@@ -27,6 +37,13 @@ func New() Config {
 			WriteTimeout:   time.Second * time.Duration(getEnvInt("WRITE_TIMEOUT", 3)),
 			MaxHeaderBytes: getEnvInt("MAX_HEADER_SIZE", 3<<20), // 3mb
 		},
+		Redis: RedisConfig{
+			Url:            getEnvStringMust("REDIS_URL"),
+			MaxConnections: getEnvIntMust("REDIS_CONNECTIONS"),
+			Username:       getEnvString("REDIS_USERNAME", ""),
+			Password:       getEnvString("REDIS_PASSWORD", ""),
+		},
+		Environment: getEnvStringMust("ENV"),
 	}
 }
 
@@ -41,7 +58,7 @@ func getEnvString(key, defaultValue string) string {
 func getEnvStringMust(key string) string {
 	v := os.Getenv(key)
 	if v == "" {
-		panic("missing env value")
+		panic(fmt.Sprintf("missing env value for key: %s", key))
 	}
 	return v
 }
@@ -62,7 +79,7 @@ func getEnvIntMust(key string) int {
 
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		panic("missing env value")
+		panic(fmt.Sprintf("missing env value for key: %s", key))
 	}
 
 	return i
