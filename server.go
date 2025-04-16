@@ -10,7 +10,7 @@ import (
 
 type ServerOpts struct {
 	Address        string
-	Handler        *http.ServeMux
+	Handler        http.Handler
 	IdleTimeout    time.Duration
 	WriteTimeout   time.Duration
 	ReadTimeout    time.Duration

@@ -8,9 +8,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/pkg/log"
+	"github.com/karnerfly/quiz/routes"
 )
 
 func main() {
@@ -20,12 +22,15 @@ func main() {
 
 	cfg := configs.New()
 
+	router := gin.Default()
+	routes.InitializeV1(router)
+
 	serverShutdownCtx, serverShutdownCancle := context.WithTimeout(context.Background(), time.Second*5)
 	defer serverShutdownCancle()
 
 	opts := ServerOpts{
 		Address:        cfg.Server.Address,
-		Handler:        nil,
+		Handler:        router,
 		ReadTimeout:    cfg.Server.ReadTimeout,
 		WriteTimeout:   cfg.Server.WriteTimeout,
 		IdleTimeout:    cfg.Server.IdleTimeout,
