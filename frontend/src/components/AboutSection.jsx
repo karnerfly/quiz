@@ -6,7 +6,7 @@ const AboutUs = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
+          <h2 className="mt-4 text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
             About Us
           </h2>
           <div className="w-20 h-1 bg-black mx-auto"></div>

@@ -39,7 +39,7 @@ export default function Header() {
             {/* Centered Nav Links */}
             <nav className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-8">
               <a href="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">About Us</a>
+              <a href="/Aboutus" className="text-gray-700 hover:text-blue-600 font-medium">About Us</a>
               
               {/* Features Dropdown */}
               <div className="relative">
@@ -63,7 +63,7 @@ export default function Header() {
                 )}
               </div>
 
-              <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">Contact Us</a>
+              <a href="/Contactus" className="text-gray-700 hover:text-blue-600 font-medium">Contact Us</a>
             </nav>
 
             {/* Right-aligned Button */}
