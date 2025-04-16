@@ -38,10 +38,11 @@ const FAQSection = () => {
           <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4">
             Frequently Asked Questions
           </h2>
-          <div className="w-20 h-1 bg-black mx-auto"></div>
+          
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Quick answers to common questions about our platform
           </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
         {/* FAQ Items */}

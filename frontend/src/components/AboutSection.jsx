@@ -9,10 +9,10 @@ const AboutUs = () => {
           <h2 className="mt-4 text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
             About Us
           </h2>
-          <div className="w-20 h-1 bg-black mx-auto"></div>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto">
             Everything you need to create engaging, interactive quizzes that your audience will love.
           </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
         {/* Content Grid */}

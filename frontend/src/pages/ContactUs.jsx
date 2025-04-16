@@ -4,7 +4,6 @@ import {
   faMapMarkerAlt,
   faPhoneAlt,
   faEnvelope,
-  faPaperPlane,
   faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,28 +11,13 @@ const ContactUs = () => {
   return (
     <section className="bg-gradient-to-br from-indigo-50 to-blue-100 py-20 px-6 md:px-24">
       <div className="max-w-7xl mx-auto">
-        {/* Breadcrumb */}
-        <div className="mb-8">
-          <nav className="flex items-center text-sm text-gray-600 space-x-2">
-            <a href="/" className="hover:text-indigo-700 flex items-center space-x-1">
-              <FontAwesomeIcon icon={faHome} />
-              <span>Home</span>
-            </a>
-            <span>/</span>
-            <span className="font-medium text-indigo-700">Contact Us</span>
-          </nav>
-        </div>
 
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-200 text-indigo-800 font-medium shadow mb-4">
-            <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
-            Let’s Connect
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="mt-4 text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
             Get in Touch with Us
           </h2>
-          <p className="text-gray-600 text-lg max-w-xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto">
             We'd love to hear from you! Whether you have questions or just want to say hello.
           </p>
           <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
