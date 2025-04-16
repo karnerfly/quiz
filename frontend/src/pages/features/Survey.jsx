@@ -8,7 +8,7 @@ import FeatureSection from "@src/components/FeatureSection";
 import HowItWorkSection from "@src/components/HowItWorkSection";
 import FaqSection from "@src/components/FaqSection";
 
-const Home = () => {
+const Survey = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -28,9 +28,9 @@ const Home = () => {
           {/* Hero Section */}
           
           <HeroSection
-            title="What will you ask your audience?"
-            description="Turn presentations into conversations with interactive polls, quiz, surveys and many more that engage meetings and classrooms."
-            buttonText="Get Started"
+            title="Interactive survey maker: Create surveys for free"
+            description="Quickly and easily gather feedback from everyone in your audience with Mentimeter’s interactive survey maker. Use a variety of slide types to collect and visualize your data."
+            buttonText="Create A Survey"
             buttonLink="/signup"
             imageUrl="https://images.ctfassets.net/rvt0uslu5yqp/6047gQPpJsgcyzjf9wAXqM/db81b77651b3c026e0c998457757afe1/Mentimeter_VisualAssets_Web_Survey_2023_01__1_.png?fm=webp&w=1920&q=75"
             imageAlt="Custom quiz interface"
@@ -48,4 +48,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Survey;
