@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Link } from "react-router";
+import { Menu, X, ChevronDown, ChevronUp } from "lucide-react";
+import { useAuth } from "@src/context/Auth";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,8 +13,8 @@ export default function Header() {
       setIsScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => {
@@ -24,8 +26,14 @@ export default function Header() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const { authenticated } = useAuth();
+
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-white py-4'}`}>
+    <header
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        isScrolled ? "bg-white shadow-md py-2" : "bg-white py-4"
+      }`}
+    >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -38,32 +46,63 @@ export default function Header() {
           <div className="hidden md:flex items-center justify-between w-full">
             {/* Centered Nav Links */}
             <nav className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-8">
-              <a href="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-              <a href="/Aboutus" className="text-gray-700 hover:text-blue-600 font-medium">About Us</a>
-              
+              <Link
+                to="/"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                Home
+              </Link>
+              <Link
+                to="/Aboutus"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                About Us
+              </Link>
+
               {/* Features Dropdown */}
               <div className="relative">
-                <button 
+                <button
                   onClick={toggleDropdown}
                   className="flex items-center text-gray-700 hover:text-blue-600 font-medium"
                 >
                   Features
-                  {isDropdownOpen ? 
-                    <ChevronUp className="ml-1 w-4 h-4" /> : 
+                  {isDropdownOpen ? (
+                    <ChevronUp className="ml-1 w-4 h-4" />
+                  ) : (
                     <ChevronDown className="ml-1 w-4 h-4" />
-                  }
+                  )}
                 </button>
-                
+
                 {isDropdownOpen && (
                   <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <a href="/features/Quiz" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Quiz</a>
-                    <a href="/features/Survey" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Survey</a>
-                    <a href="/features/Poll" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Poll</a>
+                    <Link
+                      to="/features/quiz"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Create Quiz
+                    </Link>
+                    <Link
+                      to="/features/survey"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Create Survey
+                    </Link>
+                    <Link
+                      to="/features/poll"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Create Poll
+                    </Link>
                   </div>
                 )}
               </div>
 
-              <a href="/Contactus" className="text-gray-700 hover:text-blue-600 font-medium">Contact Us</a>
+              <Link
+                to="/Contactus"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                Contact Us
+              </Link>
             </nav>
 
             {/* Right-aligned Button */}
@@ -76,14 +115,15 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button 
+            <button
               onClick={toggleMenu}
               className="text-gray-700 hover:text-blue-600 focus:outline-none"
             >
-              {isMenuOpen ? 
-                <X className="w-6 h-6" /> : 
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
                 <Menu className="w-6 h-6" />
-              }
+              )}
             </button>
           </div>
         </div>
@@ -91,35 +131,66 @@ export default function Header() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4">
-            <a href="#" className="block py-2 text-gray-700 hover:text-blue-600 font-medium">Home</a>
-            <a href="#" className="block py-2 text-gray-700 hover:text-blue-600 font-medium">About Us</a>
-            
+            <Link
+              to="#"
+              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+            >
+              Home
+            </Link>
+            <Link
+              to="#"
+              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+            >
+              About Us
+            </Link>
+
             {/* Mobile Features Dropdown */}
             <div>
-              <button 
+              <button
                 onClick={toggleDropdown}
                 className="flex items-center w-full py-2 text-gray-700 hover:text-blue-600 font-medium"
               >
                 Features
-                {isDropdownOpen ? 
-                  <ChevronUp className="ml-1 w-4 h-4" /> : 
+                {isDropdownOpen ? (
+                  <ChevronUp className="ml-1 w-4 h-4" />
+                ) : (
                   <ChevronDown className="ml-1 w-4 h-4" />
-                }
+                )}
               </button>
-              
+
               {isDropdownOpen && (
                 <div className="pl-4">
-                  <a href="#" className="block py-2 text-gray-700 hover:text-blue-600">Create Quiz</a>
-                  <a href="#" className="block py-2 text-gray-700 hover:text-blue-600">Create Survey</a>
-                  <a href="#" className="block py-2 text-gray-700 hover:text-blue-600">Create Poll</a>
+                  <Link
+                    to="/features/quiz"
+                    className="block py-2 text-gray-700 hover:text-blue-600"
+                  >
+                    Create Quiz
+                  </Link>
+                  <Link
+                    to="/features/survey"
+                    className="block py-2 text-gray-700 hover:text-blue-600"
+                  >
+                    Create Survey
+                  </Link>
+                  <Link
+                    to="/features/poll"
+                    className="block py-2 text-gray-700 hover:text-blue-600"
+                  >
+                    Create Poll
+                  </Link>
                 </div>
               )}
             </div>
-            
-            <a href="#" className="block py-2 text-gray-700 hover:text-blue-600 font-medium">Contact Us</a>
-            
+
+            <Link
+              to="#"
+              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+            >
+              Contact Us
+            </Link>
+
             <div className="border-t border-gray-200 my-2"></div>
-            
+
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full mt-2 transition duration-300">
               Create Account
             </button>
