@@ -5,7 +5,7 @@ const HeroSection = () => {
     <section className="w-full h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-24 bg-[#f9f9f9] pt-20 md:pt-0">
       {/* Left Content */}
       <div className="flex-1 text-center md:text-left md:pl-12">
-        <h1 className="text-5xl md:text-8xl font-semibold leading-tight text-gray-900 mb-6">
+        <h1 className="text-5xl md:text-5xl font-semibold leading-tight text-gray-900 mb-6">
           Quiz Maker: Create a <br />
           quiz to challenge your <br />
           audience

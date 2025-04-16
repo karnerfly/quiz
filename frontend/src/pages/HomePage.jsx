@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
-import HeroSection from "@src/components/HeroSection";
 import Loader from "@src/components/ui/Loader";
 import GoToTopButton from "@src/components/ui/GoToTopButton";
+
+import HeroSection from "@src/components/HeroSection";
+import AboutSection from "@src/components/AboutSection";
+import FeatureSection from "@src/components/FeatureSection";
+import HowItWorkSection from "@src/components/HowItWorkSection";
+import FaqSection from "@src/components/FaqSection";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +27,12 @@ const Home = () => {
         <>
           {/* Hero Section */}
           <HeroSection />
+          <AboutSection />
+          <FeatureSection />
+          <HowItWorkSection />
+          <FaqSection />
+
+
           <GoToTopButton />
         </>
       )}
