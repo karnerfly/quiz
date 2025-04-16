@@ -9,6 +9,9 @@ import Quiz from "./pages/features/Quiz";
 import Poll from "./pages/features/Poll";
 import Survey from "./pages/features/Survey";
 import Protected from "./pages/layouts/Protected";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login"
+import ForgotPass from "./pages/auth/ForgotPass";
 
 const App = () => {
   return (
@@ -31,6 +34,10 @@ const App = () => {
               </div>
             }
           />
+          <Route path="auth/register" element={<Register />} />
+          <Route path="auth/login" element={<Login />} />
+          <Route path="auth/forgotpass" element={<ForgotPass />} />
+
         </Route>
       </Route>
     </Routes>

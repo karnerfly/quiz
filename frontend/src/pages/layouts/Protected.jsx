@@ -1,14 +1,15 @@
 import React from "react";
 import { useAuth } from "@src/context/Auth";
 import { Navigate, Outlet } from "react-router";
+import Login from "@src/pages/auth/Login";
 
 const Protected = () => {
   const { authenticated } = useAuth();
-  if (authenticated == undefined) {
+  if (authenticated == false) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-gray-900 text-xl">loading..</p>
-      </div>
+      <>
+      <Login />
+      </>
     );
   }
 

@@ -234,7 +234,7 @@ export default function Header() {
             
             <div className="space-y-4">
               <Link
-                to="/login/student"
+                to="/auth/forgotpass"
                 className="block bg-blue-100/80 hover:bg-blue-200/90 text-blue-800 font-medium py-3 px-4 rounded-lg transition-all duration-300 text-center"
                 onClick={toggleAuthPopup}
               >
@@ -242,7 +242,7 @@ export default function Header() {
               </Link>
               
               <Link
-                to="/login/teacher"
+                to="/auth/login"
                 className="block bg-green-100/80 hover:bg-green-200/90 text-green-800 font-medium py-3 px-4 rounded-lg transition-all duration-300 text-center"
                 onClick={toggleAuthPopup}
               >
@@ -253,7 +253,7 @@ export default function Header() {
             <p className="text-center text-gray-500 mt-6">
               Don't have an account?{' '}
               <Link 
-                to="/register" 
+                to="/auth/register" 
                 className="text-blue-600 hover:underline"
                 onClick={toggleAuthPopup}
               >
