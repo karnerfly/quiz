@@ -14,7 +14,7 @@ const Survey = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -26,7 +26,7 @@ const Survey = () => {
       ) : (
         <>
           {/* Hero Section */}
-          
+
           <HeroSection
             title="Interactive survey maker: Create surveys for free"
             description="Quickly and easily gather feedback from everyone in your audience with Mentimeter’s interactive survey maker. Use a variety of slide types to collect and visualize your data."
@@ -39,7 +39,6 @@ const Survey = () => {
           <FeatureSection />
           <HowItWorkSection />
           <FaqSection />
-
 
           <GoToTopButton />
         </>

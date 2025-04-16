@@ -10,14 +10,14 @@ const ContactUs = () => {
   return (
     <section className="bg-gradient-to-br from-indigo-50 to-blue-100 py-20 px-6 md:px-24">
       <div className="max-w-7xl mx-auto">
-
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="mt-4 text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
             Get in Touch with Us
           </h2>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-            We'd love to hear from you! Whether you have questions or just want to say hello.
+            We'd love to hear from you! Whether you have questions or just want
+            to say hello.
           </p>
           <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
@@ -28,7 +28,9 @@ const ContactUs = () => {
             <form>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Name</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Name
+                  </label>
                   <input
                     type="text"
                     placeholder="John Doe"
@@ -36,7 +38,9 @@ const ContactUs = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Email</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Email
+                  </label>
                   <input
                     type="email"
                     placeholder="john@example.com"
@@ -45,7 +49,9 @@ const ContactUs = () => {
                 </div>
               </div>
               <div className="mt-6">
-                <label className="text-sm font-medium text-gray-700">Subject</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Subject
+                </label>
                 <input
                   type="text"
                   placeholder="Your Subject"
@@ -53,7 +59,9 @@ const ContactUs = () => {
                 />
               </div>
               <div className="mt-6">
-                <label className="text-sm font-medium text-gray-700">Message</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Message
+                </label>
                 <textarea
                   rows="5"
                   placeholder="Your message..."
@@ -74,13 +82,16 @@ const ContactUs = () => {
           {/* Contact Info */}
           <div className="space-y-8">
             <div className="bg-white p-8 rounded-2xl shadow-xl">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Contact Info</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+                Contact Info
+              </h3>
               <div className="space-y-6">
                 {[
                   {
                     icon: faMapMarkerAlt,
                     title: "Address",
-                    content: "123 Education Street, Knowledge City, India - 123456",
+                    content:
+                      "123 Education Street, Knowledge City, India - 123456",
                   },
                   {
                     icon: faPhoneAlt,
@@ -99,7 +110,9 @@ const ContactUs = () => {
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-800">{title}</h4>
-                      <p className="text-gray-600 whitespace-pre-line">{content}</p>
+                      <p className="text-gray-600 whitespace-pre-line">
+                        {content}
+                      </p>
                     </div>
                   </div>
                 ))}
