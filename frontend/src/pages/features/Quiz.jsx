@@ -14,7 +14,7 @@ const Quiz = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -26,7 +26,7 @@ const Quiz = () => {
       ) : (
         <>
           {/* Hero Section */}
-          
+
           <HeroSection
             title="Quiz Maker: Create a quiz to challenge your audience"
             description="Make fun interactive quizzes to test your colleagues’ knowledge, run a quiz night with friends, or help students study."
@@ -39,7 +39,6 @@ const Quiz = () => {
           <FeatureSection />
           <HowItWorkSection />
           <FaqSection />
-
 
           <GoToTopButton />
         </>

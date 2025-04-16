@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -26,7 +26,7 @@ const Home = () => {
       ) : (
         <>
           {/* Hero Section */}
-          
+
           <HeroSection
             title="What will you ask your audience?"
             description="Turn presentations into conversations with interactive polls, quiz, surveys and many more that engage meetings and classrooms."
@@ -39,7 +39,6 @@ const Home = () => {
           <FeatureSection />
           <HowItWorkSection />
           <FaqSection />
-
 
           <GoToTopButton />
         </>
