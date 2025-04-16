@@ -1,52 +1,56 @@
 package log
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
 
+const (
+	colorRed    = "\033[31m"
+	colorReset  = "\033[0m"
+	errorPrefix = "[ERROR]::"
+	infoPrefix  = "[INFO]::"
+)
+
 type Logger struct {
-	StdoutLogger *log.Logger
-	StderrLogger *log.Logger
+	stdout *log.Logger
+	stderr *log.Logger
 }
 
-var defaultLogger Logger
-
-func init() {
-	defaultLogger = Logger{
-		StdoutLogger: log.New(os.Stdout, "[INFO]::", 1),
-		StderrLogger: log.New(os.Stderr, "[ERROR]::", 1),
-	}
+var defaultLogger = Logger{
+	stdout: log.New(os.Stdout, infoPrefix, log.LstdFlags),
+	stderr: log.New(os.Stderr, fmt.Sprintf("%s%s", colorRed, errorPrefix), log.LstdFlags),
 }
 
 func Print(v ...any) {
-	defaultLogger.StdoutLogger.Print(v...)
+	defaultLogger.stdout.Print(v...)
 }
 
 func Printf(format string, v ...any) {
-	defaultLogger.StdoutLogger.Printf(format, v...)
+	defaultLogger.stdout.Printf(format, v...)
 }
 
 func Println(v ...any) {
-	defaultLogger.StdoutLogger.Println(v...)
+	defaultLogger.stdout.Println(v...)
 }
 
 func Error(v ...any) {
-	defaultLogger.StderrLogger.Println(v...)
+	defaultLogger.stderr.Println(append(v, colorReset)...)
 }
 
 func Errorf(format string, v ...any) {
-	defaultLogger.StderrLogger.Printf(format, v...)
-}
-
-func Fatalf(format string, v ...any) {
-	defaultLogger.StderrLogger.Fatalf(format, v...)
+	defaultLogger.stderr.Printf(format, append(v, colorReset)...)
 }
 
 func Fatal(v ...any) {
-	defaultLogger.StderrLogger.Fatal(v...)
+	defaultLogger.stderr.Fatal(append(v, colorReset)...)
+}
+
+func Fatalf(format string, v ...any) {
+	defaultLogger.stderr.Fatalf(fmt.Sprintf("%s%s", format, colorReset), v...)
 }
 
 func Fatalln(v ...any) {
-	defaultLogger.StderrLogger.Fatalln(v...)
+	defaultLogger.stderr.Fatalln(append(v, colorReset)...)
 }

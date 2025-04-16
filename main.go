@@ -13,6 +13,7 @@ import (
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/pkg/log"
 	"github.com/karnerfly/quiz/routes"
+	"github.com/karnerfly/quiz/store"
 )
 
 func main() {
@@ -23,7 +24,13 @@ func main() {
 	cfg := configs.New()
 
 	router := gin.Default()
-	routes.InitializeV1(router)
+
+	if err := store.InitializeSession(router, cfg); err != nil {
+		log.Fatal(err)
+	}
+
+	// Initialize routes
+	routes.InitializeV1(router, cfg)
 
 	serverShutdownCtx, serverShutdownCancle := context.WithTimeout(context.Background(), time.Second*5)
 	defer serverShutdownCancle()
@@ -38,6 +45,7 @@ func main() {
 		ShutdownCtx:    serverShutdownCtx,
 	}
 
+	// Create Server
 	server := CreateServer(opts)
 
 	go func() {
