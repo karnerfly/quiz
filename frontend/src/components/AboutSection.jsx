@@ -21,7 +21,7 @@ const AboutUs = () => {
           <div className="flex-1">
             <div className="bg-[#f9f9f9] p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
               <img
-                src="https://images.ctfassets.net/rvt0uslu5yqp/6wQ3h5iQjY8QlS4j5Xq5jR/5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a/Mentimeter_VisualAssets_Web_Quiz_2023_03__1_.png?fm=webp&w=1920&q=75"
+                src="https://images.ctfassets.net/rvt0uslu5yqp/4uJKnYZaVGYemyF3eVQheb/fef30c31f64ad458c5545593fb7d9262/Mentimeter_Web_Live-Polling_2022_03__2_.svg?&w=1080&q=75"
                 alt="Team collaborating on quizzes"
                 className="w-full h-auto rounded-lg"
               />

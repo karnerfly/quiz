@@ -28,9 +28,9 @@ const Poll = () => {
           {/* Hero Section */}
           
           <HeroSection
-            title="What will you ask your audience?"
-            description="Turn presentations into conversations with interactive polls, quiz, surveys and many more that engage meetings and classrooms."
-            buttonText="Get Started"
+            title="Poll maker - Create interactive polls"
+            description="Mentimeter gives you the power to design a wide variety of interactive polls. Polling your audience can be the most effective way to increase engagement and make a presentation dynamic and memorable."
+            buttonText="Create A Poll"
             buttonLink="/signup"
             imageUrl="https://images.ctfassets.net/rvt0uslu5yqp/6047gQPpJsgcyzjf9wAXqM/db81b77651b3c026e0c998457757afe1/Mentimeter_VisualAssets_Web_Survey_2023_01__1_.png?fm=webp&w=1920&q=75"
             imageAlt="Custom quiz interface"
