@@ -4,7 +4,6 @@ import {
   faMapMarkerAlt,
   faPhoneAlt,
   faEnvelope,
-  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ContactUs = () => {
