@@ -5,7 +5,6 @@ import {
   Mail, 
   Clock, 
   ChevronRight, 
-  GraduationCap 
 } from 'lucide-react';
 
 // Social media icons components
@@ -72,7 +71,7 @@ export default function Footer() {
               {/* Logo */}
           <div className="flex items-center">
             <img 
-              src="public/quiz.png" 
+              src="/quiz.png" 
               alt="Company Logo" 
               className="h-8 mr-3"
             />
@@ -125,7 +124,7 @@ export default function Footer() {
             <div>
               <h3 className="text-lg font-bold text-gray-800 mb-6 pb-2 border-b border-blue-500/30">Quick Links</h3>
               <ul className="space-y-3">
-                {['Home', 'About', 'Why Us', 'Team', 'Gallery', 'FAQ', 'Contact'].map((item) => (
+                {['Home', 'About', 'Why Us', 'Features', 'Gallery', 'FAQ', 'Contact'].map((item) => (
                   <li key={item}>
                     <a 
                       href="#"
