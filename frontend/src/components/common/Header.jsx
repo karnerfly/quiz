@@ -30,7 +30,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <img src="public/quiz.png" alt="Company Logo" className="h-8 mr-3" />
+            <img src="/quiz.png" alt="Company Logo" className="h-8 mr-3" />
             <span className="text-2xl font-bold text-blue-600">VoteMaker</span>
           </div>
 
@@ -38,7 +38,7 @@ export default function Header() {
           <div className="hidden md:flex items-center justify-between w-full">
             {/* Centered Nav Links */}
             <nav className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-8">
-              <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+              <a href="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</a>
               <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">About Us</a>
               
               {/* Features Dropdown */}
@@ -56,9 +56,9 @@ export default function Header() {
                 
                 {isDropdownOpen && (
                   <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Quiz</a>
-                    <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Survey</a>
-                    <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Poll</a>
+                    <a href="/features/Quiz" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Quiz</a>
+                    <a href="/features/Survey" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Survey</a>
+                    <a href="/features/Poll" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Create Poll</a>
                   </div>
                 )}
               </div>

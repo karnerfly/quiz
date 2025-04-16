@@ -8,7 +8,7 @@ import FeatureSection from "@src/components/FeatureSection";
 import HowItWorkSection from "@src/components/HowItWorkSection";
 import FaqSection from "@src/components/FaqSection";
 
-const Home = () => {
+const Poll = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -48,4 +48,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Poll;

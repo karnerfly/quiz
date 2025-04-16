@@ -72,7 +72,7 @@ export default function Footer() {
               {/* Logo */}
           <div className="flex items-center">
             <img 
-              src="public/quiz.png" 
+              src="/quiz.png" 
               alt="Company Logo" 
               className="h-8 mr-3"
             />
