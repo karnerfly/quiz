@@ -137,7 +137,7 @@ const Login = () => {
                     Password
                   </label>
                   <a
-                    href="/auth/forgotpass"
+                    href="/auth/forgotpassword"
                     className="text-sm font-medium text-indigo-600 hover:text-indigo-500 hover:underline"
                   >
                     Forgot password?
@@ -171,7 +171,7 @@ const Login = () => {
               <div className="text-center text-sm text-gray-600">
                 Don't have an account?{" "}
                 <a
-                  href="/auth/register"
+                  href="/auth/signup"
                   className="font-medium text-black hover:underline"
                 >
                   Sign up

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Loader from "@src/components/ui/Loader";
+import Loader from "@src/components/ui/LandingLoader ";
 import GoToTopButton from "@src/components/ui/GoToTopButton";
 
 import HeroSection from "@src/components/HeroSection";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Loader from "@src/components/ui/Loader";
+import LandingLoader from "@src/components/ui/LandingLoader ";
 import GoToTopButton from "@src/components/ui/GoToTopButton";
 
 import HeroSection from "@src/components/HeroSection";
@@ -23,7 +23,7 @@ const Home = () => {
       {/* Full-screen black overlay with loader */}
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-          <Loader />
+          <LandingLoader />
         </div>
       )}
 
