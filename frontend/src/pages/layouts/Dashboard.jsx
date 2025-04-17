@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import DbHeader from "@src/components/dashboard/DbHeader";
 import DbSidebar from "@src/components/dashboard/DbSidebar";
 

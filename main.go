@@ -11,6 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/karnerfly/quiz/configs"
+	"github.com/karnerfly/quiz/db"
+	"github.com/karnerfly/quiz/models"
 	"github.com/karnerfly/quiz/pkg/log"
 	"github.com/karnerfly/quiz/routes"
 	"github.com/karnerfly/quiz/store"
@@ -26,6 +28,17 @@ func main() {
 	router := gin.Default()
 
 	if err := store.InitializeSession(router, cfg); err != nil {
+		log.Fatal(err)
+	}
+
+	dbClient, err := db.CreateDatabaseClient(cfg.Db.Url, cfg.Db.MaxConnections)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("database connected")
+
+	err = db.Migrate(dbClient, &models.User{})
+	if err != nil {
 		log.Fatal(err)
 	}
 

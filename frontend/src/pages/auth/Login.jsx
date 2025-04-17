@@ -79,7 +79,7 @@ const Login = () => {
       });
 
       // should navigate to user dashboard
-      navigate("/protected", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   };
 

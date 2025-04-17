@@ -18,8 +18,8 @@ import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
-import DbHome from "./pages/users/DbHome"
-
+import Dashboard from "./pages/layouts/Dashboard";
+import DbHome from "./pages/users/DbHome";
 
 // const App = () => {
 //   return (
@@ -124,15 +124,41 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // protected routes
+      // dashboard route
       {
         path: "dashboard",
-        element: (
-          <Protected>
-              <DbHome />
-          </Protected>
-        ),
+        element: <Dashboard />,
+        children: [
+          {
+            path: "",
+            element: (
+              <Protected>
+                <DbHome />
+              </Protected>
+            ),
+          },
+          {
+            path: "profile",
+            element: (
+              <Protected>
+                <div className="h-full flex items-center justify-center">
+                  <p className="text-white">Profile of the User</p>
+                </div>
+              </Protected>
+            ),
+          },
+        ],
       },
+
+      // // protected routes
+      // {
+      //   path: "dashboard",
+      //   element: (
+      //     <Protected>
+      //       <DbHome />
+      //     </Protected>
+      //   ),
+      // },
     ],
   },
 ]);
