@@ -1,47 +1,52 @@
-import React, { useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
+import React, { useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
+import { useAuth } from "@src/context/Auth";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear errors when typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { email: '', password: '' };
+    const newErrors = { email: "", password: "" };
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       valid = false;
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
       valid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
       valid = false;
     }
 
@@ -51,30 +56,37 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
+      // simulate login
+      const token = btoa(JSON.stringify(formData));
+      console.log("token", token);
+      localStorage.setItem("token", token);
+      setToken(token);
+
       // Simulate successful login
-      toast.success('Logged in successfully!', {
+      toast.success("Logged in successfully!", {
         duration: 4000,
-        position: 'top-center',
+        position: "top-center",
         style: {
-          background: '#10B981',
-          color: '#FFFFFF',
-          fontWeight: '500',
-          borderRadius: '9999px',
-          padding: '16px 24px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-        }
+          background: "#10B981",
+          color: "#FFFFFF",
+          fontWeight: "500",
+          borderRadius: "9999px",
+          padding: "16px 24px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        },
       });
 
-      console.log('Login form submitted:', formData);
+      // should navigate to user dashboard
+      navigate("/protected", { replace: true });
     }
   };
 
   return (
     <>
       <Toaster />
-      
+
       <section className="w-full py-20 px-6 md:px-24 bg-[#f9f9f9] min-h-screen flex items-center justify-center">
         <div className="max-w-2xl w-full">
           {/* Header */}
@@ -93,7 +105,10 @@ const Login = () => {
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Email Address
                 </label>
                 <input
@@ -102,7 +117,9 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-black focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
                   placeholder="your@email.com"
                 />
                 {errors.email && (
@@ -113,7 +130,10 @@ const Login = () => {
               {/* Password Field */}
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Password
                   </label>
                   <a
@@ -129,7 +149,9 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-black focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
                   placeholder="••••••••"
                 />
                 {errors.password && (
@@ -147,8 +169,11 @@ const Login = () => {
 
               {/* Register Link */}
               <div className="text-center text-sm text-gray-600">
-                Don't have an account?{' '}
-                <a href="/auth/register" className="font-medium text-black hover:underline">
+                Don't have an account?{" "}
+                <a
+                  href="/auth/register"
+                  className="font-medium text-black hover:underline"
+                >
                   Sign up
                 </a>
               </div>

@@ -13,14 +13,18 @@ const (
 	infoPrefix  = "[INFO]::"
 )
 
-type Logger struct {
+type logger struct {
 	stdout *log.Logger
 	stderr *log.Logger
 }
 
-var defaultLogger = Logger{
-	stdout: log.New(os.Stdout, infoPrefix, log.LstdFlags),
-	stderr: log.New(os.Stderr, fmt.Sprintf("%s%s", colorRed, errorPrefix), log.LstdFlags),
+var defaultLogger logger
+
+func init() {
+	defaultLogger = logger{
+		stdout: log.New(os.Stdout, infoPrefix, log.LstdFlags),
+		stderr: log.New(os.Stderr, fmt.Sprintf("%s%s", colorRed, errorPrefix), log.LstdFlags),
+	}
 }
 
 func Print(v ...any) {
