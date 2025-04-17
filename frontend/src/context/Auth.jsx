@@ -1,42 +1,34 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-const AuthContext = createContext({
-  authenticated: null,
-  login: () => {},
-  logout: () => {},
-});
+const AuthContext = createContext(undefined);
+
+export const useAuth = () => {
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error("useAuth hook must be inside in AuthProvider");
+  }
+
+  return authContext;
+};
 
 const AutheProvider = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState();
+  const [token, setToken] = useState();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      const state = localStorage.getItem("auth") || false;
-      setAuthenticated(state);
+      const token = localStorage.getItem("token");
+      setToken(token);
 
       return () => clearTimeout(timeout);
     }, 1000);
   }, []);
 
-  const login = () => {
-    localStorage.setItem("auth", true);
-    setAuthenticated(true);
-  };
-
-  const logout = () => {
-    localStorage.setItem("auth", false);
-    setAuthenticated(false);
-  };
-
   return (
-    <AuthContext.Provider value={{ authenticated, login, logout }}>
+    <AuthContext.Provider value={{ token, setToken }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
 };
 
 export default AutheProvider;
