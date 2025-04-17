@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
+import React, { useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Simple validation
     if (!email) {
-      setError('Email is required');
+      setError("Email is required");
       return;
     }
-    
+
     if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError('Please enter a valid email address');
+      setError("Please enter a valid email address");
       return;
     }
 
     // Simulate API call
-    toast.success('Password reset link sent to your email!', {
+    toast.success("Password reset link sent to your email!", {
       duration: 4000,
-      position: 'top-center',
+      position: "top-center",
       style: {
-        background: '#10B981',
-        color: '#FFFFFF',
-        fontWeight: '500',
-        borderRadius: '9999px',
-        padding: '16px 24px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-      }
+        background: "#10B981",
+        color: "#FFFFFF",
+        fontWeight: "500",
+        borderRadius: "9999px",
+        padding: "16px 24px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+      },
     });
 
     setIsSubmitted(true);
-    setError('');
+    setError("");
   };
 
   return (
     <>
       <Toaster />
-      
+
       <section className="w-full py-20 px-6 md:px-24 bg-[#f9f9f9] min-h-screen flex items-center justify-center">
         <div className="max-w-2xl w-full">
           {/* Header */}
@@ -79,7 +79,8 @@ const ForgotPassword = () => {
                   Check Your Email
                 </h3>
                 <p className="text-gray-600">
-                  We've sent a password reset link to <span className="font-medium">{email}</span>
+                  We've sent a password reset link to{" "}
+                  <span className="font-medium">{email}</span>
                 </p>
                 <a
                   href="/login"
@@ -91,7 +92,10 @@ const ForgotPassword = () => {
             ) : (
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email Address
                   </label>
                   <input
@@ -100,9 +104,11 @@ const ForgotPassword = () => {
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
-                      setError('');
+                      setError("");
                     }}
-                    className={`w-full px-4 py-3 rounded-lg border ${error ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-black focus:border-transparent`}
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      error ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-black focus:border-transparent`}
                     placeholder="your@email.com"
                   />
                   {error && (
@@ -118,8 +124,11 @@ const ForgotPassword = () => {
                 </button>
 
                 <div className="text-center text-sm text-gray-600">
-                  Remember your password?{' '}
-                  <a href="/login" className="font-medium text-black hover:underline">
+                  Remember your password?{" "}
+                  <a
+                    href="/login"
+                    className="font-medium text-black hover:underline"
+                  >
                     Sign in
                   </a>
                 </div>

@@ -1,56 +1,65 @@
-import React, { useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
+import React, { useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 
-const RegisterPage = () => {
+const Signup = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    password: '',
-    confirmPassword: ''
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({
-    password: '',
-    confirmPassword: ''
+    password: "",
+    confirmPassword: "",
   });
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
-    if (name === 'password') {
+    if (name === "password") {
       if (value.length > 0 && !validatePassword(value)) {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          password: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+          password:
+            "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
         }));
       } else {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          password: ''
+          password: "",
         }));
       }
     }
 
-    if (name === 'confirmPassword' || (name === 'password' && formData.confirmPassword)) {
-      if (name === 'password' ? value !== formData.confirmPassword : value !== formData.password) {
-        setErrors(prev => ({
+    if (
+      name === "confirmPassword" ||
+      (name === "password" && formData.confirmPassword)
+    ) {
+      if (
+        name === "password"
+          ? value !== formData.confirmPassword
+          : value !== formData.password
+      ) {
+        setErrors((prev) => ({
           ...prev,
-          confirmPassword: 'Passwords do not match'
+          confirmPassword: "Passwords do not match",
         }));
       } else {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          confirmPassword: ''
+          confirmPassword: "",
         }));
       }
     }
@@ -58,46 +67,47 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validatePassword(formData.password)) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        password: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+        password:
+          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
       }));
       return;
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        confirmPassword: 'Passwords do not match'
+        confirmPassword: "Passwords do not match",
       }));
       return;
     }
 
     // Simulate successful signup
-    toast.success('Account created successfully! Redirecting...', {
+    toast.success("Account created successfully! Redirecting...", {
       duration: 4000,
-      position: 'top-center',
+      position: "top-center",
       style: {
-        background: '#10B981',
-        color: '#FFFFFF',
-        fontWeight: '500',
-        borderRadius: '9999px',
-        padding: '16px 24px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-      }
+        background: "#10B981",
+        color: "#FFFFFF",
+        fontWeight: "500",
+        borderRadius: "9999px",
+        padding: "16px 24px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+      },
     });
 
-    console.log('Form submitted:', formData);
-    
+    console.log("Form submitted:", formData);
+
     // Reset form after submission
     setFormData({
-      name: '',
-      email: '',
-      mobile: '',
-      password: '',
-      confirmPassword: ''
+      name: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirmPassword: "",
     });
   };
 
@@ -105,7 +115,7 @@ const RegisterPage = () => {
     <>
       {/* Toast Notification */}
       <Toaster />
-      
+
       <section className="w-full py-20 px-6 md:px-24 bg-[#f9f9f9] min-h-screen flex items-center justify-center">
         <div className="max-w-2xl w-full">
           {/* Header */}
@@ -124,7 +134,10 @@ const RegisterPage = () => {
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Name Field */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Full Name
                 </label>
                 <input
@@ -141,7 +154,10 @@ const RegisterPage = () => {
 
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Email Address
                 </label>
                 <input
@@ -158,7 +174,10 @@ const RegisterPage = () => {
 
               {/* Mobile Number Field */}
               <div>
-                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="mobile"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Mobile Number
                 </label>
                 <input
@@ -175,7 +194,10 @@ const RegisterPage = () => {
 
               {/* Password Field */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Password
                 </label>
                 <input
@@ -184,7 +206,9 @@ const RegisterPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-black focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
                   placeholder="••••••••"
                   required
                 />
@@ -192,13 +216,18 @@ const RegisterPage = () => {
                   <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                 )}
                 <p className="mt-1 text-xs text-gray-500">
-                  Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+                  Password must be at least 8 characters long and contain at
+                  least one uppercase letter, one lowercase letter, one number,
+                  and one special character.
                 </p>
               </div>
 
               {/* Confirm Password Field */}
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Confirm Password
                 </label>
                 <input
@@ -207,12 +236,18 @@ const RegisterPage = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-black focus:border-transparent`}
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.confirmPassword
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
                   placeholder="••••••••"
                   required
                 />
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.confirmPassword}
+                  </p>
                 )}
               </div>
 
@@ -226,8 +261,11 @@ const RegisterPage = () => {
 
               {/* Login Link */}
               <div className="text-center text-sm text-gray-600">
-                Already have an account?{' '}
-                <a href="/auth/login" className="font-medium text-black hover:underline">
+                Already have an account?{" "}
+                <a
+                  href="/auth/login"
+                  className="font-medium text-black hover:underline"
+                >
                   Sign in
                 </a>
               </div>
@@ -239,4 +277,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default Signup;
