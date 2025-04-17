@@ -89,7 +89,6 @@ const RegisterPage = () => {
       }
     });
 
-    // Here you would typically handle the form submission to your backend
     console.log('Form submitted:', formData);
     
     // Reset form after submission
@@ -228,7 +227,7 @@ const RegisterPage = () => {
               {/* Login Link */}
               <div className="text-center text-sm text-gray-600">
                 Already have an account?{' '}
-                <a href="/login" className="font-medium text-black hover:underline">
+                <a href="/auth/login" className="font-medium text-black hover:underline">
                   Sign in
                 </a>
               </div>

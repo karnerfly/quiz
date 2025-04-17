@@ -58,7 +58,7 @@ export default function Header() {
                 Home
               </Link>
               <Link
-                to="/Aboutus"
+                to="/about"
                 className="text-gray-700 hover:text-blue-600 font-medium"
               >
                 About Us
@@ -103,7 +103,7 @@ export default function Header() {
               </div>
 
               <Link
-                to="/Contactus"
+                to="/contact"
                 className="text-gray-700 hover:text-blue-600 font-medium"
               >
                 Contact Us
@@ -234,7 +234,7 @@ export default function Header() {
             
             <div className="space-y-4">
               <Link
-                to="/auth/forgotpass"
+                to="/auth/login"
                 className="block bg-blue-100/80 hover:bg-blue-200/90 text-blue-800 font-medium py-3 px-4 rounded-lg transition-all duration-300 text-center"
                 onClick={toggleAuthPopup}
               >

@@ -180,7 +180,7 @@ export default function Footer() {
     </li>
     <li>
       <a
-        href="/aboutus"
+        href="/about"
         className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
       >
         <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
@@ -189,11 +189,11 @@ export default function Footer() {
     </li>
     <li>
       <a
-        href="/contactus"
+        href="/auth/login"
         className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
       >
         <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-        <span>Contact Us</span>
+        <span>Login</span>
       </a>
     </li>
     <li>
@@ -203,15 +203,6 @@ export default function Footer() {
       >
         <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
         <span>Features</span>
-      </a>
-    </li>
-    <li>
-      <a
-        href="/gallery"
-        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
-      >
-        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-        <span>Gallery</span>
       </a>
     </li>
     <li>
@@ -229,7 +220,7 @@ export default function Footer() {
         className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
       >
         <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-        <span>Contact</span>
+        <span>Contact Us</span>
       </a>
     </li>
   </ul>
