@@ -8,13 +8,19 @@ import (
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/handlers"
 	"github.com/karnerfly/quiz/pkg/log"
+	"gorm.io/gorm"
 )
 
-func InitializeV1(engine *gin.Engine, cfg configs.Config) {
+func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 
 	engine.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
 		handlers.SendNotFoundError(ctx, path)
+	})
+
+	engine.NoMethod(func(ctx *gin.Context) {
+		method := ctx.Request.Method
+		handlers.SendMethodNotAllowedError(ctx, method)
 	})
 
 	router := engine.Group("/api/v1")
@@ -62,4 +68,7 @@ func InitializeV1(engine *gin.Engine, cfg configs.Config) {
 			"data":        data,
 		})
 	})
+
+	initializeAuthRoutes(router, db, cfg)
+	initializeUserRoutes(router, db, cfg)
 }

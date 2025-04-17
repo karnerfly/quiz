@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// Initialize routes
-	routes.InitializeV1(router, cfg)
+	routes.InitializeV1(router, dbClient, cfg)
 
 	serverShutdownCtx, serverShutdownCancle := context.WithTimeout(context.Background(), time.Second*5)
 	defer serverShutdownCancle()
