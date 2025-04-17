@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-const Loader = () => {
+const LandingLoader = () => {
   return (
     <StyledWrapper>
       <div className="card">
@@ -18,7 +18,7 @@ const Loader = () => {
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .card {
@@ -108,6 +108,7 @@ const StyledWrapper = styled.div`
       -webkit-transform: translateY(-400%);
       transform: translateY(-400%);
     }
-  }`;
+  }
+`;
 
-export default Loader;
+export default LandingLoader;

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "@src/context/Auth";
-import { Navigate, Outlet, useNavigate } from "react-router";
-import Login from "@src/pages/auth/Login";
+import { useNavigate } from "react-router";
+import Loader from "@src/components/ui/Loader";
 
 const Protected = ({ children }) => {
   const { token } = useAuth();
@@ -10,8 +10,8 @@ const Protected = ({ children }) => {
   // token still not fetched, show loader
   if (token === undefined) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-xl text-black">Loading...</p>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+        <Loader />
       </div>
     );
   }
