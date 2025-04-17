@@ -22,10 +22,16 @@ type RedisConfig struct {
 	Password       string
 }
 
+type DbConfig struct {
+	Url            string
+	MaxConnections int
+}
+
 type Config struct {
 	Server      ServerConfig
 	Redis       RedisConfig
 	Environment string
+	Db          DbConfig
 }
 
 func New() Config {
@@ -39,9 +45,13 @@ func New() Config {
 		},
 		Redis: RedisConfig{
 			Url:            getEnvStringMust("REDIS_URL"),
-			MaxConnections: getEnvIntMust("REDIS_CONNECTIONS"),
+			MaxConnections: getEnvInt("REDIS_CONNECTIONS", 10),
 			Username:       getEnvString("REDIS_USERNAME", ""),
 			Password:       getEnvString("REDIS_PASSWORD", ""),
+		},
+		Db: DbConfig{
+			Url:            getEnvStringMust("DATABASE_URL"),
+			MaxConnections: getEnvInt("DATABASE_CONNECTIONS", 10),
 		},
 		Environment: getEnvStringMust("ENV"),
 	}
