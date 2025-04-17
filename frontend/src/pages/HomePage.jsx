@@ -14,19 +14,22 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-900">
-      {/* Show Loader while isLoading is true */}
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          {/* Hero Section */}
+    <div className="bg-white dark:bg-gray-900 relative">
+      {/* Full-screen black overlay with loader */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+          <Loader />
+        </div>
+      )}
 
+      {/* Main content - hidden while loading */}
+      {!isLoading && (
+        <>
           <HeroSection
             title="What will you ask your audience?"
             description="Turn presentations into conversations with interactive polls, quiz, surveys and many more that engage meetings and classrooms."
@@ -39,7 +42,6 @@ const Home = () => {
           <FeatureSection />
           <HowItWorkSection />
           <FaqSection />
-
           <GoToTopButton />
         </>
       )}
