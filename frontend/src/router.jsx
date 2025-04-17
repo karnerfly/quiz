@@ -125,29 +125,7 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // dashboard route
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-        children: [
-          {
-            path: "",
-            element: (
-              <Protected>
-                <DbHome />
-              </Protected>
-            ),
-          },
-          {
-            path: "profile",
-            element: (
-              <Protected>
-                <Profile />
-              </Protected>
-            ),
-          },
-        ],
-      },
+      
 
       // // protected routes
       // {
@@ -158,6 +136,36 @@ export const router = createBrowserRouter([
       //     </Protected>
       //   ),
       // },
+    ],
+
+  },
+
+
+
+
+
+
+  // dashboard route
+  {
+    path: "dashboard",
+    element: <Dashboard />,
+    children: [
+      {
+        path: "",
+        element: (
+          <Protected>
+            <DbHome />
+          </Protected>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <Protected>
+            <Profile />
+          </Protected>
+        ),
+      },
     ],
   },
 ]);
