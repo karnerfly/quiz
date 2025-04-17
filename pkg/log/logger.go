@@ -4,13 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-)
 
-const (
-	colorRed    = "\033[31m"
-	colorReset  = "\033[0m"
-	errorPrefix = "[ERROR]::"
-	infoPrefix  = "[INFO]::"
+	"github.com/karnerfly/quiz/constants"
 )
 
 type logger struct {
@@ -22,8 +17,8 @@ var defaultLogger logger
 
 func init() {
 	defaultLogger = logger{
-		stdout: log.New(os.Stdout, infoPrefix, log.LstdFlags),
-		stderr: log.New(os.Stderr, fmt.Sprintf("%s%s", colorRed, errorPrefix), log.LstdFlags),
+		stdout: log.New(os.Stdout, constants.LogInfoPrefix, log.LstdFlags),
+		stderr: log.New(os.Stderr, fmt.Sprintf("%s%s", constants.LogColorRed, constants.LogErrorPrefix), log.LstdFlags),
 	}
 }
 
@@ -40,21 +35,21 @@ func Println(v ...any) {
 }
 
 func Error(v ...any) {
-	defaultLogger.stderr.Println(append(v, colorReset)...)
+	defaultLogger.stderr.Println(append(v, constants.LogColorReset)...)
 }
 
 func Errorf(format string, v ...any) {
-	defaultLogger.stderr.Printf(format, append(v, colorReset)...)
+	defaultLogger.stderr.Printf(format, append(v, constants.LogColorReset)...)
 }
 
 func Fatal(v ...any) {
-	defaultLogger.stderr.Fatal(append(v, colorReset)...)
+	defaultLogger.stderr.Fatal(append(v, constants.LogColorReset)...)
 }
 
 func Fatalf(format string, v ...any) {
-	defaultLogger.stderr.Fatalf(fmt.Sprintf("%s%s", format, colorReset), v...)
+	defaultLogger.stderr.Fatalf(fmt.Sprintf("%s%s", format, constants.LogColorReset), v...)
 }
 
 func Fatalln(v ...any) {
-	defaultLogger.stderr.Fatalln(append(v, colorReset)...)
+	defaultLogger.stderr.Fatalln(append(v, constants.LogColorReset)...)
 }

@@ -2,15 +2,14 @@ package pkg
 
 import (
 	"crypto/rand"
-	"encoding/hex"
+	"encoding/base64"
 )
 
-func CreateUniqueSub() (string, error) {
-	data := make([]byte, 20)
-	_, err := rand.Read(data)
+func GenerateAuthToken(length int) (string, error) {
+	b := make([]byte, length)
+	_, err := rand.Read(b)
 	if err != nil {
 		return "", err
 	}
-
-	return hex.EncodeToString(data), nil
+	return base64.URLEncoding.EncodeToString(b), nil
 }

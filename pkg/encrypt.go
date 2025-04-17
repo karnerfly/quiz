@@ -7,8 +7,9 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"
 	"io"
+
+	"github.com/karnerfly/quiz/constants"
 )
 
 type Encrypter struct {
@@ -60,7 +61,7 @@ func (e Encrypter) Decrypt(encryptedData string, key [32]byte) (string, error) {
 	nonceSize := gcm.NonceSize()
 
 	if len(encryptedDataBytes) < nonceSize {
-		return "", fmt.Errorf("invalid encrypted data bytes")
+		return "", constants.ErrAuthenticationFailed
 	}
 
 	nonce := encryptedDataBytes[:nonceSize]
@@ -68,7 +69,7 @@ func (e Encrypter) Decrypt(encryptedData string, key [32]byte) (string, error) {
 
 	text, err := gcm.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
-		return "", err
+		return "", constants.ErrAuthenticationFailed
 	}
 
 	return string(text), nil
