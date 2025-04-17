@@ -20,6 +20,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 
 import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
+import Profile from "./pages/users/Profile";
 
 // const App = () => {
 //   return (
@@ -141,9 +142,7 @@ export const router = createBrowserRouter([
             path: "profile",
             element: (
               <Protected>
-                <div className="h-full flex items-center justify-center">
-                  <p className="text-white">Profile of the User</p>
-                </div>
+                <Profile />
               </Protected>
             ),
           },

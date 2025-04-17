@@ -1,33 +1,32 @@
 import { useState } from "react";
 import { Outlet } from "react-router";
-import DbHeader from "@src/components/dashboard/DbHeader";
-import DbSidebar from "@src/components/dashboard/DbSidebar";
+import Header from "@src/components/dashboard/DbHeader";
+import Sidebar from "@src/components/dashboard/DbSidebar";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Toggle sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+    <div
+      className={
+        "min-h-screen flex flex-col bg-gray-50 pt-16 text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-300"
+      }
+    >
       {/* Header */}
-      <DbHeader isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
-      {/* Sidebar */}
-      <DbSidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Header isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main Content */}
-      <main
-        className={`pt-16 min-h-screen transition-all duration-300 ${
-          isSidebarOpen ? "lg:ml-64" : "lg:ml-0"
-        }`}
-      >
-        <div className="px-4 sm:px-6 lg:px-8 py-6">
-          <Outlet />
-        </div>
-      </main>
+      <div className="flex-1 container mx-auto px-4 py-6 md:px-6 md:py-8 flex">
+        {/* Sidebar */}
+        <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+        <Outlet />
+      </div>
     </div>
   );
 };
