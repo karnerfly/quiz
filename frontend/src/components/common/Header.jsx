@@ -253,7 +253,7 @@ export default function Header() {
             <p className="text-center text-gray-500 mt-6">
               Don't have an account?{' '}
               <Link 
-                to="/auth/register" 
+                to="/auth/signup" 
                 className="text-blue-600 hover:underline"
                 onClick={toggleAuthPopup}
               >

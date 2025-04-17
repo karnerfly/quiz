@@ -18,6 +18,9 @@ import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
+import DbHome from "./pages/users/DbHome"
+
+
 // const App = () => {
 //   return (
 //     <Routes>
@@ -123,12 +126,10 @@ export const router = createBrowserRouter([
 
       // protected routes
       {
-        path: "protected",
+        path: "dashboard",
         element: (
           <Protected>
-            <div className="h-screen flex items-center justify-center">
-              <p className="text-xl text-black">Protected Route</p>
-            </div>
+              <DbHome />
           </Protected>
         ),
       },

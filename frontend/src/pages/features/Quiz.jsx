@@ -14,16 +14,21 @@ const Quiz = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-900">
-      {/* Show Loader while isLoading is true */}
-      {isLoading ? (
-        <Loader />
-      ) : (
+    <div className="bg-white dark:bg-gray-900 relative">
+      {/* Full-screen black overlay with loader */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+          <Loader />
+        </div>
+      )}
+
+      {/* Main content - hidden while loading */}
+      {!isLoading && (
         <>
           {/* Hero Section */}
 
