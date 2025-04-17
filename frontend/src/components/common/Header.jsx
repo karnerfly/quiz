@@ -7,6 +7,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +25,10 @@ export default function Header() {
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleAuthPopup = () => {
+    setShowAuthPopup(!showAuthPopup);
   };
 
   const { authenticated } = useAuth();
@@ -53,7 +58,7 @@ export default function Header() {
                 Home
               </Link>
               <Link
-                to="/Aboutus"
+                to="/about"
                 className="text-gray-700 hover:text-blue-600 font-medium"
               >
                 About Us
@@ -98,7 +103,7 @@ export default function Header() {
               </div>
 
               <Link
-                to="/Contactus"
+                to="/contact"
                 className="text-gray-700 hover:text-blue-600 font-medium"
               >
                 Contact Us
@@ -107,8 +112,11 @@ export default function Header() {
 
             {/* Right-aligned Button */}
             <div className="ml-auto">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition duration-300">
-                Create Account
+              <button 
+                onClick={toggleAuthPopup}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition duration-300"
+              >
+                Login
               </button>
             </div>
           </div>
@@ -191,12 +199,70 @@ export default function Header() {
 
             <div className="border-t border-gray-200 my-2"></div>
 
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full mt-2 transition duration-300">
-              Create Account
+            <button 
+              onClick={toggleAuthPopup}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full mt-2 transition duration-300"
+            >
+              Login
             </button>
           </div>
         )}
       </div>
+
+      {/* Authentication Popup with Blur Background */}
+      {showAuthPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Blurred background overlay */}
+          <div 
+            className="absolute inset-0 bg-white/30 backdrop-blur-sm"
+            onClick={toggleAuthPopup}
+          />
+          
+          {/* Popup content */}
+          <div className="relative bg-white/90 backdrop-blur-md rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl border border-white/20">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">Welcome to VoteMaker</h3>
+              <button 
+                onClick={toggleAuthPopup}
+                className="text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <p className="text-gray-600 mb-6">Please select your role to continue</p>
+            
+            <div className="space-y-4">
+              <Link
+                to="/auth/login"
+                className="block bg-blue-100/80 hover:bg-blue-200/90 text-blue-800 font-medium py-3 px-4 rounded-lg transition-all duration-300 text-center"
+                onClick={toggleAuthPopup}
+              >
+                Login as Student
+              </Link>
+              
+              <Link
+                to="/auth/login"
+                className="block bg-green-100/80 hover:bg-green-200/90 text-green-800 font-medium py-3 px-4 rounded-lg transition-all duration-300 text-center"
+                onClick={toggleAuthPopup}
+              >
+                Login as Teacher
+              </Link>
+            </div>
+            
+            <p className="text-center text-gray-500 mt-6">
+              Don't have an account?{' '}
+              <Link 
+                to="/auth/register" 
+                className="text-blue-600 hover:underline"
+                onClick={toggleAuthPopup}
+              >
+                Sign up
+              </Link>
+            </p>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

@@ -45,7 +45,7 @@ const FeaturesSection = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
+          <h2 className=" mt-4 text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
             Powerful Features
           </h2>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto">

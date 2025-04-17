@@ -164,32 +164,67 @@ export default function Footer() {
           {/* Links & Contact Section - Middle */}
           <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-10">
             {/* Quick Links */}
-            <div>
-              <h3 className="text-lg font-bold text-gray-800 mb-6 pb-2 border-b border-blue-500/30">
-                Quick Links
-              </h3>
-              <ul className="space-y-3">
-                {[
-                  "Home",
-                  "About",
-                  "Why Us",
-                  "Features",
-                  "Gallery",
-                  "FAQ",
-                  "Contact",
-                ].map((item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
-                    >
-                      <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                      <span>{item}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+<div>
+  <h3 className="text-lg font-bold text-gray-800 mb-6 pb-2 border-b border-blue-500/30">
+    Quick Links
+  </h3>
+  <ul className="space-y-3">
+    <li>
+      <a
+        href="/"
+        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
+      >
+        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+        <span>Home</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
+      >
+        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+        <span>About Us</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="/auth/login"
+        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
+      >
+        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+        <span>Login</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="/features"
+        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
+      >
+        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+        <span>Features</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="/faq"
+        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
+      >
+        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+        <span>FAQ</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="/contact"
+        className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 group"
+      >
+        <ChevronRight className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+        <span>Contact Us</span>
+      </a>
+    </li>
+  </ul>
+</div>
 
             {/* External Links */}
             <div>
