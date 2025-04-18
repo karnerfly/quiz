@@ -22,7 +22,8 @@ import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
 import Profile from "./pages/users/Profile";
 import Settings from "./pages/users/Settings";
-import Quizzes from "./pages/users/Quizzes"
+import Quizzes from "./pages/users/Quizzes";
+import Create from "./pages/users/Create"
 
 
 // const App = () => {
@@ -184,7 +185,35 @@ export const router = createBrowserRouter([
             <Quizzes />
           </Protected>
         )
+      },
+      {
+        path: "create",
+        element: (
+          <Protected>
+            <Create />
+          </Protected>
+        )
       }
     ],
   },
+
+
+  // quiz route
+  //{
+   // path: "quizzes",
+   // element: <Quizzes />,
+   // children: [
+     // {
+     //   path: "create",
+      //  element: (
+      //    <Protected>
+       //     <Create />
+       //   </Protected>
+      //  ),
+    //  }
+   // ],
+ // },
+
+
+
 ]);
