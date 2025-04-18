@@ -1,99 +1,138 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  HomeIcon,
-  UsersIcon,
-  DocumentTextIcon,
-  ChartBarIcon,
-  CogIcon,
-  QuestionMarkCircleIcon,
-  LogoutIcon,
-} from "@heroicons/react/outline";
-import { XIcon } from "@heroicons/react/solid";
+  faHome,
+  faUser,
+  faBook,
+  faCog,
+  faSignOutAlt,
+  faTimes,
+  faBookmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router";
+import { useEffect, useRef } from "react";
 
-const DbSidebar = ({ isSidebarOpen, toggleSidebar }) => {
-  const navItems = [
-    { name: "Dashboard", icon: HomeIcon, href: "#", current: true },
-    { name: "Users", icon: UsersIcon, href: "#", current: false },
-    { name: "Quizzes", icon: DocumentTextIcon, href: "#", current: false },
-    { name: "Analytics", icon: ChartBarIcon, href: "#", current: false },
-    { name: "Settings", icon: CogIcon, href: "#", current: false },
-    { name: "Help", icon: QuestionMarkCircleIcon, href: "#", current: false },
-  ];
+const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+  const sidebarRef = useRef(null);
+  
+  // Handle clicks outside the sidebar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isSidebarOpen) {
+        toggleSidebar();
+      }
+    };
+
+    // Add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    
+    // Clean up
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSidebarOpen, toggleSidebar]);
+  
+  // Handle navigation link clicks - close sidebar
+  const handleLinkClick = () => {
+    if (isSidebarOpen) {
+      toggleSidebar();
+    }
+  };
 
   return (
-    <>
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-30 transition-transform duration-300 ease-in-out`}
+    <aside
+      ref={sidebarRef}
+      className={`w-64 rounded-xl shadow-lg p-6 transform transition-all duration-300 fixed md:relative z-40 h-screen md:h-auto overflow-y-auto 
+        ${
+          isSidebarOpen ? "left-0" : "-left-64"
+        } md:left-0 md:block dark:bg-gray-800 border dark:border-gray-700 bg-white`}
+    >
+      {/* Close Button for Small Screens */}
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden absolute top-4 right-4 p-2 rounded-full focus:outline-none text-gray-500 hover:bg-gray-200 hover:text-gray-700"
       >
-        <div className="flex flex-col h-full">
-          {/* Sidebar header */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-              QuizMaker Pro
-            </h1>
-            <button
-              onClick={toggleSidebar}
-              className="lg:hidden p-1 rounded-md text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
-            >
-              <XIcon className="h-6 w-6" />
-            </button>
-          </div>
+        <FontAwesomeIcon icon={faTimes} className="text-xl" />
+      </button>
 
-          {/* Navigation */}
-          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                  item.current
-                    ? "bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-blue-400"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
-                }`}
-              >
-                <item.icon className="flex-shrink-0 h-5 w-5 mr-3" />
-                {item.name}
-              </a>
-            ))}
-          </nav>
+      {/* User Info */}
+      <div className="flex flex-col items-center mb-8 mt-2">
+        <img
+          src="https://via.placeholder.com/80"
+          alt="User Avatar"
+          className="w-20 h-20 rounded-full border-4 border-indigo-500 mb-4 object-cover"
+        />
+        <h3 className="font-bold text-xl dark:text-white text-gray-800">
+          John Doe
+        </h3>
+        <p className="text-gray-500 text-sm">Premium User</p>
+      </div>
 
-          {/* Sidebar footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <a
-              href="#"
-              className="flex items-center space-x-3 group"
-            >
-              <div className="relative h-9 w-9 rounded-full bg-gray-200 dark:bg-gray-600 overflow-hidden">
-                <img
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
-                  alt="User profile"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-200 dark:group-hover:text-white">
-                  John Doe
-                </p>
-                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300">
-                  View profile
-                </p>
-              </div>
-            </a>
-          </div>
+      {/* Sidebar Links */}
+      <nav className="space-y-1">
+        <Link
+          to=""
+          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+          onClick={handleLinkClick}
+        >
+          <FontAwesomeIcon icon={faHome} className="mr-3 text-indigo-500" />
+          Home
+        </Link>
+
+        {/* My Posts */}
+        <Link
+          to="posts"
+          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+          onClick={handleLinkClick}
+        >
+          <FontAwesomeIcon icon={faBook} className="mr-3 text-indigo-500" />
+          My Posts
+        </Link>
+
+        {/* Profile */}
+        <Link
+          to="profile"
+          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+          onClick={handleLinkClick}
+        >
+          <FontAwesomeIcon icon={faUser} className="mr-3 text-indigo-500" />
+          Profile
+        </Link>
+
+        {/* My Bookmarks */}
+        <Link
+          to="bookmarks"
+          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+          onClick={handleLinkClick}
+        >
+          <FontAwesomeIcon icon={faBookmark} className="mr-3 text-indigo-500" />
+          My Bookmarks
+        </Link>
+
+        {/* Settings */}
+        <Link
+          to="settings"
+          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+          onClick={handleLinkClick}
+        >
+          <FontAwesomeIcon icon={faCog} className="mr-3 text-indigo-500" />
+          Settings
+        </Link>
+
+        <div className="pt-6 mt-6 border-t border-gray-200">
+          <button 
+            className="w-full text-left flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+            onClick={handleLinkClick}
+          >
+            <FontAwesomeIcon
+              icon={faSignOutAlt}
+              className="mr-3 text-indigo-500"
+            />
+            Logout
+          </button>
         </div>
-      </aside>
-    </>
+      </nav>
+    </aside>
   );
 };
 
-export default DbSidebar;
+export default Sidebar;

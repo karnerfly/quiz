@@ -1,267 +1,294 @@
-import { useState } from 'react';
-import DbHeader from '@src/components/dashboard/DbHeader';
-import DbSidebar from '@src/components/dashboard/DbSidebar';
+import React from "react";
 import {
-  ChartBarIcon,
-  ClockIcon,
-  UserGroupIcon,
-  DocumentTextIcon
-} from '@heroicons/react/outline';
+  faBook,
+  faEye,
+  faHeart,
+  faUser,
+  faCalendar,
+  faChartLine,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const DbHome = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
-  };
-
-  // Sample data
-  const stats = [
-    { name: 'Total Quizzes', value: '128', icon: DocumentTextIcon, change: '+12%', changeType: 'positive' },
-    { name: 'Active Users', value: '2,543', icon: UserGroupIcon, change: '+5.4%', changeType: 'positive' },
-    { name: 'Avg. Time Spent', value: '3.2m', icon: ClockIcon, change: '-1.2%', changeType: 'negative' },
-    { name: 'Completion Rate', value: '84%', icon: ChartBarIcon, change: '+3.8%', changeType: 'positive' },
-  ];
-
-  const recentQuizzes = [
-    { id: 1, name: 'JavaScript Basics', participants: 342, date: '2023-05-15', status: 'active' },
-    { id: 2, name: 'React Advanced', participants: 198, date: '2023-05-10', status: 'active' },
-    { id: 3, name: 'CSS Fundamentals', participants: 421, date: '2023-05-05', status: 'completed' },
-    { id: 4, name: 'Node.js Concepts', participants: 156, date: '2023-04-28', status: 'active' },
-  ];
-
+const DashboardHome = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
-      {/* Header */}
-      <DbHeader isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
-      {/* Sidebar */}
-      <DbSidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
-      {/* Main Content */}
-      <main className={`pt-16 min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>
-        <div className="px-4 sm:px-6 lg:px-8 py-6">
-          {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard Overview</h1>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Welcome back! Here's what's happening with your quizzes today.
-            </p>
+    <main className="flex-1 ml-0 md:ml-6 transition-all duration-300 dark:text-white text-gray-800">
+      {/* Welcome Message */}
+      <div className="rounded-xl shadow-lg p-6 mb-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 relative overflow-hidden">
+        <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500 opacity-10 rounded-full"></div>
+        <div className="absolute -right-5 -bottom-5 w-24 h-24 bg-purple-500 opacity-10 rounded-full"></div>
+        <div className="relative z-10">
+          <h2 className="text-2xl font-bold mb-2 flex items-center">
+            <span>Welcome back, John!</span>
+            <span className="ml-2 inline-block w-2 h-2 bg-green-500 rounded-full"></span>
+          </h2>
+          <p className="text-gray-500">
+            Here's what's happening with your account today.
+          </p>
+          <div className="flex mt-4 space-x-3">
+            <button className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              Create Story
+            </button>
+            <button className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+              View Analytics
+            </button>
           </div>
+        </div>
+      </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            {stats.map((stat) => (
-              <div 
-                key={stat.name}
-                className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg"
-              >
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <stat.icon className="h-6 w-6 text-blue-500" />
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                          {stat.name}
-                        </dt>
-                        <dd>
-                          <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {stat.value}
-                          </div>
-                        </dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-                <div className={`px-5 py-3 ${stat.changeType === 'positive' ? 'bg-blue-50 dark:bg-blue-900/20' : 'bg-red-50 dark:bg-red-900/20'} text-sm`}>
-                  <div className={`flex items-center ${stat.changeType === 'positive' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                    {stat.changeType === 'positive' ? (
-                      <svg
-                        className="h-4 w-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className="h-4 w-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                    <span className="ml-1">{stat.change}</span>
-                    <span className="sr-only">{stat.changeType === 'positive' ? 'Increased' : 'Decreased'} by</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Recent Quizzes Section */}
-          <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg mb-8">
-            <div className="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                Recent Quizzes
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-gray-500 text-sm font-medium">Total Stories</p>
+              <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
+                42
               </h3>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                A list of your most recently created quizzes.
-              </p>
             </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                    >
-                      Quiz Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                    >
-                      Participants
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                    >
-                      Date Created
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                    >
-                      Status
-                    </th>
-                    <th scope="col" className="relative px-6 py-3">
-                      <span className="sr-only">Actions</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {recentQuizzes.map((quiz) => (
-                    <tr key={quiz.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          {quiz.name}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {quiz.participants}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {quiz.date}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            quiz.status === 'active'
-                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                              : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                          }`}
-                        >
-                          {quiz.status === 'active' ? 'Active' : 'Completed'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                        >
-                          View
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+              <FontAwesomeIcon icon={faBook} className="text-indigo-600" />
             </div>
           </div>
+          <div className="mt-4 flex items-center text-xs font-medium text-green-500">
+            <svg
+              className="w-3 h-3 mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12 7a1 1 0 10-2 0v4a1 1 0 102 0V7z"
+                clipRule="evenodd"
+              />
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.938a1 1 0 00.293.707l1.16 1.16a1 1 0 101.414-1.414l-.292-.293V5z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>Up by 12% from last month</span>
+          </div>
+        </div>
+        <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-gray-500 text-sm font-medium">Followers</p>
+              <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
+                1.2K
+              </h3>
+            </div>
+            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+              <FontAwesomeIcon icon={faHeart} className="text-purple-600" />
+            </div>
+          </div>
+          <div className="mt-4 flex items-center text-xs font-medium text-green-500">
+            <svg
+              className="w-3 h-3 mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12 7a1 1 0 10-2 0v4a1 1 0 102 0V7z"
+                clipRule="evenodd"
+              />
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.938a1 1 0 00.293.707l1.16 1.16a1 1 0 101.414-1.414l-.292-.293V5z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>Up by 25% from last month</span>
+          </div>
+        </div>
+        <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-gray-500 text-sm font-medium">Following</p>
+              <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
+                350
+              </h3>
+            </div>
+            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+              <FontAwesomeIcon icon={faUser} className="text-blue-600" />
+            </div>
+          </div>
+          <div className="mt-4 flex items-center text-xs font-medium text-green-500">
+            <svg
+              className="w-3 h-3 mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12 7a1 1 0 10-2 0v4a1 1 0 102 0V7z"
+                clipRule="evenodd"
+              />
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.938a1 1 0 00.293.707l1.16 1.16a1 1 0 101.414-1.414l-.292-.293V5z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>Up by 5% from last month</span>
+          </div>
+        </div>
+      </div>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                  Create New Quiz
-                </h3>
-                <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
-                  <p>Start from scratch or use one of our templates.</p>
+      {/* Recent Activity & Popular Stories */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+        {/* Recent Activity */}
+        <div className="lg:col-span-2 rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold">Recent Activity</h3>
+            <button className="text-sm text-indigo-600 hover:text-indigo-800">
+              View All
+            </button>
+          </div>
+          <div className="space-y-5">
+            <div className="flex">
+              <div className="flex-shrink-0 mr-4 mt-1">
+                <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faBook} className="text-indigo-600" />
                 </div>
-                <div className="mt-5">
-                  <button
-                    type="button"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    New Quiz
-                  </button>
+              </div>
+              <div>
+                <p className="dark:text-gray-200 text-gray-700 font-medium">
+                  You published a new story
+                </p>
+                <p className="text-gray-500 text-sm">The Unexpected Journey</p>
+                <div className="flex items-center mt-1 text-xs text-gray-500">
+                  <FontAwesomeIcon icon={faCalendar} className="mr-1" />
+                  <span>Today, 10:42 AM</span>
                 </div>
               </div>
             </div>
-
-            <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                  Invite Collaborators
-                </h3>
-                <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
-                  <p>Work with your team to create amazing quizzes together.</p>
+            <div className="flex">
+              <div className="flex-shrink-0 mr-4 mt-1">
+                <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faEye} className="text-green-600" />
                 </div>
-                <div className="mt-5">
-                  <button
-                    type="button"
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    Invite Team
-                  </button>
+              </div>
+              <div>
+                <p className="dark:text-gray-200 text-gray-700 font-medium">
+                  Your story got 50 new views
+                </p>
+                <p className="text-gray-500 text-sm">Adventure in the Alps</p>
+                <div className="flex items-center mt-1 text-xs text-gray-500">
+                  <FontAwesomeIcon icon={faCalendar} className="mr-1" />
+                  <span>Yesterday, 02:15 PM</span>
                 </div>
               </div>
             </div>
-
-            <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                  View Analytics
-                </h3>
-                <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
-                  <p>See detailed reports on your quiz performance.</p>
+            <div className="flex">
+              <div className="flex-shrink-0 mr-4 mt-1">
+                <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faHeart} className="text-purple-600" />
                 </div>
-                <div className="mt-5">
-                  <button
-                    type="button"
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    View Reports
-                  </button>
+              </div>
+              <div>
+                <p className="dark:text-gray-200 text-gray-700 font-medium">
+                  Sarah liked your story
+                </p>
+                <p className="text-gray-500 text-sm">The Hidden Truth</p>
+                <div className="flex items-center mt-1 text-xs text-gray-500">
+                  <FontAwesomeIcon icon={faCalendar} className="mr-1" />
+                  <span>Yesterday, 08:30 AM</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+
+        {/* Popular Stories */}
+        <div className="lg:col-span-3 rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold">Popular Stories</h3>
+            <button className="text-sm text-indigo-600 hover:text-indigo-800">
+              View All
+            </button>
+          </div>
+          <div className="space-y-4">
+            <div className="p-4 rounded-lg dark:bg-gray-700 bg-gray-50 flex items-center">
+              <div className="flex-shrink-0 mr-4">
+                <div className="w-12 h-12 rounded-lg bg-indigo-500 flex items-center justify-center text-white font-bold">
+                  1
+                </div>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium">The Unexpected Journey</h4>
+                <div className="flex items-center text-xs text-gray-500 mt-1">
+                  <span className="flex items-center mr-3">
+                    <FontAwesomeIcon icon={faEye} className="mr-1" />
+                    1.2K views
+                  </span>
+                  <span className="flex items-center">
+                    <FontAwesomeIcon icon={faHeart} className="mr-1" />
+                    345 likes
+                  </span>
+                </div>
+              </div>
+              <div>
+                <span className="px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                  Adventure
+                </span>
+              </div>
+            </div>
+            <div className="p-4 rounded-lg dark:bg-gray-700 bg-gray-50 flex items-center">
+              <div className="flex-shrink-0 mr-4">
+                <div className="w-12 h-12 rounded-lg bg-indigo-400 flex items-center justify-center text-white font-bold">
+                  2
+                </div>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium">Adventure in the Alps</h4>
+                <div className="flex items-center text-xs text-gray-500 mt-1">
+                  <span className="flex items-center mr-3">
+                    <FontAwesomeIcon icon={faEye} className="mr-1" />
+                    956 views
+                  </span>
+                  <span className="flex items-center">
+                    <FontAwesomeIcon icon={faHeart} className="mr-1" />
+                    290 likes
+                  </span>
+                </div>
+              </div>
+              <div>
+                <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                  Travel
+                </span>
+              </div>
+            </div>
+            <div className="p-4 rounded-lg dark:bg-gray-700 bg-gray-50 flex items-center">
+              <div className="flex-shrink-0 mr-4">
+                <div className="w-12 h-12 rounded-lg bg-indigo-300 flex items-center justify-center text-white font-bold">
+                  3
+                </div>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium">The Hidden Truth</h4>
+                <div className="flex items-center text-xs text-gray-500 mt-1">
+                  <span className="flex items-center mr-3">
+                    <FontAwesomeIcon icon={faEye} className="mr-1" />
+                    845 views
+                  </span>
+                  <span className="flex items-center">
+                    <FontAwesomeIcon icon={faHeart} className="mr-1" />
+                    178 likes
+                  </span>
+                </div>
+              </div>
+              <div>
+                <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                  Mystery
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 };
 
-export default DbHome;
+export default DashboardHome;

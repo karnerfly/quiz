@@ -20,6 +20,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 
 import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
+import Profile from "./pages/users/Profile";
 
 // const App = () => {
 //   return (
@@ -124,31 +125,7 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // dashboard route
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-        children: [
-          {
-            path: "",
-            element: (
-              <Protected>
-                <DbHome />
-              </Protected>
-            ),
-          },
-          {
-            path: "profile",
-            element: (
-              <Protected>
-                <div className="h-full flex items-center justify-center">
-                  <p className="text-white">Profile of the User</p>
-                </div>
-              </Protected>
-            ),
-          },
-        ],
-      },
+      
 
       // // protected routes
       // {
@@ -159,6 +136,36 @@ export const router = createBrowserRouter([
       //     </Protected>
       //   ),
       // },
+    ],
+
+  },
+
+
+
+
+
+
+  // dashboard route
+  {
+    path: "dashboard",
+    element: <Dashboard />,
+    children: [
+      {
+        path: "",
+        element: (
+          <Protected>
+            <DbHome />
+          </Protected>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <Protected>
+            <Profile />
+          </Protected>
+        ),
+      },
     ],
   },
 ]);
