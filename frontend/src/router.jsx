@@ -21,6 +21,9 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
 import Profile from "./pages/users/Profile";
+import Settings from "./pages/users/Settings";
+import Quizzes from "./pages/users/Quizzes";
+import Create from "./pages/users/Create";
 
 // const App = () => {
 //   return (
@@ -125,8 +128,6 @@ export const router = createBrowserRouter([
         ],
       },
 
-      
-
       // // protected routes
       // {
       //   path: "dashboard",
@@ -137,13 +138,7 @@ export const router = createBrowserRouter([
       //   ),
       // },
     ],
-
   },
-
-
-
-
-
 
   // dashboard route
   {
@@ -166,6 +161,51 @@ export const router = createBrowserRouter([
           </Protected>
         ),
       },
+      {
+        path: "settings",
+        element: (
+          <Protected>
+            <Settings />
+          </Protected>
+        ),
+      },
+      {
+        path: "quizzes",
+        children: [
+          {
+            path: "",
+            element: (
+              <Protected>
+                <Quizzes />
+              </Protected>
+            ),
+          },
+          {
+            path: "create",
+            element: (
+              <Protected>
+                <Create />
+              </Protected>
+            ),
+          },
+        ],
+      },
     ],
   },
+
+  // quiz route
+  //{
+  // path: "quizzes",
+  // element: <Quizzes />,
+  // children: [
+  // {
+  //   path: "create",
+  //  element: (
+  //    <Protected>
+  //     <Create />
+  //   </Protected>
+  //  ),
+  //  }
+  // ],
+  // },
 ]);

@@ -72,7 +72,7 @@ func (uh *UserHandler) HandleCreateUser(ctx *gin.Context) {
 	// create user session
 	session := sessions.Default(ctx)
 
-	authToken, err := pkg.GenerateAuthToken(32)
+	authToken, err := pkg.GenerateBase64Token(32)
 	if err != nil {
 		errResp := ErrorResponse{
 			Code:        http.StatusInternalServerError,

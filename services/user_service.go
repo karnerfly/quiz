@@ -63,12 +63,13 @@ func (us *UserService) GetCurrentUser(ctx context.Context, id uint) (*models.Use
 	}
 
 	resp := &models.UserResponsePayload{
+		Id:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
 		Phone:     user.Phone,
 		Role:      string(user.Role),
 		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+		UpdatedAt: user.CreatedAt,
 	}
 
 	return resp, nil
