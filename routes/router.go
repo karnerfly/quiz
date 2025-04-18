@@ -71,4 +71,5 @@ func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 
 	initializeAuthRoutes(router, db, cfg)
 	initializeUserRoutes(router, db, cfg)
+	initializeQuizRoutes(router, db, cfg)
 }

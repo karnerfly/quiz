@@ -11,7 +11,7 @@ import (
 )
 
 func initializeUserRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Config) {
-	userRouter := router.Group("/users")
+	userRouter := router.Group("/user")
 
 	store := store.NewUserStore(db)
 	service := services.NewUserService(store)

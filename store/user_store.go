@@ -50,7 +50,7 @@ func (store *UserStore) GetUserByEmail(ctx context.Context, email string) (*mode
 func (store *UserStore) GetUserById(ctx context.Context, id uint) (*models.User, error) {
 	var user *models.User
 
-	result := store.client.WithContext(ctx).Model(&models.User{}).Where("id = ?", id).Select("name", "email", "phone", "role").First(&user)
+	result := store.client.WithContext(ctx).Model(&models.User{}).Where("id = ?", id).Select("id", "name", "email", "phone", "role", "created_at", "updated_at").First(&user)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
