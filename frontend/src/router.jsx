@@ -21,6 +21,8 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
 import Profile from "./pages/users/Profile";
+import Settings from "./pages/users/Settings";
+
 
 // const App = () => {
 //   return (
@@ -166,6 +168,14 @@ export const router = createBrowserRouter([
           </Protected>
         ),
       },
+      {
+        path: "settings",
+        element: (
+          <Protected>
+            <Settings />
+          </Protected>
+        )
+      }
     ],
   },
 ]);
