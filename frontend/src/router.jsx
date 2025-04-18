@@ -22,6 +22,7 @@ import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
 import Profile from "./pages/users/Profile";
 import Settings from "./pages/users/Settings";
+import Quizzes from "./pages/users/Quizzes"
 
 
 // const App = () => {
@@ -173,6 +174,14 @@ export const router = createBrowserRouter([
         element: (
           <Protected>
             <Settings />
+          </Protected>
+        )
+      },
+      {
+        path: "quizzes",
+        element: (
+          <Protected>
+            <Quizzes />
           </Protected>
         )
       }
