@@ -37,13 +37,18 @@ func main() {
 	}
 	log.Println("database connected")
 
-	err = db.Migrate(dbClient, &models.User{})
+	err = db.CreateEnums(dbClient)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = db.Migrate(dbClient, &models.User{}, &models.Question{}, &models.Quiz{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Initialize routes
-	routes.InitializeV1(router, cfg)
+	routes.InitializeV1(router, dbClient, cfg)
 
 	serverShutdownCtx, serverShutdownCancle := context.WithTimeout(context.Background(), time.Second*5)
 	defer serverShutdownCancle()

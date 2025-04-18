@@ -24,6 +24,22 @@ func CreateDatabaseClient(dsn string, maxConn int) (*gorm.DB, error) {
 	return gormDb, nil
 }
 
+func CreateEnums(db *gorm.DB) error {
+	result := db.Exec(`
+	DO $$ BEGIN
+		IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
+			CREATE TYPE user_role AS ENUM ('teacher', 'student', 'admin');
+		END IF;
+
+		IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'quiz_status') THEN
+			CREATE TYPE quiz_status AS ENUM ('pending', 'finished');
+		END IF;
+	END$$;
+`)
+
+	return result.Error
+}
+
 func Migrate(db *gorm.DB, tables ...any) error {
 	for _, table := range tables {
 		err := db.AutoMigrate(table)
