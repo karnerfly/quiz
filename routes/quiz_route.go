@@ -13,11 +13,12 @@ import (
 func initializeQuizRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Config) {
 	quizRouter := router.Group("/quiz")
 
-	store := store.NewQuizStore(db)
-	service := services.NewQuizeService(store)
+	store := store.NewStore(db)
+	service := services.NewQuizService(store)
 	handler := handlers.NewQuizHandler(service, cfg)
 
-	quizRouter.Use(middlewares.Protected())
+	// quizRouter.Use(middlewares.Protected())
 
-	quizRouter.POST("/new", handler.HandleCreateQuiz)
+	quizRouter.GET("", handler.HandleGetQuizByCode)
+	quizRouter.POST("/new", middlewares.Protected(), handler.HandleCreateQuiz)
 }

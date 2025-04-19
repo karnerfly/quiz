@@ -6,17 +6,11 @@ import (
 	"gorm.io/gorm"
 )
 
-const (
-	StatusStudentResponsePending  = "pending"
-	StatusStudentResponseFinished = "finished"
-)
-
 type StudentSubmission struct {
 	Id             uint            `json:"id" gorm:"primarykey"`
-	QuizId         uint            `json:"-"`
+	QuizId         uint            `json:"quiz_id"`
 	Name           string          `json:"name"`
 	Phone          string          `json:"phone"`
-	Status         string          `json:"status" gorm:"type:student_response_status;default:'pending'"`
 	SubmissionCode string          `json:"submission_code"` // To track without accounts
 	Answers        []StudentAnswer `json:"answers" gorm:"foreignKey:SubmissionId"`
 	Score          int             `json:"score"`

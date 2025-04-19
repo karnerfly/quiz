@@ -13,18 +13,13 @@ import (
 func initializeUserRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Config) {
 	teacherRouter := router.Group("/teacher")
 
-	teacherStore := store.NewUserStore(db)
-
-	teacherService := services.NewTeacherService(teacherStore)
+	s := store.NewStore(db)
+	teacherService := services.NewTeacherService(s)
 	teacherHandler := handlers.NewTeacherHandler(teacherService, cfg)
 
-	quizStore := store.NewQuizStore(db)
-	quizService := services.NewQuizeService(quizStore)
-	quizHandler := handlers.NewQuizHandler(quizService, cfg)
-
 	teacherRouter.POST("", teacherHandler.HandleCreateTeacherAccount)
-	teacherRouter.GET("/me", middlewares.Protected(), teacherHandler.HandleGetMe)
+	teacherRouter.GET("/me", middlewares.Protected(), teacherHandler.HandleGetTeacherDetails)
 
-	teacherRouter.GET("/quizzes", middlewares.Protected(), quizHandler.HandleGetAllQuizzes)
-	teacherRouter.GET("/quizzes/:quizId/submissions", middlewares.Protected(), quizHandler.HandleGetAllSubmissions)
+	teacherRouter.GET("/quizzes", middlewares.Protected(), teacherHandler.HandleGetAllQuizzes)
+	teacherRouter.GET("/quizzes/:quizId/submissions", middlewares.Protected(), teacherHandler.HandleGetAllSubmissions)
 }

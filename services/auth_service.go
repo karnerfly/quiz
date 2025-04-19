@@ -12,10 +12,10 @@ import (
 )
 
 type AuthService struct {
-	store *store.UserStore
+	store *store.Store
 }
 
-func NewAuthService(userStore *store.UserStore) *AuthService {
+func NewAuthService(userStore *store.Store) *AuthService {
 	return &AuthService{store: userStore}
 }
 

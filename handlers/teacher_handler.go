@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -14,20 +15,20 @@ import (
 	"github.com/karnerfly/quiz/services"
 )
 
-type UserHandler struct {
-	service *services.UserService
+type TeacherHandler struct {
+	service *services.TeacherService
 	config  configs.Config
 }
 
-func NewTeacherHandler(userService *services.UserService, cfg configs.Config) *UserHandler {
-	return &UserHandler{service: userService, config: cfg}
+func NewTeacherHandler(userService *services.TeacherService, cfg configs.Config) *TeacherHandler {
+	return &TeacherHandler{service: userService, config: cfg}
 }
 
-func (uh *UserHandler) HandleCreateTeacherAccount(ctx *gin.Context) {
+func (handler *TeacherHandler) HandleCreateTeacherAccount(ctx *gin.Context) {
 	// validate user payload
 	var (
 		payload dto.CreateTeacherPayload
-		env     = uh.config.Environment
+		env     = handler.config.Environment
 	)
 
 	if err := ValidateJsonPayload(ctx, &payload); err != nil {
@@ -36,7 +37,7 @@ func (uh *UserHandler) HandleCreateTeacherAccount(ctx *gin.Context) {
 	}
 
 	// create user with given payload
-	id, err := uh.service.CreateNewTeacher(ctx.Request.Context(), payload)
+	id, err := handler.service.CreateNewTeacher(ctx.Request.Context(), payload)
 
 	// handler dfferent errors
 	if err != nil {
@@ -76,8 +77,8 @@ func (uh *UserHandler) HandleCreateTeacherAccount(ctx *gin.Context) {
 	SendResponse(ctx, http.StatusCreated, resp)
 }
 
-func (uh *UserHandler) HandleGetMe(ctx *gin.Context) {
-	env := uh.config.Environment
+func (handler *TeacherHandler) HandleGetTeacherDetails(ctx *gin.Context) {
+	env := handler.config.Environment
 
 	userId, exists := ctx.Get("userId")
 	if !exists {
@@ -87,7 +88,7 @@ func (uh *UserHandler) HandleGetMe(ctx *gin.Context) {
 
 	nUserId := userId.(uint)
 
-	userResp, err := uh.service.GetCurrentTeacher(ctx.Request.Context(), nUserId)
+	userResp, err := handler.service.GetCurrentTeacher(ctx.Request.Context(), nUserId)
 	if err != nil {
 		if errors.Is(err, constants.ErrRecordDoesNotExists) {
 			SendResourceNotFoundError(ctx, "user details fetch error", "user does not exists", env)
@@ -105,5 +106,64 @@ func (uh *UserHandler) HandleGetMe(ctx *gin.Context) {
 			"user": userResp,
 		},
 	}
+	SendResponse(ctx, http.StatusOK, resp)
+}
+
+func (handler *TeacherHandler) HandleGetAllQuizzes(ctx *gin.Context) {
+	env := handler.config.Environment
+
+	teacherId, exists := ctx.Get("userId")
+	if !exists {
+		SendInternalServerError(ctx, fmt.Errorf("context serialization failed"), env)
+		return
+	}
+
+	nTeacherId := teacherId.(uint)
+
+	quizzes, err := handler.service.GetAllQuizzesByTeacherId(ctx.Request.Context(), nTeacherId)
+	if err != nil {
+		SendInternalServerError(ctx, err, env)
+		return
+	}
+
+	resp := SuccessResponse{
+		Code:    http.StatusOK,
+		Message: "quizzes fetched successfully",
+		Data:    quizzes,
+	}
+	SendResponse(ctx, http.StatusOK, resp)
+}
+
+func (qh *TeacherHandler) HandleGetAllSubmissions(ctx *gin.Context) {
+	var (
+		env    = qh.config.Environment
+		quizId = ctx.Param("quizId")
+	)
+
+	teacherId, exists := ctx.Get("userId")
+	if !exists {
+		SendInternalServerError(ctx, fmt.Errorf("context serialization failed"), env)
+		return
+	}
+
+	nTeacherId := teacherId.(uint)
+	nQuizId, err := strconv.Atoi(quizId)
+	if err != nil {
+		SendBadRequestError(ctx, "invalid quiz id", "quizId is not a key id", env)
+		return
+	}
+
+	submissions, err := qh.service.GetAllSubmissionsByTeacherId(ctx.Request.Context(), uint(nQuizId), nTeacherId)
+	if err != nil {
+		SendInternalServerError(ctx, err, env)
+		return
+	}
+
+	resp := SuccessResponse{
+		Code:    http.StatusOK,
+		Message: "submission fetched successfully",
+		Data:    submissions,
+	}
+
 	SendResponse(ctx, http.StatusOK, resp)
 }

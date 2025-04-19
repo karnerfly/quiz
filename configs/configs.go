@@ -9,6 +9,7 @@ import (
 
 type ServerConfig struct {
 	Address        string
+	Domain         string
 	IdleTimeout    time.Duration
 	WriteTimeout   time.Duration
 	ReadTimeout    time.Duration
@@ -39,6 +40,7 @@ func New() Config {
 	return Config{
 		Server: ServerConfig{
 			Address:        getEnvString("ADDRESS", ":3000"),
+			Domain:         getEnvString("DOMAIN", "localhost"),
 			IdleTimeout:    time.Second * time.Duration(getEnvInt("IDLE_TIMEOUT", 5)),
 			ReadTimeout:    time.Second * time.Duration(getEnvInt("READ_TIMEOUT", 3)),
 			WriteTimeout:   time.Second * time.Duration(getEnvInt("WRITE_TIMEOUT", 3)),

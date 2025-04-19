@@ -24,6 +24,7 @@ type Quiz struct {
 	Duration          time.Duration  `json:"duration"`
 	Expiry            time.Time      `json:"-"`
 	IsNegativeMarking bool           `json:"is_negative_marking" gorm:"default:false"`
+	TotalSubmissions  int            `json:"total_submissions" gorm:"-"`
 	CreatedAt         time.Time      `json:"created_at"`
 	UpdatedAt         time.Time      `json:"updated_at"`
 	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`

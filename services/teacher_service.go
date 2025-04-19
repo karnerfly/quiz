@@ -12,15 +12,15 @@ import (
 	"github.com/karnerfly/quiz/store"
 )
 
-type UserService struct {
-	store *store.UserStore
+type TeacherService struct {
+	store *store.Store
 }
 
-func NewTeacherService(userStore *store.UserStore) *UserService {
-	return &UserService{store: userStore}
+func NewTeacherService(userStore *store.Store) *TeacherService {
+	return &TeacherService{store: userStore}
 }
 
-func (us *UserService) CreateNewTeacher(ctx context.Context, payload dto.CreateTeacherPayload) (uint, error) {
+func (s *TeacherService) CreateNewTeacher(ctx context.Context, payload dto.CreateTeacherPayload) (uint, error) {
 	encryptor := pkg.Encrypter{}
 
 	encryptedToken, err := encryptor.Encrypt([]byte(payload.Email), encryptor.HashKey([]byte(payload.Password)))
@@ -36,7 +36,7 @@ func (us *UserService) CreateNewTeacher(ctx context.Context, payload dto.CreateT
 		Role:          models.Teacher,
 	}
 
-	id, err := us.store.CreateUser(ctx, user)
+	id, err := s.store.CreateUser(ctx, user)
 
 	if err != nil {
 		if errors.Is(err, constants.ErrRecordAlreadyExists) {
@@ -49,8 +49,8 @@ func (us *UserService) CreateNewTeacher(ctx context.Context, payload dto.CreateT
 	return id, err
 }
 
-func (us *UserService) GetCurrentTeacher(ctx context.Context, id uint) (models.User, error) {
-	user, err := us.store.GetUserById(ctx, id)
+func (s *TeacherService) GetCurrentTeacher(ctx context.Context, id uint) (models.User, error) {
+	user, err := s.store.GetUserById(ctx, id)
 	if err != nil {
 		if errors.Is(err, constants.ErrRecordDoesNotExists) {
 			return models.User{}, fmt.Errorf("user does not exists: %w", err)
@@ -60,4 +60,21 @@ func (us *UserService) GetCurrentTeacher(ctx context.Context, id uint) (models.U
 	}
 
 	return user, nil
+}
+
+func (s *TeacherService) GetAllQuizzesByTeacherId(ctx context.Context, teacherId uint) ([]models.Quiz, error) {
+	return s.store.GetAllQuizzesByTeacherId(ctx, teacherId)
+}
+
+func (s *TeacherService) GetAllSubmissionsByTeacherId(ctx context.Context, quizId uint, teacherId uint) ([]models.StudentSubmission, error) {
+	// owner, err := s.store.IsQuizOwner(ctx, quizId, teacherId)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// if !owner {
+	// 	return nil, constants.ErrRecordDoesNotExists
+	// }
+
+	return s.store.GetAllSubmissionsByTeacherId(ctx, teacherId)
 }

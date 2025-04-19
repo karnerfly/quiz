@@ -12,9 +12,10 @@ import (
 func initializStudentRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Config) {
 	studentRouter := router.Group("/student")
 
-	store := store.NewQuizStore(db)
-	service := services.NewQuizeService(store)
+	s := store.NewStore(db)
+	service := services.NewStudentService(s)
 	handler := handlers.NewStudentHandler(service, cfg)
 
+	studentRouter.POST("/quiz/submit", handler.HandleSubmitQuiz)
 	studentRouter.GET("/result", handler.HandleGetResult)
 }
