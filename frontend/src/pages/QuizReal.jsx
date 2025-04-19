@@ -183,6 +183,7 @@ const handleQuizSubmit = () => {
   setCurrentSection("submitted");
   localStorage.clear();
  };
+ 
 
 
   // Timer logic
