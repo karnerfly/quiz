@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/handlers"
+	"github.com/karnerfly/quiz/middlewares"
 	"github.com/karnerfly/quiz/pkg/log"
 	"gorm.io/gorm"
 )
@@ -15,7 +16,7 @@ func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 
 	engine.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
-		handlers.SendNotFoundError(ctx, path)
+		handlers.SendRouteNotFoundError(ctx, path)
 	})
 
 	engine.NoMethod(func(ctx *gin.Context) {
@@ -24,6 +25,8 @@ func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 	})
 
 	router := engine.Group("/api/v1")
+
+	router.Use(middlewares.CORSMiddleware(cfg))
 
 	router.GET("/_health", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
@@ -72,4 +75,5 @@ func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 	initializeAuthRoutes(router, db, cfg)
 	initializeUserRoutes(router, db, cfg)
 	initializeQuizRoutes(router, db, cfg)
+	initializStudentRoutes(router, db, cfg)
 }

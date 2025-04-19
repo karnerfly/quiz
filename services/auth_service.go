@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/karnerfly/quiz/constants"
-	"github.com/karnerfly/quiz/models"
+	"github.com/karnerfly/quiz/models/dto"
 	"github.com/karnerfly/quiz/pkg"
 	"github.com/karnerfly/quiz/store"
 )
@@ -19,7 +19,7 @@ func NewAuthService(userStore *store.UserStore) *AuthService {
 	return &AuthService{store: userStore}
 }
 
-func (as *AuthService) AuthenticateUser(ctx context.Context, payload models.LoginUserPayload) (uint, error) {
+func (as *AuthService) AuthenticateUser(ctx context.Context, payload dto.LoginUserPayload) (uint, error) {
 	user, err := as.store.GetUserByEmail(ctx, payload.Email)
 	if err != nil {
 		if errors.Is(err, constants.ErrRecordDoesNotExists) {
@@ -39,8 +39,6 @@ func (as *AuthService) AuthenticateUser(ctx context.Context, payload models.Logi
 
 		return 0, err
 	}
-
-	fmt.Println(email)
 
 	if email != user.Email {
 		return 0, fmt.Errorf("user authentication failed: %w", constants.ErrAuthenticationFailed)

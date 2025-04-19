@@ -30,8 +30,9 @@ type DbConfig struct {
 type Config struct {
 	Server      ServerConfig
 	Redis       RedisConfig
-	Environment string
 	Db          DbConfig
+	Environment string
+	CorsOrigin  string
 }
 
 func New() Config {
@@ -54,6 +55,7 @@ func New() Config {
 			MaxConnections: getEnvInt("DATABASE_CONNECTIONS", 10),
 		},
 		Environment: getEnvStringMust("ENV"),
+		CorsOrigin:  getEnvString("CORS_ORIGIN", "*"),
 	}
 }
 

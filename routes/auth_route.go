@@ -19,4 +19,5 @@ func initializeAuthRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Conf
 
 	authRouter.POST("/login", handler.HandleLoginUser)
 	authRouter.POST("/logout", middlewares.Protected(), handler.HandleLogoutUser)
+	authRouter.GET("/token", handler.HandleGetAuthToken)
 }

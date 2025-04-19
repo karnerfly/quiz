@@ -19,9 +19,5 @@ func initializeQuizRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Conf
 
 	quizRouter.Use(middlewares.Protected())
 
-	quizRouter.GET("/", handler.HandleGetAllQuizzes)
-
 	quizRouter.POST("/new", handler.HandleCreateQuiz)
-	quizRouter.POST("/:quizId/add_question", handler.HandleAddQuestion)
-	quizRouter.POST("/finish", handler.HandleAddQuestion)
 }

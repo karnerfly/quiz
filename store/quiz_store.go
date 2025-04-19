@@ -17,70 +17,45 @@ func NewQuizStore(client *gorm.DB) *QuizStore {
 	return &QuizStore{client: client}
 }
 
-func (store *QuizStore) CreateQuiz(ctx context.Context, quiz models.Quiz) (uint, error) {
+func (store *QuizStore) CreateQuiz(ctx context.Context, quiz models.Quiz) (string, error) {
 	result := store.client.WithContext(ctx).Model(&models.Quiz{}).Create(&quiz)
 
 	if result.Error != nil {
-		return 0, result.Error
+		return "", result.Error
 	}
 
-	return quiz.ID, nil
+	return quiz.ShareCode, nil
 }
 
-func (store *QuizStore) GetQuestionCount(ctx context.Context, quizId uint, hostId uint) (int64, error) {
-	var totalQuestions int64
-	var currentQuestionCount int64
+func (store *QuizStore) IsOwner(ctx context.Context, quizId uint, teacherId uint) (bool, error) {
+	var count int64
+	err := store.client.WithContext(ctx).Model(&models.Quiz{}).Where("id = ? AND teacher_id = ?", quizId, teacherId).Count(&count).Error
 
-	result := store.client.WithContext(ctx).Model(&models.Quiz{}).Where("id = ? AND host_id = ?", quizId, hostId).Select("no_of_questions").Scan(&totalQuestions)
-
-	if result.Error != nil {
-		return 0, result.Error
+	if err != nil {
+		return false, err
 	}
-
-	if result.RowsAffected == 0 {
-		return 0, constants.ErrRecordDoesNotExists
-	}
-
-	result = store.client.WithContext(ctx).Model(&models.Question{}).Where("quiz_id = ?", quizId).Count(&currentQuestionCount)
-
-	if result.Error != nil {
-		return 0, result.Error
-	}
-
-	if currentQuestionCount == totalQuestions {
-		return 0, constants.ErrMaxNumberExceed
-	}
-
-	return currentQuestionCount, nil
+	return count > 0, nil
 }
 
-func (store *QuizStore) GetQuizById(ctx context.Context, quizId uint, hostId uint) (*models.Quiz, error) {
-	var quiz *models.Quiz
-	result := store.client.WithContext(ctx).Preload("Host").Preload("Questions").Where("id = ? AND host_id = ?", quizId, hostId).First(&quiz)
+func (store *QuizStore) GetQuizById(ctx context.Context, quizId uint) (models.Quiz, error) {
+	var quiz models.Quiz
+	result := store.client.WithContext(ctx).Preload("Teacher").Preload("Questions").First(&quiz, quizId)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, constants.ErrRecordDoesNotExists
+			return models.Quiz{}, constants.ErrRecordDoesNotExists
 		}
 
-		return nil, result.Error
+		return models.Quiz{}, result.Error
 	}
 
 	return quiz, nil
 }
 
-func (store *QuizStore) GetAllQuizzesByHostId(ctx context.Context, hostId uint) ([]models.Quiz, error) {
+func (store *QuizStore) GetAllQuizzesByTeacherId(ctx context.Context, teacherId uint) ([]models.Quiz, error) {
 	quizzes := []models.Quiz{}
 
-	result := store.client.WithContext(ctx).
-		Where("host_id = ?", hostId).
-		Preload("Questions", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id", "created_at", "updated_at", "deleted_at", "quiz_id", "problem", "options", "answers")
-		}).
-		Select("id", "created_at", "updated_at", "deleted_at", "title", "subject",
-			"no_of_questions", "current_question_count", "host_id", "status",
-			"duration", "expiry", "is_negative_marking").
-		Find(&quizzes)
+	result := store.client.WithContext(ctx).Preload("Questions").Find(&quizzes).Where("teacher_id = ?", teacherId)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -88,21 +63,24 @@ func (store *QuizStore) GetAllQuizzesByHostId(ctx context.Context, hostId uint) 
 	return quizzes, nil
 }
 
-func (store *QuizStore) AddQuestionToQuiz(ctx context.Context, quizId uint, questionCount int64, question models.Question) (uint, error) {
-	result := store.client.WithContext(ctx).Model(&models.Question{}).Create(&question)
-	if result.Error != nil {
-		return 0, result.Error
+func (store *QuizStore) GetAllSubmissions(ctx context.Context, quizId uint) ([]models.StudentSubmission, error) {
+	submissions := []models.StudentSubmission{}
+	if err := store.client.WithContext(ctx).Model(&models.StudentSubmission{}).Preload("Answers").Find(&submissions).Where("quiz_id = ? AND status = 'finished'", quizId).Error; err != nil {
+		return nil, err
 	}
 
-	result = store.client.WithContext(ctx).Model(&models.Quiz{}).Where("id = ?", quizId).Update("current_question_count", questionCount)
-	if result.Error != nil {
-		return 0, result.Error
-	}
-
-	return question.ID, nil
+	return submissions, nil
 }
 
-func (store *QuizStore) AddQuestionToQuizInBatch(ctx context.Context, quizId uint, questions []models.Question) error {
-	result := store.client.WithContext(ctx).Model(&models.Question{}).CreateInBatches(questions, len(questions))
-	return result.Error
+func (store *QuizStore) GetSubmissionBySessionId(ctx context.Context, sessionId string) (models.StudentSubmission, error) {
+	var submission models.StudentSubmission
+	if err := store.client.WithContext(ctx).Model(&models.StudentSubmission{}).First(&submission).Where("session_id = ? AND status = 'finished'", sessionId).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.StudentSubmission{}, constants.ErrRecordDoesNotExists
+		}
+
+		return models.StudentSubmission{}, err
+	}
+
+	return submission, nil
 }

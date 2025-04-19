@@ -6,10 +6,9 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/constants"
-	"github.com/karnerfly/quiz/models"
+	"github.com/karnerfly/quiz/models/dto"
 	"github.com/karnerfly/quiz/pkg"
 	"github.com/karnerfly/quiz/services"
 )
@@ -25,28 +24,14 @@ func NewAuthHandler(authService *services.AuthService, cfg configs.Config) *Auth
 
 func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 	// validate request payload
-	var payload models.LoginUserPayload
+	var (
+		payload dto.LoginUserPayload
+		env     = ah.config.Environment
+	)
 
 	err := ValidateJsonPayload(ctx, &payload)
 	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid JSON payload",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(ah.config.Environment))
-		return
-	}
-
-	v := validator.New()
-	err = v.Struct(payload)
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid JSON payload",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(ah.config.Environment))
+		SendBadRequestError(ctx, "invalid json payload", err.Error(), env)
 		return
 	}
 
@@ -55,16 +40,11 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 
 	// handle different errors
 	if err != nil {
-		errCode := http.StatusInternalServerError
 		if errors.Is(err, constants.ErrRecordDoesNotExists) || errors.Is(err, constants.ErrAuthenticationFailed) {
-			errCode = http.StatusBadRequest
+			SendBadRequestError(ctx, "user authentication failed", "invalid username or password", env)
+			return
 		}
-		errResp := ErrorResponse{
-			Code:        errCode,
-			Message:     "invalid user credentials",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(ah.config.Environment))
+		SendInternalServerError(ctx, err, env)
 		return
 	}
 
@@ -73,25 +53,14 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 
 	authToken, err := pkg.GenerateBase64Token(32)
 	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "cannot create authentication token",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(ah.config.Environment))
+		SendInternalServerError(ctx, err, env)
 		return
 	}
 
 	session.Set("user_id", id)
 	session.Set("auth_token", authToken)
-	err = session.Save()
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "cannot create user session",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(ah.config.Environment))
+	if err = session.Save(); err != nil {
+		SendInternalServerError(ctx, err, env)
 		return
 	}
 
@@ -111,20 +80,29 @@ func (ah *AuthHandler) HandleLogoutUser(ctx *gin.Context) {
 
 	session.Delete("auth_token")
 	session.Delete("user_id")
-	err := session.Save()
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "cannot delete user session",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(ah.config.Environment))
+	if err := session.Save(); err != nil {
+		SendInternalServerError(ctx, err, ah.config.Environment)
 		return
 	}
 
 	resp := SuccessResponse{
 		Code:    http.StatusOK,
 		Message: "user logout successfully",
+	}
+	SendResponse(ctx, http.StatusOK, resp)
+}
+
+func (ah *AuthHandler) HandleGetAuthToken(ctx *gin.Context) {
+	session := sessions.Default(ctx)
+
+	authToken := session.Get("auth_token")
+
+	resp := SuccessResponse{
+		Code:    http.StatusOK,
+		Message: "token fetched",
+		Data: map[string]any{
+			"auth_token": authToken,
+		},
 	}
 	SendResponse(ctx, http.StatusOK, resp)
 }

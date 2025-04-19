@@ -31,33 +31,33 @@ func (store *UserStore) CreateUser(ctx context.Context, user models.User) (uint,
 	return user.ID, nil
 }
 
-func (store *UserStore) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
-	var user *models.User
+func (store *UserStore) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
+	var user models.User
 
 	result := store.client.WithContext(ctx).Model(&models.User{}).Where("email = ?", email).First(&user)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, constants.ErrRecordDoesNotExists
+			return models.User{}, constants.ErrRecordDoesNotExists
 		}
 
-		return nil, result.Error
+		return models.User{}, result.Error
 	}
 
 	return user, nil
 }
 
-func (store *UserStore) GetUserById(ctx context.Context, id uint) (*models.User, error) {
-	var user *models.User
+func (store *UserStore) GetUserById(ctx context.Context, id uint) (models.User, error) {
+	var user models.User
 
-	result := store.client.WithContext(ctx).Model(&models.User{}).Where("id = ?", id).Select("id", "name", "email", "phone", "role", "created_at", "updated_at").First(&user)
+	result := store.client.WithContext(ctx).Model(&models.User{}).Select("id", "name", "email", "phone", "role", "created_at", "updated_at").First(&user, id)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, constants.ErrRecordDoesNotExists
+			return models.User{}, constants.ErrRecordDoesNotExists
 		}
 
-		return nil, result.Error
+		return models.User{}, result.Error
 	}
 
 	return user, nil

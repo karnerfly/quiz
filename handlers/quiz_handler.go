@@ -1,16 +1,13 @@
 package handlers
 
 import (
-	"encoding/gob"
-	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/karnerfly/quiz/configs"
-	"github.com/karnerfly/quiz/constants"
-	"github.com/karnerfly/quiz/models"
+	"github.com/karnerfly/quiz/models/dto"
 	"github.com/karnerfly/quiz/services"
 )
 
@@ -19,61 +16,37 @@ type QuizHandler struct {
 	config  configs.Config
 }
 
-func init() {
-	gob.Register([]models.AddQuestionPayload{})
-}
-
 func NewQuizHandler(quizService *services.QuizService, cfg configs.Config) *QuizHandler {
 	return &QuizHandler{service: quizService, config: cfg}
 }
 
 func (qh *QuizHandler) HandleCreateQuiz(ctx *gin.Context) {
-	hostId, exists := ctx.Get("userId")
+	var (
+		payload dto.CreateQuizPayload
+		env     = qh.config.Environment
+	)
+
+	teacherId, exists := ctx.Get("userId")
 	if !exists {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "something went wrong",
-			Description: "userId is missing in request context",
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(qh.config.Environment))
+		SendInternalServerError(ctx, fmt.Errorf("context serialization failed"), env)
 		return
 	}
 
-	nHostId := hostId.(uint)
+	nTeacherId := teacherId.(uint)
 
-	var payload models.CreateQuizPayload
-	err := ValidateJsonPayload(ctx, &payload)
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid JSON payload",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(qh.config.Environment))
+	if err := ValidateJsonPayload(ctx, &payload); err != nil {
+		SendBadRequestError(ctx, "invalid json payload", err.Error(), env)
 		return
 	}
 
-	v := validator.New()
-
-	err = v.Struct(payload)
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid JSON payload",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(qh.config.Environment))
+	if payload.NoOfQuestions != len(payload.Questions) {
+		SendBadRequestError(ctx, "invalid json payload", "insufficient question lists", env)
 		return
 	}
 
-	quizId, err := qh.service.CreateNewQuiz(ctx.Request.Context(), nHostId, payload)
+	shareCode, err := qh.service.CreateNewQuiz(ctx.Request.Context(), nTeacherId, payload)
 	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "something went wrong while creating user",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(qh.config.Environment))
+		SendInternalServerError(ctx, err, env)
 		return
 	}
 
@@ -81,114 +54,26 @@ func (qh *QuizHandler) HandleCreateQuiz(ctx *gin.Context) {
 		Code:    http.StatusCreated,
 		Message: "new quiz created successfully",
 		Data: map[string]any{
-			"quiz_id": quizId,
+			"share_code": shareCode,
 		},
 	}
 	SendResponse(ctx, http.StatusCreated, resp)
 }
-
-func (qh *QuizHandler) HandleAddQuestion(ctx *gin.Context) {
-	quizId := ctx.Param("quizId")
-
-	nQuizId, err := strconv.Atoi(quizId)
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid quizId",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(qh.config.Environment))
-		return
-	}
-
-	hostId, exists := ctx.Get("userId")
-	if !exists {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "something went wrong",
-			Description: "userId is missing in request context",
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(qh.config.Environment))
-		return
-	}
-
-	nHostId := hostId.(uint)
-
-	var payload models.AddQuestionPayload
-
-	err = ValidateJsonPayload(ctx, &payload)
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid JSON payload",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(qh.config.Environment))
-		return
-	}
-
-	v := validator.New()
-	err = v.Struct(payload)
-	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusBadRequest,
-			Message:     "invalid JSON payload",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(qh.config.Environment))
-		return
-	}
-
-	questionId, err := qh.service.AddQuestion(ctx, uint(nQuizId), nHostId, payload)
-	if err != nil {
-		errCode := http.StatusInternalServerError
-		if errors.Is(err, constants.ErrMaxNumberExceed) {
-			errCode = http.StatusBadRequest
-		}
-		errResp := ErrorResponse{
-			Code:        errCode,
-			Message:     "something went wrong while add question",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, errCode, errResp, PrintStack(qh.config.Environment))
-		return
-	}
-
-	resp := SuccessResponse{
-		Code:    http.StatusCreated,
-		Message: "new question added to the quiz",
-		Data: map[string]any{
-			"quiz_id":     quizId,
-			"question_id": questionId,
-		},
-	}
-	SendResponse(ctx, http.StatusCreated, resp)
-}
-
-func (qh *QuizHandler) HandleFinishQuiz(ctx *gin.Context) {}
 
 func (qh *QuizHandler) HandleGetAllQuizzes(ctx *gin.Context) {
-	hostId, exists := ctx.Get("userId")
+	env := qh.config.Environment
+
+	teacherId, exists := ctx.Get("userId")
 	if !exists {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "something went wrong",
-			Description: "userId is missing in request context",
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(qh.config.Environment))
+		SendInternalServerError(ctx, fmt.Errorf("context serialization failed"), env)
 		return
 	}
 
-	nhostId := hostId.(uint)
+	nTeacherId := teacherId.(uint)
 
-	quizzes, err := qh.service.GetAllQuizzes(ctx.Request.Context(), nhostId)
+	quizzes, err := qh.service.GetAllQuizzesByTeacherId(ctx.Request.Context(), nTeacherId)
 	if err != nil {
-		errResp := ErrorResponse{
-			Code:        http.StatusInternalServerError,
-			Message:     "something went wrong while fetching quizzes",
-			Description: err.Error(),
-		}
-		SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(qh.config.Environment))
+		SendInternalServerError(ctx, err, env)
 		return
 	}
 
@@ -197,5 +82,39 @@ func (qh *QuizHandler) HandleGetAllQuizzes(ctx *gin.Context) {
 		Message: "quizzes fetched successfully",
 		Data:    quizzes,
 	}
+	SendResponse(ctx, http.StatusOK, resp)
+}
+
+func (qh *QuizHandler) HandleGetAllSubmissions(ctx *gin.Context) {
+	var (
+		env    = qh.config.Environment
+		quizId = ctx.Param("quizId")
+	)
+
+	teacherId, exists := ctx.Get("userId")
+	if !exists {
+		SendInternalServerError(ctx, fmt.Errorf("context serialization failed"), env)
+		return
+	}
+
+	nTeacherId := teacherId.(uint)
+	nQuizId, err := strconv.Atoi(quizId)
+	if err != nil {
+		SendBadRequestError(ctx, "invalid quiz id", "quizId is not a key id", env)
+		return
+	}
+
+	submissions, err := qh.service.GetAllSubmissions(ctx.Request.Context(), uint(nQuizId), nTeacherId)
+	if err != nil {
+		SendInternalServerError(ctx, err, env)
+		return
+	}
+
+	resp := SuccessResponse{
+		Code:    http.StatusOK,
+		Message: "submission fetched successfully",
+		Data:    submissions,
+	}
+
 	SendResponse(ctx, http.StatusOK, resp)
 }

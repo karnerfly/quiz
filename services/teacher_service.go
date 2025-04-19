@@ -7,6 +7,7 @@ import (
 
 	"github.com/karnerfly/quiz/constants"
 	"github.com/karnerfly/quiz/models"
+	"github.com/karnerfly/quiz/models/dto"
 	"github.com/karnerfly/quiz/pkg"
 	"github.com/karnerfly/quiz/store"
 )
@@ -15,19 +16,11 @@ type UserService struct {
 	store *store.UserStore
 }
 
-func NewUserService(userStore *store.UserStore) *UserService {
+func NewTeacherService(userStore *store.UserStore) *UserService {
 	return &UserService{store: userStore}
 }
 
-func getUserRole(r string) models.UserRole {
-	if r != "" {
-		return models.UserRole(r)
-	}
-
-	return models.Teacher
-}
-
-func (us *UserService) CreateUser(ctx context.Context, payload models.CreateUserPayload) (uint, error) {
+func (us *UserService) CreateNewTeacher(ctx context.Context, payload dto.CreateTeacherPayload) (uint, error) {
 	encryptor := pkg.Encrypter{}
 
 	encryptedToken, err := encryptor.Encrypt([]byte(payload.Email), encryptor.HashKey([]byte(payload.Password)))
@@ -40,7 +33,7 @@ func (us *UserService) CreateUser(ctx context.Context, payload models.CreateUser
 		Email:         payload.Email,
 		IdentityToken: encryptedToken,
 		Phone:         payload.Phone,
-		Role:          getUserRole(payload.Role),
+		Role:          models.Teacher,
 	}
 
 	id, err := us.store.CreateUser(ctx, user)
@@ -56,21 +49,15 @@ func (us *UserService) CreateUser(ctx context.Context, payload models.CreateUser
 	return id, err
 }
 
-func (us *UserService) GetCurrentUser(ctx context.Context, id uint) (*models.UserResponsePayload, error) {
+func (us *UserService) GetCurrentTeacher(ctx context.Context, id uint) (models.User, error) {
 	user, err := us.store.GetUserById(ctx, id)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, constants.ErrRecordDoesNotExists) {
+			return models.User{}, fmt.Errorf("user does not exists: %w", err)
+		}
+
+		return models.User{}, err
 	}
 
-	resp := &models.UserResponsePayload{
-		Id:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		Phone:     user.Phone,
-		Role:      string(user.Role),
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.CreatedAt,
-	}
-
-	return resp, nil
+	return user, nil
 }
