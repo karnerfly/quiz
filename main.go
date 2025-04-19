@@ -37,13 +37,15 @@ func main() {
 	}
 	log.Println("database connected")
 
-	err = db.CreateEnums(dbClient)
-	if err != nil {
+	if err = db.CreateEnums(dbClient); err != nil {
 		log.Fatal(err)
 	}
 
-	err = db.Migrate(dbClient, &models.User{}, &models.Question{}, &models.Quiz{})
-	if err != nil {
+	if err = db.Migrate(dbClient, &models.User{}, &models.Quiz{}, &models.Question{}, &models.StudentSubmission{}, &models.StudentAnswer{}); err != nil {
+		log.Fatal(err)
+	}
+
+	if err = db.CreateConstrains(dbClient); err != nil {
 		log.Fatal(err)
 	}
 

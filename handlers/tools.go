@@ -6,6 +6,7 @@ import (
 	"runtime/debug"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type ErrorResponse struct {
@@ -28,7 +29,34 @@ func SendErrorResponse(ctx *gin.Context, status int, errResp ErrorResponse, stac
 	})
 }
 
-func SendNotFoundError(ctx *gin.Context, path string) {
+func SendInternalServerError(ctx *gin.Context, err error, env string) {
+	errResp := ErrorResponse{
+		Code:        http.StatusInternalServerError,
+		Message:     "internal server error",
+		Description: err.Error(),
+	}
+	SendErrorResponse(ctx, http.StatusInternalServerError, errResp, PrintStack(env))
+}
+
+func SendBadRequestError(ctx *gin.Context, message string, description string, env string) {
+	errResp := ErrorResponse{
+		Code:        http.StatusBadRequest,
+		Message:     message,
+		Description: description,
+	}
+	SendErrorResponse(ctx, http.StatusBadRequest, errResp, PrintStack(env))
+}
+
+func SendResourceNotFoundError(ctx *gin.Context, message string, description string, env string) {
+	errResp := ErrorResponse{
+		Code:        http.StatusNotFound,
+		Message:     message,
+		Description: description,
+	}
+	SendErrorResponse(ctx, http.StatusNotFound, errResp, PrintStack(env))
+}
+
+func SendRouteNotFoundError(ctx *gin.Context, path string) {
 	code := http.StatusNotFound
 
 	SendErrorResponse(ctx, code, ErrorResponse{
@@ -56,7 +84,13 @@ func SendResponse(ctx *gin.Context, status int, resp SuccessResponse) {
 }
 
 func ValidateJsonPayload(ctx *gin.Context, paylodPtr any) error {
-	return ctx.ShouldBindJSON(paylodPtr)
+	err := ctx.ShouldBindJSON(paylodPtr)
+	if err != nil {
+		return err
+	}
+	v := validator.New()
+
+	return v.Struct(paylodPtr)
 }
 
 func PrintStack(env string) string {

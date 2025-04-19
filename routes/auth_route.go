@@ -13,10 +13,11 @@ import (
 func initializeAuthRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Config) {
 	authRouter := router.Group("/auth")
 
-	store := store.NewUserStore(db)
+	store := store.NewStore(db)
 	service := services.NewAuthService(store)
 	handler := handlers.NewAuthHandler(service, cfg)
 
 	authRouter.POST("/login", handler.HandleLoginUser)
 	authRouter.POST("/logout", middlewares.Protected(), handler.HandleLogoutUser)
+	authRouter.GET("/token", handler.HandleGetAuthToken)
 }
