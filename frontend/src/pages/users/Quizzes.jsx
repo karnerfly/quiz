@@ -52,19 +52,20 @@ const QuizzesPage = () => {
       color: "bg-indigo-100 text-indigo-600"
     },
     {
-      title: "Quiz History",
+      title: "Quiz Result",
       icon: faHistory,
-      path: "history",
+      path: "result",
       description: "View past quizzes",
       color: "bg-purple-100 text-purple-600"
     },
+    /*
     {
       title: "Analytics",
       icon: faChartBar,
       path: "analytics",
       description: "Performance metrics",
       color: "bg-blue-100 text-blue-600"
-    },
+    }, 
     {
       title: "Participants",
       icon: faUsers,
@@ -72,6 +73,7 @@ const QuizzesPage = () => {
       description: "Manage quiz takers",
       color: "bg-green-100 text-green-600"
     }
+      */
   ];
 
   return (

@@ -91,13 +91,13 @@ export default function Footer() {
               <div className="flex items-center">
                 <img src="/quiz.png" alt="Company Logo" className="h-8 mr-3" />
                 <span className="text-2xl font-bold text-blue-600">
-                  VoteMaker
+                Quiznity
                 </span>
               </div>
             </div>
 
             <p className="text-gray-600 max-w-md">
-              Mentimeter allows everyone to ask questions, to get clarification
+              Quiznity allows everyone to ask questions, to get clarification
               or a clearer understanding on subjects resulting in a more
               fulfilling learning experience.
             </p>
@@ -233,12 +233,12 @@ export default function Footer() {
               </h3>
               <ul className="space-y-3">
                 {[
-                  "University Of Calcutta",
-                  "Affiliated Colleges",
-                  "NDLI",
-                  "Student Club",
-                  "Join Community",
-                  "University Result",
+                  "National Testing Agency",
+                  "WBJEE BOARD",
+                  "NEET",
+                  "Jee Main",
+                  "Wbjee",
+                  "Cuet",
                 ].map((item) => (
                   <li key={item}>
                     <a
@@ -272,7 +272,7 @@ export default function Footer() {
                       Our Location
                     </h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      123 Education Ave, Learning City, ST 12345
+                      Kolkata, West Bengal, India
                     </p>
                   </div>
                 </li>
@@ -285,7 +285,7 @@ export default function Footer() {
                     <h4 className="text-sm font-medium text-gray-800">
                       Phone Number
                     </h4>
-                    <p className="text-sm text-gray-600 mt-1">(123) 456-7890</p>
+                    <p className="text-sm text-gray-600 mt-1">Updated Soon</p>
                   </div>
                 </li>
 
@@ -298,7 +298,7 @@ export default function Footer() {
                       Email Address
                     </h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      info@brightminds.com
+                      Updated Soon
                     </p>
                   </div>
                 </li>
@@ -354,11 +354,11 @@ export default function Footer() {
         <div className="mt-16 flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200">
           <div className="mb-4 md:mb-0">
             <p className="text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} BitLearning. All rights
+              &copy; {new Date().getFullYear()} Quiznity. All rights
               reserved.
             </p>
             <p className="text-sm text-gray-500">
-              Designed with ❤️ for your business
+              Designed with ❤️ for smart education
             </p>
           </div>
           <div className="flex flex-wrap gap-6">

@@ -86,7 +86,7 @@ const FAQSection = () => {
             Still have questions?
           </p>
           <a 
-            href="#contact" 
+            href="/contact" 
             className="inline-flex items-center text-black font-semibold hover:text-gray-700 transition-colors"
           >
             Contact our support team

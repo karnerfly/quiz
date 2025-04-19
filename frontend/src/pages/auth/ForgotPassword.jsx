@@ -126,7 +126,7 @@ const ForgotPassword = () => {
                 <div className="text-center text-sm text-gray-600">
                   Remember your password?{" "}
                   <a
-                    href="/login"
+                    href="/auth/login"
                     className="font-medium text-black hover:underline"
                   >
                     Sign in

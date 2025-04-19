@@ -24,6 +24,9 @@ import Profile from "./pages/users/Profile";
 import Settings from "./pages/users/Settings";
 import Quizzes from "./pages/users/Quizzes";
 import Create from "./pages/users/Create";
+import Result from "./pages/users/Result";
+import QuizReal from "./pages/QuizReal";
+import Analysis from "./pages/Analysis";
 
 // const App = () => {
 //   return (
@@ -84,6 +87,14 @@ export const router = createBrowserRouter([
       {
         path: "faq",
         element: <Faq />,
+      },
+      {
+        path: "quizreal",
+        element: <QuizReal />
+      },
+      {
+        path: "analysis",
+        element: <Analysis />
       },
 
       // features sub route
@@ -185,6 +196,15 @@ export const router = createBrowserRouter([
             element: (
               <Protected>
                 <Create />
+              </Protected>
+            ),
+          },
+
+          {
+            path: "result",
+            element: (
+              <Protected>
+                <Result />
               </Protected>
             ),
           },
