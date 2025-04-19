@@ -44,7 +44,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <img src="/quiz.png" alt="Company Logo" className="h-8 mr-3" />
-            <span className="text-2xl font-bold text-blue-600">VoteMaker</span>
+            <span className="text-2xl font-bold text-blue-600">Quiznity</span>
           </div>
 
           {/* Desktop Navigation + Button */}
