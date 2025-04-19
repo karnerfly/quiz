@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import Header from "@src/components/dashboard/DbHeader";
 import Sidebar from "@src/components/dashboard/DbSidebar";
+import apiClient from "@src/api/client";
+import { getCurrentTeacherDetails } from "@src/api";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,6 +12,16 @@ const Dashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    getCurrentTeacherDetails()
+      .then((resp) => {
+        console.log(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   return (
     <div
