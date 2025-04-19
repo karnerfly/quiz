@@ -52,9 +52,9 @@ const QuizzesPage = () => {
       color: "bg-indigo-100 text-indigo-600"
     },
     {
-      title: "Quiz History",
+      title: "Quiz Result",
       icon: faHistory,
-      path: "history",
+      path: "result",
       description: "View past quizzes",
       color: "bg-purple-100 text-purple-600"
     },
