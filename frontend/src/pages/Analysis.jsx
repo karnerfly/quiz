@@ -110,11 +110,11 @@ const StudentAnalysisPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto pt-22 px-4 py-6">
         {/* Back Button */}
-        <Link to="/results" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-6">
+        <Link to="/" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-6">
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-          Back to Results
+          Back to Home
         </Link>
 
         {/* Student Info Card */}
