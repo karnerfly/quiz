@@ -90,11 +90,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "quizreal",
-        element: <QuizReal />
+        element: <QuizReal />,
       },
       {
         path: "analysis",
-        element: <Analysis />
+        element: <Analysis />,
       },
 
       // features sub route
@@ -152,61 +152,102 @@ export const router = createBrowserRouter([
   },
 
   // dashboard route
+  // {
+  //   path: "dashboard",
+  //   element: <Dashboard />,
+  //   children: [
+  //     {
+  //       path: "",
+  //       element: (
+  //         <Protected>
+  //           <DbHome />
+  //         </Protected>
+  //       ),
+  //     },
+  //     {
+  //       path: "profile",
+  //       element: (
+  //         <Protected>
+  //           <Profile />
+  //         </Protected>
+  //       ),
+  //     },
+  //     {
+  //       path: "settings",
+  //       element: (
+  //         <Protected>
+  //           <Settings />
+  //         </Protected>
+  //       ),
+  //     },
+  //     {
+  //       path: "quizzes",
+  //       children: [
+  //         {
+  //           path: "",
+  //           element: (
+  //             <Protected>
+  //               <Quizzes />
+  //             </Protected>
+  //           ),
+  //         },
+  //         {
+  //           path: "create",
+  //           element: (
+  //             <Protected>
+  //               <Create />
+  //             </Protected>
+  //           ),
+  //         },
+
+  //         {
+  //           path: "result",
+  //           element: (
+  //             <Protected>
+  //               <Result />
+  //             </Protected>
+  //           ),
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
+
   {
     path: "dashboard",
-    element: <Dashboard />,
+    element: (
+      <Protected>
+        <Dashboard />
+      </Protected>
+    ),
     children: [
       {
         path: "",
-        element: (
-          <Protected>
-            <DbHome />
-          </Protected>
-        ),
+        element: <DbHome />,
       },
       {
         path: "profile",
-        element: (
-          <Protected>
-            <Profile />
-          </Protected>
-        ),
+        element: <Profile />,
       },
       {
         path: "settings",
-        element: (
-          <Protected>
-            <Settings />
-          </Protected>
-        ),
+        element: <Settings />,
       },
       {
         path: "quizzes",
         children: [
           {
             path: "",
-            element: (
-              <Protected>
-                <Quizzes />
-              </Protected>
-            ),
+            element: <Quizzes />,
           },
           {
             path: "create",
-            element: (
-              <Protected>
-                <Create />
-              </Protected>
-            ),
+            element: <Create />,
           },
 
           {
             path: "result",
-            element: (
-              <Protected>
-                <Result />
-              </Protected>
-            ),
+            element: <Result />,
           },
         ],
       },

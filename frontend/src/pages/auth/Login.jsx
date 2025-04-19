@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useAuth } from "@src/context/Auth";
 import { useNavigate } from "react-router";
+import { login } from "@src/api";
 
 const Login = () => {
   const { setToken } = useAuth();
@@ -58,28 +59,19 @@ const Login = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      // simulate login
-      const token = btoa(JSON.stringify(formData));
-      console.log("token", token);
-      localStorage.setItem("token", token);
-      setToken(token);
-
-      // Simulate successful login
-      toast.success("Logged in successfully!", {
-        duration: 4000,
-        position: "top-center",
-        style: {
-          background: "#10B981",
-          color: "#FFFFFF",
-          fontWeight: "500",
-          borderRadius: "9999px",
-          padding: "16px 24px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-        },
-      });
-
-      // should navigate to user dashboard
-      navigate("/dashboard", { replace: true });
+      login({ email: formData.email, password: formData.password })
+        .then((resp) => {
+          const authToken = resp.data?.data?.auth_token;
+          if (authToken) {
+            setToken(authToken);
+          }
+          navigate("/dashboard", { replace: true });
+        })
+        .catch((err) => {
+          const msg = err.status === 400 ? "invalid credentials" : err.message;
+          setToken(null);
+          toast.error(msg);
+        });
     }
   };
 

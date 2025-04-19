@@ -12,19 +12,25 @@ import {
   faList,
   faCheckCircle,
   faPoll,
-  faClipboardList
+  faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
+import { logout } from "@src/api";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   const [activeFeature, setActiveFeature] = useState(null);
-  
+  const navigate = useNavigate();
+
   // Handle clicks outside the sidebar
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isSidebarOpen) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        isSidebarOpen
+      ) {
         toggleSidebar();
       }
     };
@@ -34,36 +40,49 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSidebarOpen, toggleSidebar]);
-  
+
   const handleLinkClick = () => {
     if (isSidebarOpen) {
       toggleSidebar();
     }
   };
 
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        navigate("/", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("error while logout");
+      });
+  };
+
   const featureMenus = {
     quiz: [
       { name: "All Quizzes", icon: faList, path: "quizzes" },
       { name: "Create Quiz", icon: faPlus, path: "quizzes/create" },
-      { name: "Quiz Results", icon: faCheckCircle, path: "quizzes/results" }
+      { name: "Quiz Results", icon: faCheckCircle, path: "quizzes/result" },
     ],
     poll: [
       { name: "All Polls", icon: faPoll, path: "polls" },
       { name: "Create Poll", icon: faPlus, path: "polls/create" },
-      { name: "Poll Analytics", icon: faChartBar, path: "polls/analytics" }
+      { name: "Poll Analytics", icon: faChartBar, path: "polls/analytics" },
     ],
     survey: [
       { name: "All Surveys", icon: faClipboardList, path: "surveys" },
       { name: "Create Survey", icon: faPlus, path: "surveys/create" },
-      { name: "Survey Responses", icon: faChartBar, path: "surveys/responses" }
-    ]
+      { name: "Survey Responses", icon: faChartBar, path: "surveys/responses" },
+    ],
   };
 
   return (
     <aside
       ref={sidebarRef}
       className={`w-64 rounded-xl shadow-lg p-6 transform transition-all duration-300 fixed md:relative z-40 h-screen md:h-auto overflow-y-auto 
-        ${isSidebarOpen ? "left-0" : "-left-64"} md:left-0 md:block dark:bg-gray-800 border dark:border-gray-700 bg-white`}
+        ${
+          isSidebarOpen ? "left-0" : "-left-64"
+        } md:left-0 md:block dark:bg-gray-800 border dark:border-gray-700 bg-white`}
     >
       {/* Close Button for Small Screens */}
       <button
@@ -100,17 +119,23 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         {/* Quiz Section */}
         <div>
           <button
-            onClick={() => setActiveFeature(activeFeature === 'quiz' ? null : 'quiz')}
+            onClick={() =>
+              setActiveFeature(activeFeature === "quiz" ? null : "quiz")
+            }
             className="w-full text-left flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
           >
             <FontAwesomeIcon icon={faBook} className="mr-3 text-indigo-500" />
             Quizzes
-            <span className={`ml-auto transition-transform duration-200 ${activeFeature === 'quiz' ? 'rotate-90' : ''}`}>
+            <span
+              className={`ml-auto transition-transform duration-200 ${
+                activeFeature === "quiz" ? "rotate-90" : ""
+              }`}
+            >
               ›
             </span>
           </button>
-          
-          {activeFeature === 'quiz' && (
+
+          {activeFeature === "quiz" && (
             <div className="ml-8 mt-1 space-y-1">
               {featureMenus.quiz.map((item) => (
                 <Link
@@ -119,7 +144,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                   className="flex items-center py-2 px-3 rounded-lg text-sm dark:text-gray-300 hover:dark:bg-gray-700 text-gray-600 hover:bg-indigo-50 transition-colors duration-200"
                   onClick={handleLinkClick}
                 >
-                  <FontAwesomeIcon icon={item.icon} className="mr-3 text-indigo-400" />
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="mr-3 text-indigo-400"
+                  />
                   {item.name}
                 </Link>
               ))}
@@ -130,17 +158,23 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         {/* Poll Section */}
         <div>
           <button
-            onClick={() => setActiveFeature(activeFeature === 'poll' ? null : 'poll')}
+            onClick={() =>
+              setActiveFeature(activeFeature === "poll" ? null : "poll")
+            }
             className="w-full text-left flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
           >
             <FontAwesomeIcon icon={faPoll} className="mr-3 text-indigo-500" />
             Polls
-            <span className={`ml-auto transition-transform duration-200 ${activeFeature === 'poll' ? 'rotate-90' : ''}`}>
+            <span
+              className={`ml-auto transition-transform duration-200 ${
+                activeFeature === "poll" ? "rotate-90" : ""
+              }`}
+            >
               ›
             </span>
           </button>
-          
-          {activeFeature === 'poll' && (
+
+          {activeFeature === "poll" && (
             <div className="ml-8 mt-1 space-y-1">
               {featureMenus.poll.map((item) => (
                 <Link
@@ -149,7 +183,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                   className="flex items-center py-2 px-3 rounded-lg text-sm dark:text-gray-300 hover:dark:bg-gray-700 text-gray-600 hover:bg-indigo-50 transition-colors duration-200"
                   onClick={handleLinkClick}
                 >
-                  <FontAwesomeIcon icon={item.icon} className="mr-3 text-indigo-400" />
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="mr-3 text-indigo-400"
+                  />
                   {item.name}
                 </Link>
               ))}
@@ -160,17 +197,26 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         {/* Survey Section */}
         <div>
           <button
-            onClick={() => setActiveFeature(activeFeature === 'survey' ? null : 'survey')}
+            onClick={() =>
+              setActiveFeature(activeFeature === "survey" ? null : "survey")
+            }
             className="w-full text-left flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
           >
-            <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-indigo-500" />
+            <FontAwesomeIcon
+              icon={faClipboardList}
+              className="mr-3 text-indigo-500"
+            />
             Surveys
-            <span className={`ml-auto transition-transform duration-200 ${activeFeature === 'survey' ? 'rotate-90' : ''}`}>
+            <span
+              className={`ml-auto transition-transform duration-200 ${
+                activeFeature === "survey" ? "rotate-90" : ""
+              }`}
+            >
               ›
             </span>
           </button>
-          
-          {activeFeature === 'survey' && (
+
+          {activeFeature === "survey" && (
             <div className="ml-8 mt-1 space-y-1">
               {featureMenus.survey.map((item) => (
                 <Link
@@ -179,7 +225,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                   className="flex items-center py-2 px-3 rounded-lg text-sm dark:text-gray-300 hover:dark:bg-gray-700 text-gray-600 hover:bg-indigo-50 transition-colors duration-200"
                   onClick={handleLinkClick}
                 >
-                  <FontAwesomeIcon icon={item.icon} className="mr-3 text-indigo-400" />
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="mr-3 text-indigo-400"
+                  />
                   {item.name}
                 </Link>
               ))}
@@ -218,9 +267,9 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         </Link>
 
         <div className="pt-6 mt-6 border-t border-gray-200">
-          <button 
+          <button
             className="w-full text-left flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
-            onClick={handleLinkClick}
+            onClick={handleLogout}
           >
             <FontAwesomeIcon
               icon={faSignOutAlt}

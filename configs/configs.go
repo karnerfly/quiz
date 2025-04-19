@@ -28,10 +28,16 @@ type DbConfig struct {
 	MaxConnections int
 }
 
+type CookieConfig struct {
+	Domain string
+	MaxAge int
+}
+
 type Config struct {
 	Server      ServerConfig
 	Redis       RedisConfig
 	Db          DbConfig
+	Cookie      CookieConfig
 	Environment string
 	CorsOrigin  string
 }
@@ -55,6 +61,10 @@ func New() Config {
 		Db: DbConfig{
 			Url:            getEnvStringMust("DATABASE_URL"),
 			MaxConnections: getEnvInt("DATABASE_CONNECTIONS", 10),
+		},
+		Cookie: CookieConfig{
+			Domain: getEnvStringMust("SESSION_COOKIE_DOMAIN"),
+			MaxAge: getEnvInt("SESSION_COOKIE_DOMAIN", 2592000),
 		},
 		Environment: getEnvStringMust("ENV"),
 		CorsOrigin:  getEnvString("CORS_ORIGIN", "*"),

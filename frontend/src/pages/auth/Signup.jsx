@@ -1,5 +1,8 @@
+import { createTeacher } from "@src/api";
+import { useAuth } from "@src/context/Auth";
 import React, { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +17,9 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
 
   const validatePassword = (password) => {
     const regex =
@@ -85,30 +91,22 @@ const Signup = () => {
       return;
     }
 
-    // Simulate successful signup
-    toast.success("Account created successfully! Redirecting...", {
-      duration: 4000,
-      position: "top-center",
-      style: {
-        background: "#10B981",
-        color: "#FFFFFF",
-        fontWeight: "500",
-        borderRadius: "9999px",
-        padding: "16px 24px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-      },
-    });
-
-    console.log("Form submitted:", formData);
-
-    // Reset form after submission
-    setFormData({
-      name: "",
-      email: "",
-      mobile: "",
-      password: "",
-      confirmPassword: "",
-    });
+    createTeacher({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.mobile,
+    })
+      .then((resp) => {
+        const authToken = resp.data?.data?.auth_token;
+        setToken(authToken);
+        navigate("/dashboard", { replace: true });
+      })
+      .catch((error) => {
+        const msg =
+          error.status == 400 ? "invalid user details" : error.message;
+        toast.error(msg);
+      });
   };
 
   return (

@@ -8,10 +8,13 @@ import {
   faCog,
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { logout } from "@src/api";
+import toast from "react-hot-toast";
 
 const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const navigate = useNavigate();
 
   // Toggle user dropdown
   const toggleUserDropdown = () => {
@@ -31,6 +34,17 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showUserDropdown]);
+
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        navigate("/", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("error while logout");
+      });
+  };
 
   return (
     <header className="shadow-lg dark:bg-gray-800 bg-white transition-colors duration-300">
@@ -126,6 +140,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
                 </Link>
                 <button
                   className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 flex items-center"
+                  onClick={handleLogout}
                 >
                   <FontAwesomeIcon
                     icon={faSignOutAlt}

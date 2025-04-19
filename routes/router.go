@@ -14,6 +14,8 @@ import (
 
 func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 
+	engine.Use(middlewares.CORSMiddleware(cfg))
+
 	engine.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
 		handlers.SendRouteNotFoundError(ctx, path)
@@ -25,8 +27,6 @@ func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 	})
 
 	router := engine.Group("/api/v1")
-
-	router.Use(middlewares.CORSMiddleware(cfg))
 
 	router.GET("/_health", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
