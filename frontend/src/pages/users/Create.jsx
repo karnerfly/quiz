@@ -57,7 +57,7 @@ const CreateQuizPage = () => {
   const fileInputRef = useRef(null);
 
 
-  const durationOptions = ["15", "30", "45", "60", "90", "120"];
+  const durationOptions = ["15", "30", "45", "60", "90", "120", "180"];
 
 
   useEffect(() => {

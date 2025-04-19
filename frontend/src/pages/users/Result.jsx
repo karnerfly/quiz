@@ -12,12 +12,11 @@ import { Link } from "react-router";
 import { useState } from "react";
 
 const QuizResultsPage = () => {
-  // Sample data - in real app this would come from API
+
   const [students, setStudents] = useState([
     { id: 1, name: "John Doe", mobile: "9876543210", score: 85 },
     { id: 2, name: "Jane Smith", mobile: "8765432109", score: 92 },
     { id: 3, name: "Robert Johnson", mobile: "7654321098", score: 78 },
-    // ... add more sample data (50+ entries to test pagination)
     ...Array.from({ length: 50 }, (_, i) => ({
       id: i + 4,
       name: `Student ${i + 4}`,
@@ -28,9 +27,9 @@ const QuizResultsPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const studentsPerPage = 10; // Reduced for better demonstration of scroll + pagination
+  const studentsPerPage = 30;
 
-  // Filter students based on search term
+  // Filter students 
   const filteredStudents = students.filter(student =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.mobile.includes(searchTerm)
@@ -120,7 +119,7 @@ const QuizResultsPage = () => {
         </div>
       </div>
 
-      {/* Results Table - Fixed table layout with scrollable body */}
+      {/* Results Table */}
       <div className="rounded-xl shadow-lg overflow-hidden border dark:border-gray-700 bg-white dark:bg-gray-800">
         <div className="overflow-x-auto w-full">
           <div className="max-h-96 overflow-y-auto">
@@ -229,7 +228,7 @@ const QuizResultsPage = () => {
         )}
       </div>
 
-      {/* Additional Analytics Section - Commented out as requested */}
+      {/* Additional Analytics Section */}
       {/* 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-xl shadow-lg p-4 border dark:border-gray-700 bg-white dark:bg-gray-800">
