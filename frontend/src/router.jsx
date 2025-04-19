@@ -24,6 +24,7 @@ import Profile from "./pages/users/Profile";
 import Settings from "./pages/users/Settings";
 import Quizzes from "./pages/users/Quizzes";
 import Create from "./pages/users/Create";
+import QuizReal from "./pages/QuizReal";
 
 // const App = () => {
 //   return (
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
       {
         path: "faq",
         element: <Faq />,
+      },
+      {
+        path: "quizreal",
+        element: <QuizReal />
       },
 
       // features sub route
