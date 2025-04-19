@@ -6,9 +6,7 @@ import "./index.css";
 import AutheProvider from "./context/Auth.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <AutheProvider>
-      <RouterProvider router={router} />
-    </AutheProvider>
-  </StrictMode>
+  <AutheProvider>
+    <RouterProvider router={router} />
+  </AutheProvider>
 );
