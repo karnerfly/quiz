@@ -6,28 +6,26 @@ import (
 	"gorm.io/gorm"
 )
 
-type QuizStaus string
-
 const (
-	StatusPending  = "pending"
-	StatusFinished = "finished"
+	StatusQuizInActive = "inactive"
+	StatusQuizActive   = "active"
 )
 
-type Rules struct {
-	IsNegativeMarking bool `gorm:"default:false"`
-}
-
 type Quiz struct {
-	gorm.Model
-	Title                string
-	Subject              string
-	NoOfQuestions        int
-	CurrentQuestionCount int
-	Questions            []Question `gorm:"foreignKey:QuizId"`
-	HostId               uint
-	Host                 *User     `gorm:"foreignKey:HostId;constraint:OnDelete:SET NULL"`
-	Status               QuizStaus `gorm:"type:quiz_status;default:'pending'"`
-	Duration             time.Duration
-	Expiry               time.Time
-	Rule                 Rules `gorm:"embedded"`
+	ID                uint           `json:"id" gorm:"primarykey"`
+	Title             string         `json:"title"`
+	Subject           string         `json:"subject"`
+	ShareCode         string         `json:"share_code" gorm:"unique"`
+	NoOfQuestions     int            `json:"no_of_questions"`
+	Questions         []Question     `json:"questions" gorm:"foreignKey:QuizId"`
+	TeacherId         uint           `json:"teacher_id"`
+	Teacher           *User          `json:"-" gorm:"foreignKey:TeacherId;constraint:OnDelete:SET NULL"`
+	Status            string         `json:"status" gorm:"type:quiz_status;default:'inactive'"`
+	Duration          time.Duration  `json:"duration"`
+	Expiry            time.Time      `json:"-"`
+	IsNegativeMarking bool           `json:"is_negative_marking" gorm:"default:false"`
+	TotalSubmissions  int            `json:"total_submissions" gorm:"-"`
+	CreatedAt         time.Time      `json:"created_at"`
+	UpdatedAt         time.Time      `json:"updated_at"`
+	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
 }

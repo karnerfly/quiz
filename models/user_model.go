@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type UserRole string
 
@@ -11,11 +15,14 @@ const (
 )
 
 type User struct {
-	gorm.Model
-	Name          string
-	Email         string `gorm:"unique"`
-	IdentityToken string
-	Phone         string
-	Role          UserRole `gorm:"type:user_role;default:'teacher'"`
-	Quizzes       []Quiz   `gorm:"foreignKey:HostId"`
+	ID            uint           `json:"id" gorm:"primarykey"`
+	Name          string         `json:"name"`
+	Email         string         `json:"email" gorm:"unique"`
+	IdentityToken string         `json:"-"`
+	Phone         string         `json:"phone"`
+	Role          UserRole       `json:"role" gorm:"type:user_role;default:'teacher'"`
+	Quizzes       []Quiz         `gorm:"foreignKey:TeacherId"`
+	CreatedAt     time.Time      `json:"created_at"`
+	UpdatedAt     time.Time      `json:"updated_at"`
+	DeletedAt     gorm.DeletedAt `json:"-" gorm:"index"`
 }

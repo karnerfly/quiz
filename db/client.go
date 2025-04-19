@@ -32,10 +32,21 @@ func CreateEnums(db *gorm.DB) error {
 		END IF;
 
 		IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'quiz_status') THEN
-			CREATE TYPE quiz_status AS ENUM ('pending', 'finished');
+			CREATE TYPE quiz_status AS ENUM ('inactive', 'active');
 		END IF;
 	END$$;
 `)
+
+	return result.Error
+}
+
+func CreateConstrains(db *gorm.DB) error {
+	result := db.Exec(`
+		DO $$ BEGIN
+			CREATE UNIQUE INDEX IF NOT EXISTS idx_submission_question ON student_answers(submission_id, question_id);
+			CREATE UNIQUE INDEX IF NOT EXISTS idx_quiz_submission ON student_submissions(quiz_id, submission_code);
+		END$$;
+	`)
 
 	return result.Error
 }
