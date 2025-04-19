@@ -59,6 +59,14 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 
 	session.Set("user_id", id)
 	session.Set("auth_token", authToken)
+	session.Options(sessions.Options{
+		Path:     "/",
+		Domain:   ah.config.Cookie.Domain,
+		MaxAge:   ah.config.Cookie.MaxAge,
+		Secure:   ah.config.Environment == "production",
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
 	if err = session.Save(); err != nil {
 		SendInternalServerError(ctx, err, env)
 		return
