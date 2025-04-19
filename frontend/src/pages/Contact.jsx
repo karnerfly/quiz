@@ -91,17 +91,17 @@ const ContactUs = () => {
                     icon: faMapMarkerAlt,
                     title: "Address",
                     content:
-                      "123 Education Street, Knowledge City, India - 123456",
+                      "Kolkata, West Bengal, India",
                   },
                   {
                     icon: faPhoneAlt,
                     title: "Phone",
-                    content: "+91 123 456 7890\n+91 987 654 3210",
+                    content: "Mentioned soon",
                   },
                   {
                     icon: faEnvelope,
                     title: "Email",
-                    content: "info@example.com\nsupport@example.com",
+                    content: "Will mentioned soon",
                   },
                 ].map(({ icon, title, content }, idx) => (
                   <div className="flex items-start" key={idx}>

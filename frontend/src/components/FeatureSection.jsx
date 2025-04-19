@@ -5,38 +5,20 @@ const FeaturesSection = () => {
     {
       title: "Easy Quiz Creation",
       description: "Create stunning quizzes in minutes with our intuitive drag-and-drop interface.",
-      image: "https://images.ctfassets.net/rvt0uslu5yqp/5Fkoz2vg8B856mMMmlKvDu/e92a19b31f3893aa4d55ebc3cb61fe51/Mentimeter_VisualAssets_Web_Survey_2023_03__1_.png?fm=webp&w=800&q=75",
+      image: "/Features quiz.webp",
       alt: "Easy quiz creation interface"
     },
     {
-      title: "Multiple Question Types",
+      title: "Create Poll",
       description: "Choose from multiple choice, true/false, open-ended, and more to keep your quizzes engaging.",
-      image: "https://images.ctfassets.net/rvt0uslu5yqp/6wQ3h5iQjY8QlS4j5Xq5jR/5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a/Mentimeter_VisualAssets_Web_Quiz_2023_03__1_.png?fm=webp&w=800&q=75",
+      image: "/Features Poll.svg",
       alt: "Multiple question types"
     },
     {
-      title: "Real-time Analytics",
-      description: "Get instant insights into participant responses with our comprehensive analytics dashboard.",
-      image: "https://images.ctfassets.net/rvt0uslu5yqp/7x8X9y0z1A2B3C4D5E6F7G/8h9i0j1k2l3m4n5o6p7q8r/Mentimeter_VisualAssets_Web_Analytics_2023_03__1_.png?fm=webp&w=800&q=75",
+      title: "Create Survey",
+      description: "Get instant insights into participant responses with our comprehensive survey creation service.",
+      image: "/Features Survey.webp",
       alt: "Analytics dashboard"
-    },
-    {
-      title: "Custom Branding",
-      description: "Add your logo, colors, and themes to make quizzes uniquely yours.",
-      image: "https://images.ctfassets.net/rvt0uslu5yqp/9s8t7u6v5w4x3y2z1a0b1c2d/3e4f5g6h7i8j9k0l1m2n3o4p/Mentimeter_VisualAssets_Web_Branding_2023_03__1_.png?fm=webp&w=800&q=75",
-      alt: "Custom branding options"
-    },
-    {
-      title: "Collaboration Tools",
-      description: "Work with your team in real-time to create the perfect quiz together.",
-      image: "https://images.ctfassets.net/rvt0uslu5yqp/1a2b3c4d5e6f7g8h9i0j1k2l/3m4n5o6p7q8r9s0t1u2v3w4x/Mentimeter_VisualAssets_Web_Collaboration_2023_03__1_.png?fm=webp&w=800&q=75",
-      alt: "Collaboration features"
-    },
-    {
-      title: "Mobile Friendly",
-      description: "Participants can join from any device, anywhere with our responsive design.",
-      image: "https://images.ctfassets.net/rvt0uslu5yqp/5y6z7a8b9c0d1e2f3g4h5i6j/7k8l9m0n1o2p3q4r5s6t7u8v/Mentimeter_VisualAssets_Web_Mobile_2023_03__1_.png?fm=webp&w=800&q=75",
-      alt: "Mobile responsive design"
     }
   ];
 
