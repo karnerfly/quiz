@@ -54,7 +54,7 @@ const StudentQuizPage = () => {
     ],
   };
 
-  // Initialize state from local storage or default values
+  // Initialize state from local storage
   const initializeStateFromStorage = (key, defaultValue) => {
     const storedValue = localStorage.getItem(key);
     return storedValue ? JSON.parse(storedValue) : defaultValue;
@@ -93,7 +93,7 @@ const StudentQuizPage = () => {
     initializeStateFromStorage("visitedQuestions", [])
   );
 
-  // Save state to local storage whenever it changes
+  // Save state to local storage when it changes
   useEffect(() => {
     localStorage.setItem("currentSection", JSON.stringify(currentSection));
     localStorage.setItem("studentDetails", JSON.stringify(studentDetails));
@@ -183,7 +183,10 @@ const handleQuizSubmit = () => {
   setCurrentSection("submitted");
   localStorage.clear();
  };
- 
+
+
+
+
 
 
   // Timer logic
@@ -228,7 +231,7 @@ const handleQuizSubmit = () => {
     };
   };
 
-  // Get status color for question navigation button
+
   const getQuestionStatusColor = (questionId) => {
     if (answers[questionId]) return "bg-green-500"; // Visited and answered
     if (visitedQuestions.includes(questionId)) return "bg-orange-400"; // Visited but not answered
@@ -376,7 +379,7 @@ const handleQuizSubmit = () => {
       {currentSection === "quiz" && (
         <section className="min-h-screen flex flex-col pt-22 px-4 sm:px-6 lg:px-8 py-8">
           <div className="max-w-2xl w-full mx-auto">
-            {/* Timer and Progress Bar - Non-sticky */}
+            {/* Timer and Progress Bar */}
             <div className="bg-white shadow-md rounded-xl mb-6 overflow-hidden">
               {/* Timer */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 flex items-center justify-center">
@@ -484,11 +487,11 @@ const handleQuizSubmit = () => {
               </div>
             </div>
             
-            {/* Question Navigation Panel - Non-sticky */}
+            {/* Question Navigation Panel*/}
             <div className="bg-white rounded-xl shadow-md p-6 mb-6">
               <h3 className="text-sm font-medium text-gray-700 mb-4">Question Navigation</h3>
               
-              {/* Question Button Grid with proper wrapping */}
+              {/* Question Button Grid */}
               <div className="flex flex-wrap gap-2 justify-center">
                 {quizData.questions.map((question, index) => (
                   <button
@@ -539,7 +542,7 @@ const handleQuizSubmit = () => {
             <button
               onClick={() => {
                 setCurrentSection("hero");
-                // Reset all states to initial values
+                // Reset all states to empty
                 setStudentDetails({
                   name: "",
                   mobile: "",
