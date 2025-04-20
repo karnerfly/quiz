@@ -795,17 +795,25 @@ const CreateQuizPage = () => {
 
                   {filteredQuestions[activeQuestionIndex].isOpen && (
                     <div className="p-4 border-t dark:border-gray-700">
-                      <div className="mb-4">
-                        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Question Text*</label>
-                        <input
-                          type="text"
-                          value={filteredQuestions[activeQuestionIndex].text}
-                          onChange={(e) => handleQuestionChange(filteredQuestions[activeQuestionIndex].id, "text", e.target.value)}
-                          className="w-full p-3 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-white"
-                          placeholder="Enter question text"
-                          required
-                        />
-                      </div>
+                       <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                            Question Text*
+                          </label>
+                            <textarea
+                            value={filteredQuestions[activeQuestionIndex].text}
+                            onChange={(e) =>
+                            handleQuestionChange(
+                            filteredQuestions[activeQuestionIndex].id,
+                            "text",
+                            e.target.value
+                             )
+                             }
+                           className="w-full p-3 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-white"
+                            placeholder="Enter question text"
+                              rows={2} // you can change this number based on height preference
+                              required
+                            />
+                        </div>
 
 
                       <div className="mb-4">
