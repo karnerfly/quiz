@@ -22,7 +22,7 @@ export async function createTeacher({ name, email, password, phone }) {
   } catch (error) {
     throw {
       error: true,
-      status: error.response.status,
+      status: error.response?.status,
       message: "something went wrong",
     };
   }
@@ -45,7 +45,7 @@ export async function login({ email, password }) {
   } catch (error) {
     throw {
       error: true,
-      status: error.response.status,
+      status: error.response?.status,
       message: "something went wrong",
     };
   }
@@ -76,7 +76,7 @@ export async function getCurrentTeacherDetails() {
   } catch (error) {
     throw {
       error: true,
-      status: error.response.status,
+      status: error.response?.status,
       message: "something went wrong",
     };
   }
@@ -98,7 +98,7 @@ export async function logout() {
   } catch (error) {
     throw {
       error: true,
-      status: error.response.status,
+      status: error.response?.status,
       message: "something went wrong",
     };
   }

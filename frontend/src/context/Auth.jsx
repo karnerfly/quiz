@@ -39,7 +39,10 @@ const AutheProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     const interceptorId = apiClient.interceptors.request.use(
       function (config) {
