@@ -1,12 +1,14 @@
-import apiClient from "@src/api/client";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useState,
 } from "react";
+import apiClient from "@src/api/client";
 import Loader from "@src/components/ui/Loader";
+import { checkHealth } from "@src/api";
+import { useNavigate } from "react-router";
 
 const AuthContext = createContext(undefined);
 
@@ -14,35 +16,46 @@ export const useAuth = () => {
   const authContext = useContext(AuthContext);
 
   if (!authContext) {
-    throw new Error("useAuth hook must be inside in AuthProvider");
+    throw new Error("useAuth hook must be inside AuthProvider");
   }
 
   return authContext;
 };
 
-const AutheProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const resp = await apiClient.get("/auth/token");
-        const token = resp.data?.response?.data?.auth_token;
-        setToken(token);
-      } catch (error) {
-        setToken(null);
+  const fetchHealthOfApi = useCallback(async () => {
+    try {
+      const ok = await checkHealth();
+      if (!ok) {
+        navigate(`/500?from=${window.location.pathname}`);
       }
-    };
+    } catch (error) {}
+  }, []);
 
-    fetchToken();
+  const fetchToken = useCallback(async () => {
+    try {
+      const resp = await apiClient.get("/auth/token");
+      const token = resp.data?.response?.data?.auth_token;
+      setToken(token);
+    } catch (error) {
+      setToken(null);
+    }
   }, []);
 
   useEffect(() => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    fetchHealthOfApi();
+  }, []);
+
+  useEffect(() => {
+    fetchToken();
+  }, [fetchToken]);
+
+  useEffect(() => {
+    if (token === undefined) return;
 
     const interceptorId = apiClient.interceptors.request.use(
       function (config) {
@@ -76,4 +89,4 @@ const AutheProvider = ({ children }) => {
   );
 };
 
-export default AutheProvider;
+export default AuthProvider;

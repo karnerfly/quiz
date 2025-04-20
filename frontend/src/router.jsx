@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router";
 import Base from "./pages/layouts/Base";
 
 import HomePage from "./pages/HomePage";
@@ -7,7 +7,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Features from "./pages/Features";
 import Faq from "./pages/Faq";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+// import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import Support from "./pages/Support";
 import Sitemap from "./pages/Sitemap";
@@ -27,13 +27,20 @@ import DbHome from "./pages/users/DbHome";
 import Profile from "./pages/users/Profile";
 import Settings from "./pages/users/Settings";
 import Quizzes from "./pages/users/Quizzes";
-import Create from "./pages/users/Create";
+import QuizCreateLayout from "./pages/users/quiz/QuizCreateLayout";
 import Result from "./pages/users/Result";
 import QuizReal from "./pages/QuizReal";
 import Analysis from "./pages/Analysis";
-import AutheProvider from "./context/Auth";
+
+import Error500Page from "./pages/errors/Error500Page";
+import Error404Page from "./pages/errors/Error404Page";
+
+import AuthProvider from "./context/Auth";
+import UserProvider from "./context/User";
+import SharePopup from "./components/dashboard/SharePopup";
 
 export const router = createBrowserRouter([
+  // public routes
   {
     path: "/",
     element: <Base />,
@@ -60,22 +67,21 @@ export const router = createBrowserRouter([
         path: "faq",
         element: <Faq />,
       },
-      {
-        path: "privacy_Policy",
-        element: <PrivacyPolicy />
-
-      },
+      // {
+      //   path: "privacy",
+      //   element: <PrivacyPolicy />,
+      // },
       {
         path: "terms",
-        element: <Terms />
+        element: <Terms />,
       },
       {
         path: "support",
-        element: <Support />
+        element: <Support />,
       },
       {
         path: "sitemap",
-        element: <Sitemap />
+        element: <Sitemap />,
       },
       {
         path: "quizreal",
@@ -111,13 +117,13 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // auth route - needs AuthProvider
+  // auth routes - needs AuthProvider
   {
     path: "auth",
     element: (
-      <AutheProvider>
+      <AuthProvider>
         <Base />
-      </AutheProvider>
+      </AuthProvider>
     ),
     children: [
       {
@@ -135,15 +141,17 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // dashboard route - needs AuthProvider
+  // dashboard routes - needs AuthProvider
   {
     path: "dashboard",
     element: (
-      <AutheProvider>
+      <AuthProvider>
         <Protected>
-          <Dashboard />
+          <UserProvider>
+            <Dashboard />
+          </UserProvider>
         </Protected>
-      </AutheProvider>
+      </AuthProvider>
     ),
     children: [
       {
@@ -167,7 +175,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "create",
-            element: <Create />,
+            element: <QuizCreateLayout />,
           },
 
           {
@@ -177,5 +185,29 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+
+  // error routes
+  {
+    path: "/500",
+    element: <Error500Page />,
+  },
+  // this route should always at end of all routes
+  {
+    path: "/t",
+    element: (
+      <SharePopup
+        title="hello"
+        duration={10}
+        link="hi"
+        totalQuestions={4}
+        copyShareLink={null}
+        key={"fuck you"}
+      />
+    ),
+  },
+  {
+    path: "*",
+    element: <Error404Page />,
   },
 ]);
