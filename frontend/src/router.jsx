@@ -27,39 +27,7 @@ import Create from "./pages/users/Create";
 import Result from "./pages/users/Result";
 import QuizReal from "./pages/QuizReal";
 import Analysis from "./pages/Analysis";
-
-// const App = () => {
-//   return (
-//     <Routes>
-//       <Route path="" element={<Base />}>
-//         <Route path="" index element={<HomePage />} />
-//         <Route path="About" element={<About />} />
-//         <Route path="Contact" element={<Contact />} />
-//         <Route path="Features" element={<Features />} />
-//         <Route path="Faq" element={<Faq />} />
-
-//         <Route path="features/quiz" element={<Quiz />} />
-//         <Route path="features/poll" element={<Poll />} />
-//         <Route path="features/survey" element={<Survey />} />
-
-//         <Route path="auth/register" element={<Register />} />
-//           <Route path="auth/login" element={<Login />} />
-//           <Route path="auth/forgotpass" element={<ForgotPass />} />
-
-//         <Route element={<Protected />}>
-//           <Route
-//             path="protected"
-//             element={
-//               <div className="h-screen text-black flex items-center justify-center">
-//                 protected route
-//               </div>
-//             }
-//           />
-//         </Route>
-//       </Route>
-//     </Routes>
-//   );
-// };
+import AutheProvider from "./context/Auth";
 
 export const router = createBrowserRouter([
   {
@@ -119,106 +87,42 @@ export const router = createBrowserRouter([
           },
         ],
       },
-
-      // auth sub routes
-      {
-        path: "auth",
-        children: [
-          {
-            path: "login",
-            element: <Login />,
-          },
-          {
-            path: "signup",
-            element: <Signup />,
-          },
-          {
-            path: "forgotpassword",
-            element: <ForgotPassword />,
-          },
-        ],
-      },
-
-      // // protected routes
-      // {
-      //   path: "dashboard",
-      //   element: (
-      //     <Protected>
-      //       <DbHome />
-      //     </Protected>
-      //   ),
-      // },
     ],
   },
 
-  // dashboard route
-  // {
-  //   path: "dashboard",
-  //   element: <Dashboard />,
-  //   children: [
-  //     {
-  //       path: "",
-  //       element: (
-  //         <Protected>
-  //           <DbHome />
-  //         </Protected>
-  //       ),
-  //     },
-  //     {
-  //       path: "profile",
-  //       element: (
-  //         <Protected>
-  //           <Profile />
-  //         </Protected>
-  //       ),
-  //     },
-  //     {
-  //       path: "settings",
-  //       element: (
-  //         <Protected>
-  //           <Settings />
-  //         </Protected>
-  //       ),
-  //     },
-  //     {
-  //       path: "quizzes",
-  //       children: [
-  //         {
-  //           path: "",
-  //           element: (
-  //             <Protected>
-  //               <Quizzes />
-  //             </Protected>
-  //           ),
-  //         },
-  //         {
-  //           path: "create",
-  //           element: (
-  //             <Protected>
-  //               <Create />
-  //             </Protected>
-  //           ),
-  //         },
+  // auth route - needs AuthProvider
+  {
+    path: "auth",
+    element: (
+      <AutheProvider>
+        <Base />
+      </AutheProvider>
+    ),
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+      },
+      {
+        path: "forgotpassword",
+        element: <ForgotPassword />,
+      },
+    ],
+  },
 
-  //         {
-  //           path: "result",
-  //           element: (
-  //             <Protected>
-  //               <Result />
-  //             </Protected>
-  //           ),
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-
+  // dashboard route - needs AuthProvider
   {
     path: "dashboard",
     element: (
-      <Protected>
-        <Dashboard />
-      </Protected>
+      <AutheProvider>
+        <Protected>
+          <Dashboard />
+        </Protected>
+      </AutheProvider>
     ),
     children: [
       {
@@ -253,20 +157,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-
-  // quiz route
-  //{
-  // path: "quizzes",
-  // element: <Quizzes />,
-  // children: [
-  // {
-  //   path: "create",
-  //  element: (
-  //    <Protected>
-  //     <Create />
-  //   </Protected>
-  //  ),
-  //  }
-  // ],
-  // },
 ]);
