@@ -1,7 +1,10 @@
 import React from "react";
 import { Routes, Route, createBrowserRouter } from "react-router";
+
+//Base Layout
 import Base from "./pages/layouts/Base";
 
+// Public Route - General Pages
 import HomePage from "./pages/HomePage";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -12,16 +15,20 @@ import Terms from "./pages/Terms";
 import Support from "./pages/Support";
 import Sitemap from "./pages/Sitemap";
 
+// public Route - Features Pages
 import Quiz from "./pages/features/Quiz";
 import Poll from "./pages/features/Poll";
 import Survey from "./pages/features/Survey";
 
+// Protected Layout
 import Protected from "./pages/layouts/Protected";
 
+// Auth Pages
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
+// Dashboard Pages
 import Dashboard from "./pages/layouts/Dashboard";
 import DbHome from "./pages/users/DbHome";
 import Profile from "./pages/users/Profile";
@@ -29,9 +36,12 @@ import Settings from "./pages/users/Settings";
 import Quizzes from "./pages/users/Quizzes";
 import Create from "./pages/users/Create";
 import Result from "./pages/users/Result";
-import QuizReal from "./pages/QuizReal";
 import Analysis from "./pages/Analysis";
 import AutheProvider from "./context/Auth";
+
+//Users Quiz Pages
+import QuizReal from "./pages/QuizReal";
+import StudentQuizPage from "./pages/attendquiz/StudentQuizPage";
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +94,10 @@ export const router = createBrowserRouter([
       {
         path: "analysis",
         element: <Analysis />,
+      },
+      {
+        path: "studentquizpage",
+        element: <StudentQuizPage />
       },
 
       // features sub route
