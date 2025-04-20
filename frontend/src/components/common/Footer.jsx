@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, ChevronRight } from "lucide-react";
+import { Link } from "react-router";
 
 // Social media icons components
 const FacebookIcon = () => (
@@ -89,10 +90,12 @@ export default function Footer() {
             <div className="flex items-center">
               {/* Logo */}
               <div className="flex items-center">
+              <Link to="/" className="flex items-center">
                 <img src="/quiz.png" alt="Company Logo" className="h-8 mr-3" />
                 <span className="text-2xl font-bold text-blue-600">
                 Quiznity
                 </span>
+              </Link>
               </div>
             </div>
 
