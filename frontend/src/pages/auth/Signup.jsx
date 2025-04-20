@@ -213,11 +213,6 @@ const Signup = () => {
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                 )}
-                <p className="mt-1 text-xs text-gray-500">
-                  Password must be at least 8 characters long and contain at
-                  least one uppercase letter, one lowercase letter, one number,
-                  and one special character.
-                </p>
               </div>
 
               {/* Confirm Password Field */}

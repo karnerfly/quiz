@@ -103,7 +103,7 @@ export default function Header() {
             <div className="ml-auto">
               <button
                 onClick={toggleAuthPopup}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition duration-300"
+                className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-medium py-2 px-6 rounded-full transition duration-300"
               >
                 Login
               </button>

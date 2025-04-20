@@ -7,6 +7,10 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Features from "./pages/Features";
 import Faq from "./pages/Faq";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+import Support from "./pages/Support";
+import Sitemap from "./pages/Sitemap";
 
 import Quiz from "./pages/features/Quiz";
 import Poll from "./pages/features/Poll";
@@ -55,6 +59,23 @@ export const router = createBrowserRouter([
       {
         path: "faq",
         element: <Faq />,
+      },
+      {
+        path: "privacy_Policy",
+        element: <PrivacyPolicy />
+
+      },
+      {
+        path: "terms",
+        element: <Terms />
+      },
+      {
+        path: "support",
+        element: <Support />
+      },
+      {
+        path: "sitemap",
+        element: <Sitemap />
       },
       {
         path: "quizreal",
