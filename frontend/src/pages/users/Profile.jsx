@@ -1,21 +1,31 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSave, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faSave,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons";
+import { useUser } from "@src/context/User";
 
 const DashboardProfile = () => {
-  const [username, setUsername] = useState("JohnDoe");
-  const [bio, setBio] = useState("A passionate storyteller and adventurer.");
-  const [phoneNumber, setPhoneNumber] = useState("+1234567890");
+  const { user } = useUser();
+  // const [username, setUsername] = useState(user?.name || "username");
+  // const [bio, setBio] = useState("N/A");
+  // const [phoneNumber, setPhoneNumber] = useState(
+  //   user?.phone || "+91xxxxxxxxxx"
+  // );
   const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState("https://via.placeholder.com/150");
+  const [avatarPreview, setAvatarPreview] = useState(
+    "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?t=st=1745129082~exp=1745132682~hmac=b46e69eed84b545abad517e6e3fd7d9413808f22f1a45f2d3a84b32074008adc&w=740"
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [issue, setIssue] = useState("");
 
-  const handleSaveProfile = () => {
-    setIsEditing(false);
-    // Here you can add logic to save the updated profile to your backend
-    console.log("Profile saved:", { username, bio, phoneNumber, avatar });
-  };
+  // const handleSaveProfile = () => {
+  //   setIsEditing(false);
+  //   // Here you can add logic to save the updated profile to your backend
+  //   console.log("Profile saved:", { username, bio, phoneNumber, avatar });
+  // };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -54,7 +64,9 @@ const DashboardProfile = () => {
             </div>
             {isEditing && (
               <div className="flex-1">
-                <label className="block text-sm font-medium mb-2">Upload Avatar</label>
+                <label className="block text-sm font-medium mb-2">
+                  Upload Avatar
+                </label>
                 <input
                   type="file"
                   accept="image/*"
@@ -71,14 +83,14 @@ const DashboardProfile = () => {
             {isEditing ? (
               <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                // value={user?.name}
+                // onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 placeholder="Enter Username"
               />
             ) : (
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {username}
+                {user?.name}
               </p>
             )}
           </div>
@@ -88,33 +100,35 @@ const DashboardProfile = () => {
             <label className="block text-sm font-medium mb-2">Bio</label>
             {isEditing ? (
               <textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
+                // value={bio}
+                // onChange={(e) => setBio(e.target.value)}
                 className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 rows="4"
                 placeholder="Enter Bio"
               />
             ) : (
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {bio}
+                N/A
               </p>
             )}
           </div>
 
           {/* Phone Number Section */}
           <div>
-            <label className="block text-sm font-medium mb-2">Phone Number</label>
+            <label className="block text-sm font-medium mb-2">
+              Phone Number
+            </label>
             {isEditing ? (
               <input
                 type="text"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                // value={phoneNumber}
+                // onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 placeholder="Enter Phone Number"
               />
             ) : (
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {phoneNumber}
+                {user?.phone}
               </p>
             )}
           </div>
@@ -123,10 +137,16 @@ const DashboardProfile = () => {
         {/* Edit/Save Button */}
         <div className="mt-6 flex justify-end">
           <button
-            onClick={() => (isEditing ? handleSaveProfile() : setIsEditing(true))}
-            className="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            // onClick={() =>
+            //   isEditing ? handleSaveProfile() : setIsEditing(true)
+            // }
+            disabled
+            className="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 hover:cursor-not-allowed"
           >
-            <FontAwesomeIcon icon={isEditing ? faSave : faEdit} className="mr-2" />
+            <FontAwesomeIcon
+              icon={isEditing ? faSave : faEdit}
+              className="mr-2"
+            />
             {isEditing ? "Save Changes" : "Edit Profile"}
           </button>
         </div>

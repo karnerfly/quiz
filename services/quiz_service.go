@@ -36,7 +36,7 @@ func (qs *QuizService) CreateNewQuiz(ctx context.Context, teacherId uint, payloa
 		ShareCode:         pkg.GenerateShareCode(),
 		NoOfQuestions:     payload.NoOfQuestions,
 		TeacherId:         teacherId,
-		Status:            models.StatusQuizInActive,
+		Status:            models.StatusQuizActive,
 		Duration:          time.Minute * time.Duration(payload.Duration),
 		Expiry:            payload.Expiry,
 		IsNegativeMarking: payload.Rule.IsNegativeMarking,

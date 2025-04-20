@@ -2,6 +2,19 @@ import apiClient from "./client";
 
 /**
  *
+ * @returns {Promise<boolean>}
+ */
+export async function checkHealth() {
+  try {
+    await apiClient.get("/_health");
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ *
  * @param {{name:string, email:string, password:string, phone:string}} param0
  * @returns {Promise<{status:number, text:string, data:any}>}
  * @throws {{error:boolean, status:number, message:string}}
@@ -63,15 +76,30 @@ export async function getCurrentTeacherDetails() {
     return {
       status: resp.status,
       text: resp.statusText,
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-      },
+      data: user,
+    };
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
+ * @returns {Promise<{status:number, text:string, data:{id:number, title:string, subject:string, is_negative_marking:boolean, no_of_questions:number, status:string, share_code:string, total_submissions:number, duration:number, questions:{id:number, options:string[], problem:string, created_at:Date, updated_at:Date}[], created_at:Date, updated_at:Date}[]}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function getTeacherQuizzes() {
+  try {
+    const resp = await apiClient.get("/teacher/quizzes");
+    const data = resp.data?.response?.data;
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: data,
     };
   } catch (error) {
     throw {
@@ -96,6 +124,42 @@ export async function logout() {
       text: resp.statusText,
     };
   } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
+ * @param {{title:string, subject:string, no_of_questions:number, duration:number, questions:{problem:string, options:string[], correct_answer:number}[]}} param0
+ * @returns {Promise<{status:number, text:string, data:string}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function createQuiz({
+  title,
+  subject,
+  no_of_questions,
+  duration,
+  questions,
+}) {
+  try {
+    const resp = await apiClient.post("/quiz/new", {
+      title,
+      subject,
+      no_of_questions,
+      duration,
+      questions,
+    });
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: resp.data?.response?.data?.share_code,
+    };
+  } catch (error) {
+    console.log("API ERROR: ", error);
     throw {
       error: true,
       status: error.response?.status,
