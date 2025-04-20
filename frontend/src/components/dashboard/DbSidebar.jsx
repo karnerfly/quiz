@@ -95,7 +95,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       {/* User Info */}
       <div className="flex flex-col items-center mb-8 mt-2">
         <img
-          src="https://via.placeholder.com/80"
+          src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?t=st=1745129082~exp=1745132682~hmac=b46e69eed84b545abad517e6e3fd7d9413808f22f1a45f2d3a84b32074008adc&w=740"
           alt="User Avatar"
           className="w-20 h-20 rounded-full border-4 border-indigo-500 mb-4 object-cover"
         />
@@ -246,7 +246,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           Profile
         </Link>
 
-        {/* My Bookmarks */}
+        {/* My Bookmarks 
         <Link
           to="bookmarks"
           className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
@@ -255,6 +255,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           <FontAwesomeIcon icon={faBookmark} className="mr-3 text-indigo-500" />
           My Bookmarks
         </Link>
+        */}
 
         {/* Settings */}
         <Link

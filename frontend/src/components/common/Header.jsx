@@ -40,8 +40,10 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img src="/quiz.png" alt="Company Logo" className="h-8 mr-3" />
             <span className="text-2xl font-bold text-blue-600">Quiznity</span>
+            </Link>
           </div>
 
           {/* Desktop Navigation + Button */}
@@ -103,7 +105,7 @@ export default function Header() {
             <div className="ml-auto">
               <button
                 onClick={toggleAuthPopup}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition duration-300"
+                className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-medium py-2 px-6 rounded-full transition duration-300"
               >
                 Login
               </button>

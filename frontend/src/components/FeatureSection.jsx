@@ -75,7 +75,7 @@ const FeaturesSection = () => {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <button className="bg-black text-white px-8 py-4 rounded-full text-lg font-semibold shadow hover:scale-105 transition">
+          <button className="bg-black text-white px-8 py-4 cursor-pointer rounded-full text-lg font-semibold shadow hover:scale-105 transition">
             Start Creating Your Quiz Now
           </button>
         </div>

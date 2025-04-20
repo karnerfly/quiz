@@ -76,11 +76,11 @@ const DashboardHome = () => {
               <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-sm" />
             </Link>
             <Link 
-              to="polls/create" 
+              to="quizzes/result" 
               className="px-4 py-2 sm:px-5 sm:py-3 bg-white dark:bg-gray-700 border dark:border-gray-600 text-gray-700 dark:text-white font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200 flex items-center text-sm sm:text-base"
             >
               <FontAwesomeIcon icon={faPoll} className="mr-2 text-purple-500" />
-              Quick Poll
+              See Quiz Result
             </Link>
           </div>
         </div>
