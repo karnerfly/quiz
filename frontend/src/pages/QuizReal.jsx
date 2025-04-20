@@ -93,6 +93,11 @@ const StudentQuizPage = () => {
     initializeStateFromStorage("visitedQuestions", [])
   );
 
+  // New states for submission popup and result countdown
+  const [showSubmitPopup, setShowSubmitPopup] = useState(false);
+  const [resultCountdown, setResultCountdown] = useState(180); // 3 minutes in seconds
+  const [isResultAvailable, setIsResultAvailable] = useState(false);
+
   // Save state to local storage when it changes
   useEffect(() => {
     localStorage.setItem("currentSection", JSON.stringify(currentSection));
@@ -168,28 +173,20 @@ const StudentQuizPage = () => {
     }
   };
 
-  // Submit quiz with optional warning
-const handleQuizSubmit = () => {
-  const unansweredCount = quizData.questions.length - Object.keys(answers).length;
+  // Show confirmation popup for quiz submission
+  const handleQuizSubmit = () => {
+    setShowSubmitPopup(true);
+  };
 
-  if (unansweredCount > 0) {
-    const confirmSubmit = window.confirm(
-      `You have ${unansweredCount} unanswered question(s). Do you still want to submit?`
-    );
-    if (!confirmSubmit) return;
-  }
+  // Handle confirmed quiz submission
+  const confirmQuizSubmit = () => {
+    setIsQuizActive(false);
+    setCurrentSection("submitted");
+    setShowSubmitPopup(false);
+    localStorage.clear();
+  };
 
-  setIsQuizActive(false);
-  setCurrentSection("submitted");
-  localStorage.clear();
- };
-
-
-
-
-
-
-  // Timer logic
+  // Timer logic for quiz
   useEffect(() => {
     if (isQuizActive && timeLeft > 0) {
       const timer = setInterval(() => {
@@ -207,6 +204,23 @@ const handleQuizSubmit = () => {
       return () => clearInterval(timer);
     }
   }, [isQuizActive, timeLeft]);
+
+  // Countdown timer for result availability
+  useEffect(() => {
+    if (currentSection === "submitted" && resultCountdown > 0) {
+      const countdownTimer = setInterval(() => {
+        setResultCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownTimer);
+            setIsResultAvailable(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(countdownTimer);
+    }
+  }, [currentSection, resultCountdown]);
 
   // Format time for display
   const formatTime = (seconds) => {
@@ -230,7 +244,6 @@ const handleQuizSubmit = () => {
       answeredPercentage: Math.round((answeredQuestions / totalQuestions) * 100)
     };
   };
-
 
   const getQuestionStatusColor = (questionId) => {
     if (answers[questionId]) return "bg-green-500"; // Visited and answered
@@ -318,7 +331,6 @@ const handleQuizSubmit = () => {
       {currentSection === "welcome" && (
         <section className="min-h-screen flex items-center justify-center pt-22 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Welcome Header with Gradient */}
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white text-center">
               <h2 className="text-2xl font-bold mb-2">
                 Welcome, {studentDetails.name}!
@@ -328,7 +340,6 @@ const handleQuizSubmit = () => {
               </p>
             </div>
             
-            {/* Quiz Details Card */}
             <div className="p-6">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Quiz Details</h3>
@@ -352,7 +363,6 @@ const handleQuizSubmit = () => {
                 </div>
               </div>
               
-              {/* Instructions */}
               <div className="bg-yellow-50 p-4 rounded-lg mb-6">
                 <h4 className="text-sm font-semibold text-yellow-700 mb-2">Instructions</h4>
                 <ul className="text-xs text-gray-700 space-y-1">
@@ -379,9 +389,7 @@ const handleQuizSubmit = () => {
       {currentSection === "quiz" && (
         <section className="min-h-screen flex flex-col pt-22 px-4 sm:px-6 lg:px-8 py-8">
           <div className="max-w-2xl w-full mx-auto">
-            {/* Timer and Progress Bar */}
             <div className="bg-white shadow-md rounded-xl mb-6 overflow-hidden">
-              {/* Timer */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 flex items-center justify-center">
                 <div className="flex items-center bg-blue-800 px-4 py-2 rounded-full">
                   <FontAwesomeIcon icon={faClock} className="mr-2" />
@@ -389,14 +397,12 @@ const handleQuizSubmit = () => {
                 </div>
               </div>
               
-              {/* Progress Statistics */}
               <div className="p-4 bg-gray-50">
                 <div className="flex justify-between items-center mb-2 text-xs text-gray-500">
                   <span>Progress: {getQuizStats().answeredPercentage}%</span>
                   <span>{getQuizStats().answeredQuestions}/{getQuizStats().totalQuestions} Questions</span>
                 </div>
                 
-                {/* Progress Bar */}
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div 
                     className="bg-blue-500 h-3 rounded-full" 
@@ -404,7 +410,6 @@ const handleQuizSubmit = () => {
                   ></div>
                 </div>
                 
-                {/* Question Status Indicators */}
                 <div className="flex items-center justify-center mt-3 space-x-6 text-xs">
                   <div className="flex items-center">
                     <span className="w-3 h-3 bg-green-500 rounded-full mr-1"></span>
@@ -422,7 +427,6 @@ const handleQuizSubmit = () => {
               </div>
             </div>
 
-            {/* Question Card */}
             <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 mb-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                 <span className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 text-sm">
@@ -456,7 +460,6 @@ const handleQuizSubmit = () => {
                 ))}
               </div>
 
-              {/* Navigation Buttons */}
               <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-3">
                 <button
                   onClick={handlePreviousQuestion}
@@ -487,11 +490,9 @@ const handleQuizSubmit = () => {
               </div>
             </div>
             
-            {/* Question Navigation Panel*/}
             <div className="bg-white rounded-xl shadow-md p-6 mb-6">
               <h3 className="text-sm font-medium text-gray-700 mb-4">Question Navigation</h3>
               
-              {/* Question Button Grid */}
               <div className="flex flex-wrap gap-2 justify-center">
                 {quizData.questions.map((question, index) => (
                   <button
@@ -508,7 +509,6 @@ const handleQuizSubmit = () => {
                 ))}
               </div>
               
-              {/* Legend for the colors */}
               <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs text-gray-600">
                 <div className="flex items-center">
                   <span className="w-3 h-3 bg-green-500 rounded-full mr-1"></span>
@@ -525,6 +525,35 @@ const handleQuizSubmit = () => {
               </div>
             </div>
           </div>
+
+          {/* Submit Confirmation Popup */}
+          {showSubmitPopup && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full shadow-xl">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Submission</h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  Are you sure you want to submit your exam?
+                </p>
+                <p className="text-sm text-red-600 mb-4">
+                  You have {quizData.questions.length - Object.keys(answers).length} unanswered question(s). Do you still want to submit?
+                </p>
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={() => setShowSubmitPopup(false)}
+                    className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 text-sm font-medium transition-colors duration-200"
+                  >
+                    No
+                  </button>
+                  <button
+                    onClick={confirmQuizSubmit}
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm font-medium transition-colors duration-200"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
       )}
 
@@ -539,25 +568,48 @@ const handleQuizSubmit = () => {
             <p className="text-sm text-gray-600 mb-6">
               Thank you, {studentDetails.name}, for taking the quiz. Your responses have been recorded.
             </p>
-            <button
-              onClick={() => {
-                setCurrentSection("hero");
-                // Reset all states to empty
-                setStudentDetails({
-                  name: "",
-                  mobile: "",
-                  email: "",
-                });
-                setAnswers({});
-                setCurrentQuestionIndex(0);
-                setTimeLeft(quizData.duration * 60);
-                setIsQuizActive(false);
-                setVisitedQuestions([]);
-              }}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm font-medium transition-colors duration-200"
-            >
-              Back to Home
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => {
+                  setCurrentSection("hero");
+                  setStudentDetails({
+                    name: "",
+                    mobile: "",
+                    email: "",
+                  });
+                  setAnswers({});
+                  setCurrentQuestionIndex(0);
+                  setTimeLeft(quizData.duration * 60);
+                  setIsQuizActive(false);
+                  setVisitedQuestions([]);
+                  setShowSubmitPopup(false);
+                  setResultCountdown(180);
+                  setIsResultAvailable(false);
+                }}
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm font-medium transition-colors duration-200"
+              >
+                Back to Home
+              </button>
+              <button
+                disabled={!isResultAvailable}
+                className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                  isResultAvailable
+                    ? "bg-green-500 text-white hover:bg-green-600"
+                    : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                }`}
+              >
+                {isResultAvailable
+                  ? "See Result"
+                  : `Results in ${formatTime(resultCountdown)}`}
+              </button>
+              {isResultAvailable && (
+                <button
+                  className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm font-medium transition-colors duration-200"
+                >
+                  Download Score Card
+                </button>
+              )}
+            </div>
           </div>
         </section>
       )}
