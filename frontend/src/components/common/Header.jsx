@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Menu, X, ChevronDown, ChevronUp } from "lucide-react";
-import { useAuth } from "@src/context/Auth";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,8 +29,6 @@ export default function Header() {
   const toggleAuthPopup = () => {
     setShowAuthPopup(!showAuthPopup);
   };
-
-  const { authenticated } = useAuth();
 
   return (
     <header
@@ -66,35 +63,33 @@ export default function Header() {
 
               {/* Features Dropdown */}
               <div className="relative group">
-                 <button
-                   className="flex items-center text-gray-700 hover:text-blue-600 font-medium"
-                 >
+                <button className="flex items-center text-gray-700 hover:text-blue-600 font-medium">
                   Features
-                 <ChevronDown className="ml-1 w-4 h-4 group-hover:hidden" />
-                 <ChevronUp className="ml-1 w-4 h-4 hidden group-hover:inline" />
+                  <ChevronDown className="ml-1 w-4 h-4 group-hover:hidden" />
+                  <ChevronUp className="ml-1 w-4 h-4 hidden group-hover:inline" />
                 </button>
 
-                  <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                   <Link
-                      to="/features/quiz"
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    >
-                     Create Quiz
-                   </Link>
-                   <Link
-                     to="/features/survey"
-                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    >
-                   Create Survey
-                   </Link>
-                   <Link
-                   to="/features/poll"
+                <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <Link
+                    to="/features/quiz"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                   >
-                   Create Poll
+                  >
+                    Create Quiz
+                  </Link>
+                  <Link
+                    to="/features/survey"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Create Survey
+                  </Link>
+                  <Link
+                    to="/features/poll"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Create Poll
                   </Link>
                 </div>
-          </div>
+              </div>
 
               <Link
                 to="/contact"
@@ -106,7 +101,7 @@ export default function Header() {
 
             {/* Right-aligned Button */}
             <div className="ml-auto">
-              <button 
+              <button
                 onClick={toggleAuthPopup}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition duration-300"
               >
@@ -193,7 +188,7 @@ export default function Header() {
 
             <div className="border-t border-gray-200 my-2"></div>
 
-            <button 
+            <button
               onClick={toggleAuthPopup}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full mt-2 transition duration-300"
             >
@@ -207,25 +202,29 @@ export default function Header() {
       {showAuthPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Blurred background overlay */}
-          <div 
+          <div
             className="absolute inset-0 bg-white/30 backdrop-blur-sm"
             onClick={toggleAuthPopup}
           />
-          
+
           {/* Popup content */}
           <div className="relative bg-white/90 backdrop-blur-md rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl border border-white/20">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-gray-800">Welcome to Quiznity</h3>
-              <button 
+              <h3 className="text-xl font-bold text-gray-800">
+                Welcome to Quiznity
+              </h3>
+              <button
                 onClick={toggleAuthPopup}
                 className="text-gray-500 hover:text-gray-700 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
-            <p className="text-gray-600 mb-6">Please select your role to continue</p>
-            
+
+            <p className="text-gray-600 mb-6">
+              Please select your role to continue
+            </p>
+
             <div className="space-y-4">
               {/*
               <Link
@@ -235,7 +234,7 @@ export default function Header() {
               >
                 Login as Student
               </Link> */}
-              
+
               <Link
                 to="/auth/login"
                 className="block bg-green-100/80 hover:bg-green-200/90 text-green-800 font-medium py-3 px-4 rounded-lg transition-all duration-300 text-center"
@@ -244,11 +243,11 @@ export default function Header() {
                 Login as Teacher
               </Link>
             </div>
-            
+
             <p className="text-center text-gray-500 mt-6">
-              Don't have an account?{' '}
-              <Link 
-                to="/auth/signup" 
+              Don't have an account?{" "}
+              <Link
+                to="/auth/signup"
                 className="text-blue-600 hover:underline"
                 onClick={toggleAuthPopup}
               >
