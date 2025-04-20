@@ -61,7 +61,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
 
         {/* Header Actions */}
         <div className="flex items-center space-x-6">
-          {/* Notifications */}
+          {/* Notifications 
           <div className="relative">
             <button className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:dark:bg-gray-700 transition-colors duration-200">
               <FontAwesomeIcon
@@ -73,6 +73,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               </span>
             </button>
           </div>
+          */}
 
           {/* Sidebar Toggle Button (for small screens) */}
           <button
@@ -93,7 +94,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
             >
               <div className="relative">
                 <img
-                  src="https://via.placeholder.com/40"
+                  src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?t=st=1745129082~exp=1745132682~hmac=b46e69eed84b545abad517e6e3fd7d9413808f22f1a45f2d3a84b32074008adc&w=740"
                   alt="User Avatar"
                   className="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover"
                 />
