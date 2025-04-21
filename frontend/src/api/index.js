@@ -9,7 +9,14 @@ export async function checkHealth() {
     await apiClient.get("/_health");
     return true;
   } catch (error) {
-    return false;
+    if (
+      (error.code && error.code === "ERR_NETWORK") ||
+      error.code === "ECONNREFUSED" ||
+      error.code === "ETIMEDOUT"
+    ) {
+      return false;
+    }
+    return true;
   }
 }
 

@@ -44,13 +44,18 @@ import SharePopup from "./components/dashboard/SharePopup";
 
 //Users Quiz Pages
 import QuizReal from "./pages/QuizReal";
-import StudentQuizPage from "./pages/attendquiz/StudentQuizPage";
+import QuizAttendLayout from "./pages/attendquiz/QuizAttendLayout";
+import AuthProvider from "./context/Auth";
 
 export const router = createBrowserRouter([
   // public routes
   {
     path: "/",
-    element: <Base />,
+    element: (
+      <AuthProvider>
+        <Base />
+      </AuthProvider>
+    ),
     children: [
       // public routes
       {
@@ -99,8 +104,8 @@ export const router = createBrowserRouter([
         element: <Analysis />,
       },
       {
-        path: "studentquizpage",
-        element: <StudentQuizPage />,
+        path: "quiz",
+        element: <QuizAttendLayout />,
       },
 
       // features sub route
@@ -151,11 +156,13 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: (
-      <Protected>
-        <UserProvider>
-          <Dashboard />
-        </UserProvider>
-      </Protected>
+      <AuthProvider>
+        <Protected>
+          <UserProvider>
+            <Dashboard />
+          </UserProvider>
+        </Protected>
+      </AuthProvider>
     ),
     children: [
       {
@@ -197,19 +204,6 @@ export const router = createBrowserRouter([
     element: <Error500Page />,
   },
   // this route should always at end of all routes
-  {
-    path: "/t",
-    element: (
-      <SharePopup
-        title="hello"
-        duration={10}
-        link="hi"
-        totalQuestions={4}
-        copyShareLink={null}
-        key={"fuck you"}
-      />
-    ),
-  },
   {
     path: "*",
     element: <Error404Page />,

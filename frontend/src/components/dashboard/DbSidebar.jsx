@@ -14,16 +14,17 @@ import {
   faPoll,
   faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@src/context/User";
 import { logout } from "@src/api";
+import { useAuth } from "@src/context/Auth";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const [activeFeature, setActiveFeature] = useState(null);
   const sidebarRef = useRef(null);
   const { user } = useUser();
-  const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   // Handle clicks outside the sidebar
   useEffect(() => {
@@ -52,7 +53,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const handleLogout = () => {
     logout()
       .then(() => {
-        navigate("/", { replace: true });
+        setToken(null);
       })
       .catch((err) => {
         console.log(err);

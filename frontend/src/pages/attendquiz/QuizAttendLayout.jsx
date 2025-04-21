@@ -3,13 +3,13 @@ import QuizIntro from "./QuizIntro";
 import QuizPage from "./QuizPage";
 import QuizSubmit from "./QuizSubmit";
 
-const StudentQuizPage = () => {
+const QuizAttendLayout = () => {
   const quizData = {
     title: "Python Fundamentals",
     subject: "Programming",
     preparedBy: "Dr. John Smith",
     totalQuestions: 5,
-    duration: 30, // Duration in minutes
+    duration: 1, // Duration in minutes
     questions: [
       {
         id: 1,
@@ -59,7 +59,7 @@ const StudentQuizPage = () => {
   const [currentSection, setCurrentSection] = useState(
     initializeStateFromStorage("currentSection", "hero")
   );
-  
+
   const [studentDetails, setStudentDetails] = useState(
     initializeStateFromStorage("studentDetails", {
       name: "",
@@ -67,23 +67,23 @@ const StudentQuizPage = () => {
       email: "",
     })
   );
-  
+
   const [answers, setAnswers] = useState(
     initializeStateFromStorage("answers", {})
   );
-  
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(
     initializeStateFromStorage("currentQuestionIndex", 0)
   );
-  
+
   const [timeLeft, setTimeLeft] = useState(
     initializeStateFromStorage("timeLeft", quizData.duration * 60)
   );
-  
+
   const [isQuizActive, setIsQuizActive] = useState(
     initializeStateFromStorage("isQuizActive", false)
   );
-  
+
   const [visitedQuestions, setVisitedQuestions] = useState(
     initializeStateFromStorage("visitedQuestions", [])
   );
@@ -98,11 +98,22 @@ const StudentQuizPage = () => {
     localStorage.setItem("currentSection", JSON.stringify(currentSection));
     localStorage.setItem("studentDetails", JSON.stringify(studentDetails));
     localStorage.setItem("answers", JSON.stringify(answers));
-    localStorage.setItem("currentQuestionIndex", JSON.stringify(currentQuestionIndex));
+    localStorage.setItem(
+      "currentQuestionIndex",
+      JSON.stringify(currentQuestionIndex)
+    );
     localStorage.setItem("timeLeft", JSON.stringify(timeLeft));
     localStorage.setItem("isQuizActive", JSON.stringify(isQuizActive));
     localStorage.setItem("visitedQuestions", JSON.stringify(visitedQuestions));
-  }, [currentSection, studentDetails, answers, currentQuestionIndex, timeLeft, isQuizActive, visitedQuestions]);
+  }, [
+    currentSection,
+    studentDetails,
+    answers,
+    currentQuestionIndex,
+    timeLeft,
+    isQuizActive,
+    visitedQuestions,
+  ]);
 
   // Handle answer selection
   const handleAnswerSelect = (questionId, answer) => {
@@ -114,7 +125,7 @@ const StudentQuizPage = () => {
     if (currentQuestionIndex < quizData.questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
-      
+
       // Mark the question as visited
       const nextQuestionId = quizData.questions[nextIndex].id;
       if (!visitedQuestions.includes(nextQuestionId)) {
@@ -133,7 +144,7 @@ const StudentQuizPage = () => {
   // Navigate to specific question
   const jumpToQuestion = (index) => {
     setCurrentQuestionIndex(index);
-    
+
     // Mark the question as visited
     const questionId = quizData.questions[index].id;
     if (!visitedQuestions.includes(questionId)) {
@@ -201,15 +212,19 @@ const StudentQuizPage = () => {
   const getQuizStats = () => {
     const totalQuestions = quizData.questions.length;
     const answeredQuestions = Object.keys(answers).length;
-    const visitedNotAnswered = visitedQuestions.filter(qId => !answers[qId]).length;
+    const visitedNotAnswered = visitedQuestions.filter(
+      (qId) => !answers[qId]
+    ).length;
     const notVisited = totalQuestions - visitedQuestions.length;
-    
+
     return {
       totalQuestions,
       answeredQuestions,
       visitedNotAnswered,
       notVisited,
-      answeredPercentage: Math.round((answeredQuestions / totalQuestions) * 100)
+      answeredPercentage: Math.round(
+        (answeredQuestions / totalQuestions) * 100
+      ),
     };
   };
 
@@ -221,13 +236,16 @@ const StudentQuizPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white font-sans">
-      {currentSection === "hero" || currentSection === "form" || currentSection === "welcome" ? (
+      {currentSection === "hero" ||
+      currentSection === "form" ||
+      currentSection === "welcome" ? (
         <QuizIntro
           quizData={quizData}
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}
           studentDetails={studentDetails}
           setStudentDetails={setStudentDetails}
+          setIsQuizActive={setIsQuizActive}
         />
       ) : currentSection === "quiz" ? (
         <QuizPage
@@ -266,10 +284,10 @@ const StudentQuizPage = () => {
         resultCountdown={resultCountdown}
         isResultAvailable={isResultAvailable}
         formatTime={formatTime}
-        answers={answers} 
+        answers={answers}
       />
     </div>
   );
 };
 
-export default StudentQuizPage;
+export default QuizAttendLayout;

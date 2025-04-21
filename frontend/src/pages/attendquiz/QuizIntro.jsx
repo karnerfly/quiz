@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-const QuizIntro = ({ 
-  quizData, 
+const QuizIntro = ({
+  quizData,
   currentSection, // Add this to props
-  setCurrentSection, 
-  studentDetails, 
-  setStudentDetails 
+  setCurrentSection,
+  studentDetails,
+  setStudentDetails,
+  setIsQuizActive,
 }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,15 +25,18 @@ const QuizIntro = ({
 
   const startQuiz = () => {
     setCurrentSection("quiz");
+    setIsQuizActive(true);
   };
 
   return (
     <>
-       {/* Hero Section */}
-       {currentSection === "hero" && (
+      {/* Hero Section */}
+      {currentSection === "hero" && (
         <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 sm:p-8 transform transition-all duration-300 hover:shadow-2xl">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center">{quizData.title}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+              {quizData.title}
+            </h1>
             <p className="text-sm text-gray-600 mb-2 text-center">
               <strong>Subject:</strong> {quizData.subject}
             </p>
@@ -54,10 +58,14 @@ const QuizIntro = ({
       {currentSection === "form" && (
         <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Enter Your Details</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Enter Your Details
+            </h2>
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name*</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name*
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -69,7 +77,9 @@ const QuizIntro = ({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number*</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Mobile Number*
+                </label>
                 <input
                   type="tel"
                   name="mobile"
@@ -80,7 +90,7 @@ const QuizIntro = ({
                   required
                 />
               </div>
-           {/*   <div>
+              {/*   <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
                 <input
                   type="email"
@@ -114,40 +124,62 @@ const QuizIntro = ({
                 Get ready to test your knowledge
               </p>
             </div>
-            
+
             <div className="p-6">
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Quiz Details</h3>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Quiz Details
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg text-center">
-                    <p className="text-xs text-blue-600 font-medium uppercase">Title</p>
-                    <p className="text-sm font-semibold text-gray-800">{quizData.title}</p>
+                    <p className="text-xs text-blue-600 font-medium uppercase">
+                      Title
+                    </p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      {quizData.title}
+                    </p>
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg text-center">
-                    <p className="text-xs text-purple-600 font-medium uppercase">Subject</p>
-                    <p className="text-sm font-semibold text-gray-800">{quizData.subject}</p>
+                    <p className="text-xs text-purple-600 font-medium uppercase">
+                      Subject
+                    </p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      {quizData.subject}
+                    </p>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg text-center">
-                    <p className="text-xs text-green-600 font-medium uppercase">Questions</p>
-                    <p className="text-sm font-semibold text-gray-800">{quizData.totalQuestions}</p>
+                    <p className="text-xs text-green-600 font-medium uppercase">
+                      Questions
+                    </p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      {quizData.totalQuestions}
+                    </p>
                   </div>
                   <div className="bg-red-50 p-4 rounded-lg text-center">
-                    <p className="text-xs text-red-600 font-medium uppercase">Duration</p>
-                    <p className="text-sm font-semibold text-gray-800">{quizData.duration} minutes</p>
+                    <p className="text-xs text-red-600 font-medium uppercase">
+                      Duration
+                    </p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      {quizData.duration} minutes
+                    </p>
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-yellow-50 p-4 rounded-lg mb-6">
-                <h4 className="text-sm font-semibold text-yellow-700 mb-2">Instructions</h4>
+                <h4 className="text-sm font-semibold text-yellow-700 mb-2">
+                  Instructions
+                </h4>
                 <ul className="text-xs text-gray-700 space-y-1">
                   <li>• Answer all questions within the time limit</li>
-                  <li>• You can navigate between questions using the buttons</li>
+                  <li>
+                    • You can navigate between questions using the buttons
+                  </li>
                   <li>• Your progress will be saved if you refresh the page</li>
                   <li>• Submit when you have answered all questions</li>
                 </ul>
               </div>
-              
+
               <button
                 onClick={startQuiz}
                 className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors duration-200 text-sm font-medium flex items-center justify-center"

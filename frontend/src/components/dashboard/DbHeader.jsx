@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBell,
   faBars,
   faTimes,
   faUser,
   faCog,
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router";
-import { logout } from "@src/api";
+import { Link } from "react-router";
 import toast from "react-hot-toast";
 import { useUser } from "@src/context/User";
+import { useAuth } from "@src/context/Auth";
+import { logout } from "@src/api";
 
 const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const { user } = useUser();
-  const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   // Toggle user dropdown
   const toggleUserDropdown = () => {
@@ -40,7 +40,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const handleLogout = () => {
     logout()
       .then(() => {
-        navigate("/", { replace: true });
+        setToken(null);
       })
       .catch((err) => {
         console.log(err);

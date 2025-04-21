@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useAuth } from "@src/context/Auth";
 import { useNavigate } from "react-router";
 import { login } from "@src/api";
 
 const Login = () => {
-  const { setToken } = useAuth();
+  const [authenticatedRequest, setAuthenticatedRequest] = useState(false);
+  const { token, setToken } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -74,6 +75,12 @@ const Login = () => {
         });
     }
   };
+
+  useEffect(() => {
+    if (token) setAuthenticatedRequest(true);
+  }, []);
+
+  if (authenticatedRequest) return navigate("/dashboard", { replace: true });
 
   return (
     <>

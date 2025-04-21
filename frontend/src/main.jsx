@@ -6,7 +6,5 @@ import "./index.css";
 import AuthProvider from "./context/Auth.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <RouterProvider router={router} />
 );
