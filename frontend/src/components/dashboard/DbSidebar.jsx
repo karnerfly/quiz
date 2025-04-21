@@ -16,11 +16,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
+import { useUser } from "@src/context/User";
 import { logout } from "@src/api";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
-  const sidebarRef = useRef(null);
   const [activeFeature, setActiveFeature] = useState(null);
+  const sidebarRef = useRef(null);
+  const { user } = useUser();
   const navigate = useNavigate();
 
   // Handle clicks outside the sidebar
@@ -61,7 +63,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const featureMenus = {
     quiz: [
       { name: "All Quizzes", icon: faList, path: "quizzes" },
-      { name: "Create Quiz", icon: faPlus, path: "quizzes/create" },
+      { name: "Create Quiz", icon: faPlus, path: "quizzes/create?section=dts" },
       { name: "Quiz Results", icon: faCheckCircle, path: "quizzes/result" },
     ],
     poll: [
@@ -100,9 +102,9 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           className="w-20 h-20 rounded-full border-4 border-indigo-500 mb-4 object-cover"
         />
         <h3 className="font-bold text-xl dark:text-white text-gray-800">
-          John Doe
+          {user?.name}
         </h3>
-        <p className="text-gray-500 text-sm">Premium User</p>
+        <p className="text-gray-500 text-sm">{user?.phone}</p>
       </div>
 
       {/* Sidebar Links */}

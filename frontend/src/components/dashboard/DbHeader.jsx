@@ -11,9 +11,11 @@ import {
 import { Link, useNavigate } from "react-router";
 import { logout } from "@src/api";
 import toast from "react-hot-toast";
+import { useUser } from "@src/context/User";
 
 const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const { user } = useUser();
   const navigate = useNavigate();
 
   // Toggle user dropdown
@@ -102,9 +104,9 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               </div>
               <div className="hidden md:block">
                 <p className="font-medium dark:text-white text-gray-800">
-                  John Doe
+                  {user?.name}
                 </p>
-                <p className="text-xs text-gray-500">Admin</p>
+                <p className="text-xs text-gray-500">{user?.role}</p>
               </div>
             </button>
 
@@ -113,10 +115,10 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-xl py-2 z-50 bg-white dark:bg-gray-800 border dark:border-gray-700">
                 <div className="px-4 py-3 border-b dark:border-gray-700 border-gray-100">
                   <p className="text-sm font-medium dark:text-white text-gray-800">
-                    John Doe
+                    {user?.name}
                   </p>
                   <p className="text-xs dark:text-gray-400 text-gray-500 truncate">
-                    john.doe@example.com
+                    {user?.email}
                   </p>
                 </div>
                 <Link

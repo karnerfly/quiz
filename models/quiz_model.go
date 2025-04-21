@@ -20,7 +20,7 @@ type Quiz struct {
 	Questions         []Question     `json:"questions" gorm:"foreignKey:QuizId"`
 	TeacherId         uint           `json:"teacher_id"`
 	Teacher           *User          `json:"-" gorm:"foreignKey:TeacherId;constraint:OnDelete:SET NULL"`
-	Status            string         `json:"status" gorm:"type:quiz_status;default:'inactive'"`
+	Status            string         `json:"status" gorm:"type:quiz_status;default:'active'"`
 	Duration          time.Duration  `json:"duration"`
 	Expiry            time.Time      `json:"-"`
 	IsNegativeMarking bool           `json:"is_negative_marking" gorm:"default:false"`
