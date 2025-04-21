@@ -1,6 +1,6 @@
 import { createTeacher } from "@src/api";
 import { useAuth } from "@src/context/Auth";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
 
@@ -14,18 +14,49 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    mobile: "",
     password: "",
     confirmPassword: "",
   });
+
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const { setToken } = useAuth();
   const navigate = useNavigate();
 
   const validatePassword = (password) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     return regex.test(password);
   };
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validateMobile = (mobile) => {
+    const re = /^[0-9]{10}$/;
+    return re.test(mobile);
+  };
+
+  useEffect(() => {
+    // Check if all fields are filled and no errors
+    const isValid =
+      formData.name.trim() !== "" &&
+      formData.email.trim() !== "" &&
+      formData.mobile.trim() !== "" &&
+      formData.password.trim() !== "" &&
+      formData.confirmPassword.trim() !== "" &&
+      validateEmail(formData.email) &&
+      validateMobile(formData.mobile) &&
+      validatePassword(formData.password) &&
+      formData.password === formData.confirmPassword &&
+      Object.values(errors).every((error) => error === "");
+    
+    setIsFormValid(isValid);
+  }, [formData, errors]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,12 +65,64 @@ const Signup = () => {
       [name]: value,
     }));
 
+    if (name === "name") {
+      if (value.trim() === "") {
+        setErrors((prev) => ({
+          ...prev,
+          name: "Name is required",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          name: "",
+        }));
+      }
+    }
+
+    if (name === "email") {
+      if (value.trim() === "") {
+        setErrors((prev) => ({
+          ...prev,
+          email: "Email is required",
+        }));
+      } else if (!validateEmail(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          email: "Please enter a valid email address",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          email: "",
+        }));
+      }
+    }
+
+    if (name === "mobile") {
+      if (value.trim() === "") {
+        setErrors((prev) => ({
+          ...prev,
+          mobile: "Mobile number is required",
+        }));
+      } else if (!validateMobile(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          mobile: "Please enter a valid 10-digit mobile number",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          mobile: "",
+        }));
+      }
+    }
+
     if (name === "password") {
       if (value.length > 0 && !validatePassword(value)) {
         setErrors((prev) => ({
           ...prev,
           password:
-            "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+            "Password must be at least 8 characters long and contain at least one letter, one number, and one special character",
         }));
       } else {
         setErrors((prev) => ({
@@ -74,22 +157,7 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validatePassword(formData.password)) {
-      setErrors((prev) => ({
-        ...prev,
-        password:
-          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-      }));
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setErrors((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords do not match",
-      }));
-      return;
-    }
+    if (!isFormValid) return;
 
     createTeacher({
       name: formData.name,
@@ -111,12 +179,10 @@ const Signup = () => {
 
   return (
     <>
-      {/* Toast Notification */}
       <Toaster />
 
       <section className="w-full py-20 px-6 md:px-24 bg-[#f9f9f9] min-h-screen flex items-center justify-center">
         <div className="max-w-2xl w-full">
-          {/* Header */}
           <div className="text-center mb-16">
             <h2 className="mt-4 text-4xl md:text-5xl font-semibold text-gray-900 mb-6">
               Sign Up
@@ -127,10 +193,8 @@ const Signup = () => {
             <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
           </div>
 
-          {/* Register Form */}
           <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Name Field */}
               <div>
                 <label
                   htmlFor="name"
@@ -144,13 +208,17 @@ const Signup = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent"
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.name ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
                   placeholder="John Doe"
                   required
                 />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                )}
               </div>
 
-              {/* Email Field */}
               <div>
                 <label
                   htmlFor="email"
@@ -164,13 +232,17 @@ const Signup = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent"
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
                   placeholder="your@email.com"
                   required
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
 
-              {/* Mobile Number Field */}
               <div>
                 <label
                   htmlFor="mobile"
@@ -184,13 +256,17 @@ const Signup = () => {
                   name="mobile"
                   value={formData.mobile}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent"
-                  placeholder="+1 (555) 123-4567"
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    errors.mobile ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-black focus:border-transparent`}
+                  placeholder="1234567890"
                   required
                 />
+                {errors.mobile && (
+                  <p className="mt-1 text-sm text-red-600">{errors.mobile}</p>
+                )}
               </div>
 
-              {/* Password Field */}
               <div>
                 <label
                   htmlFor="password"
@@ -215,7 +291,6 @@ const Signup = () => {
                 )}
               </div>
 
-              {/* Confirm Password Field */}
               <div>
                 <label
                   htmlFor="confirmPassword"
@@ -244,15 +319,18 @@ const Signup = () => {
                 )}
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-black text-white px-6 py-3 rounded-full text-base font-semibold shadow hover:scale-[1.02] transition-transform"
+                disabled={!isFormValid}
+                className={`w-full px-6 py-3 rounded-full text-base font-semibold shadow transition-transform ${
+                  isFormValid
+                    ? "bg-black text-white hover:scale-[1.02] cursor-pointer"
+                    : "bg-gray-400 text-gray-700 cursor-not-allowed"
+                }`}
               >
                 Create Account
               </button>
 
-              {/* Login Link */}
               <div className="text-center text-sm text-gray-600">
                 Already have an account?{" "}
                 <a
