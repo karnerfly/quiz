@@ -10,7 +10,7 @@ import (
 
 const (
 	UserSession      = "SID"
-	QuizStartSession = "start_quiz_session"
+	StartQuizSession = "start_quiz_session"
 )
 
 func InitializeSession(r *gin.Engine, cfg configs.Config) error {
@@ -19,7 +19,7 @@ func InitializeSession(r *gin.Engine, cfg configs.Config) error {
 		return err
 	}
 
-	sessionNames := []string{UserSession, QuizStartSession}
+	sessionNames := []string{UserSession, StartQuizSession}
 
 	r.Use(sessions.SessionsMany(sessionNames, store))
 

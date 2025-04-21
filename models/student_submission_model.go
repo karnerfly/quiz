@@ -8,9 +8,10 @@ import (
 
 type StudentSubmission struct {
 	Id             uint            `json:"id" gorm:"primarykey"`
-	QuizId         uint            `json:"quiz_id"`
+	QuizCode       string          `json:"quiz_code"`
 	Name           string          `json:"name"`
 	Phone          string          `json:"phone"`
+	District       string          `json:"distrcit"`
 	SubmissionCode string          `json:"submission_code"` // To track without accounts
 	Answers        []StudentAnswer `json:"answers" gorm:"foreignKey:SubmissionId"`
 	Score          int             `json:"score"`

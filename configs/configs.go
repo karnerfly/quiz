@@ -34,12 +34,13 @@ type CookieConfig struct {
 }
 
 type Config struct {
-	Server      ServerConfig
-	Redis       RedisConfig
-	Db          DbConfig
-	Cookie      CookieConfig
-	Environment string
-	CorsOrigin  string
+	Server                  ServerConfig
+	Redis                   RedisConfig
+	Db                      DbConfig
+	UserSessionCookie       CookieConfig
+	SubmissionSessionCookie CookieConfig
+	Environment             string
+	CorsOrigin              string
 }
 
 func New() Config {
@@ -62,9 +63,13 @@ func New() Config {
 			Url:            getEnvStringMust("DATABASE_URL"),
 			MaxConnections: getEnvInt("DATABASE_CONNECTIONS", 10),
 		},
-		Cookie: CookieConfig{
-			Domain: getEnvStringMust("SESSION_COOKIE_DOMAIN"),
-			MaxAge: getEnvInt("SESSION_COOKIE_DOMAIN", 2592000),
+		UserSessionCookie: CookieConfig{
+			Domain: getEnvStringMust("USER_SESSION_COOKIE_DOMAIN"),
+			MaxAge: getEnvInt("USER_SESSION_COOKIE_EXPIRY", 2592000),
+		},
+		SubmissionSessionCookie: CookieConfig{
+			Domain: getEnvStringMust("SUBMISSION_SESSION_COOKIE_DOMAIN"),
+			MaxAge: getEnvInt("SUBMISSION_SESSION_COOKIE_EXPIRY", 2592000),
 		},
 		Environment: getEnvStringMust("ENV"),
 		CorsOrigin:  getEnvString("CORS_ORIGIN", "*"),

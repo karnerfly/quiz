@@ -61,6 +61,14 @@ func (handler *TeacherHandler) HandleCreateTeacherAccount(ctx *gin.Context) {
 
 	session.Set("user_id", id)
 	session.Set("auth_token", authToken)
+	session.Options(sessions.Options{
+		Path:     "/",
+		Domain:   handler.config.UserSessionCookie.Domain,
+		MaxAge:   handler.config.UserSessionCookie.MaxAge,
+		Secure:   handler.config.Environment == "production",
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
 
 	if err = session.Save(); err != nil {
 		SendInternalServerError(ctx, err, env)
@@ -135,9 +143,9 @@ func (handler *TeacherHandler) HandleGetAllQuizzes(ctx *gin.Context) {
 	SendResponse(ctx, http.StatusOK, resp)
 }
 
-func (qh *TeacherHandler) HandleGetAllSubmissions(ctx *gin.Context) {
+func (handler *TeacherHandler) HandleGetAllSubmissions(ctx *gin.Context) {
 	var (
-		env    = qh.config.Environment
+		env    = handler.config.Environment
 		quizId = ctx.Param("quizId")
 	)
 
@@ -154,7 +162,7 @@ func (qh *TeacherHandler) HandleGetAllSubmissions(ctx *gin.Context) {
 		return
 	}
 
-	submissions, err := qh.service.GetAllSubmissionsByTeacherId(ctx.Request.Context(), uint(nQuizId), nTeacherId)
+	submissions, err := handler.service.GetAllSubmissionsByTeacherId(ctx.Request.Context(), uint(nQuizId), nTeacherId)
 	if err != nil {
 		SendInternalServerError(ctx, err, env)
 		return
