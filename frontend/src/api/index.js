@@ -89,6 +89,25 @@ export async function getCurrentTeacherDetails() {
 
 /**
  *
+ * @returns {Promise<{status:number, text:string, data:string}}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function getAuthToken() {
+  try {
+    const resp = await apiClient.get("/auth/token");
+    const token = resp.data?.response?.data?.auth_token;
+    return token;
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
  * @returns {Promise<{status:number, text:string, data:{id:number, title:string, subject:string, is_negative_marking:boolean, no_of_questions:number, status:string, share_code:string, total_submissions:number, duration:number, questions:{id:number, options:string[], problem:string, created_at:Date, updated_at:Date}[], created_at:Date, updated_at:Date}[]}>}
  * @throws {{error:boolean, status:number, message:string}}
  */

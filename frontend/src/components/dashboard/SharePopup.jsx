@@ -1,18 +1,29 @@
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router";
 
 /**
- * @param {{title:string, link:string, totalQuestions:number, duration:number, copyShareLink:Function}} param0
+ * @param {{title:string, link:string, totalQuestions:number, duration:number, onClose:Function}} param0
  */
-const SharePopup = ({
-  title,
-  link,
-  totalQuestions,
-  duration,
-  copyShareLink,
-}) => {
+const SharePopup = ({ title, link, totalQuestions, duration, onClose }) => {
+  const [copied, setCopied] = useState(false);
+
+  const copyShareLink = async () => {
+    if (link) {
+      try {
+        await navigator.clipboard.writeText(link);
+        setCopied(true);
+
+        setTimeout(() => {
+          setCopied(false);
+        }, 3000);
+      } catch (error) {
+        alert(`Error in copy link: ${error}`);
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
       <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl transform transition-all duration-300 scale-100">
@@ -46,19 +57,23 @@ const SharePopup = ({
             />
             <button
               onClick={copyShareLink}
-              className="px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center text-sm font-medium transition-colors duration-200"
+              className={`px-4 py-3 text-white rounded-lg  flex items-center text-sm font-medium transition-colors duration-200 cursor-pointer ${
+                !copied
+                  ? "bg-indigo-600 hover:bg-indigo-700"
+                  : "bg-green-600 hover:bg-green-700"
+              }`}
             >
               <FontAwesomeIcon icon={faCopy} />
             </button>
           </div>
         </div>
         <div className="flex justify-center">
-          <Link
-            to="/dashboard/quizzes"
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors duration-200"
+          <button
+            onClick={onClose}
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors duration-200 cursor-pointer"
           >
             Close
-          </Link>
+          </button>
         </div>
       </div>
     </div>

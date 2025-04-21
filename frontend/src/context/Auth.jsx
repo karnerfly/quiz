@@ -1,16 +1,8 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import apiClient from "@src/api/client";
-import Loader from "@src/components/ui/Loader";
-import { checkHealth } from "@src/api";
-import { useNavigate } from "react-router";
+import { checkHealth, getAuthToken } from "@src/api";
 
-const AuthContext = createContext(undefined);
+const AuthContext = createContext();
 
 export const useAuth = () => {
   const authContext = useContext(AuthContext);
@@ -25,26 +17,24 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
-  const fetchHealthOfApi = useCallback(async () => {
+  const fetchHealthOfApi = async () => {
     try {
       const ok = await checkHealth();
       if (!ok) {
-        navigate(`/500?from=${window.location.pathname}`);
+        window.location.href = `/500?from=${window.location.pathname}`;
       }
     } catch (error) {}
-  }, []);
+  };
 
-  const fetchToken = useCallback(async () => {
+  const fetchToken = async () => {
     try {
-      const resp = await apiClient.get("/auth/token");
-      const token = resp.data?.response?.data?.auth_token;
+      const token = await getAuthToken();
       setToken(token);
     } catch (error) {
       setToken(null);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchHealthOfApi();
@@ -74,16 +64,8 @@ const AuthProvider = ({ children }) => {
     };
   }, [token]);
 
-  if (loading) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ token, setToken, loading }}>
       {children}
     </AuthContext.Provider>
   );

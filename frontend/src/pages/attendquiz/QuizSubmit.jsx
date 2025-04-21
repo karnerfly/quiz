@@ -1,8 +1,7 @@
-import { useRef } from 'react'
-import { usePDF } from 'react-to-pdf'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
-import ScoreCard from "./ScoreCard"
+import { useRef } from "react";
+import { usePDF } from "react-to-pdf";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 const QuizSubmit = ({
   showSubmitPopup,
@@ -23,16 +22,16 @@ const QuizSubmit = ({
   resultCountdown,
   isResultAvailable,
   formatTime,
-  answers
+  answers,
 }) => {
   const { toPDF, targetRef } = usePDF({
     filename: `${studentDetails.name}_${quizData.title}_ScoreCard.pdf`,
     page: {
       margin: 20,
-      format: 'A4',
-      orientation: 'portrait'
-    }
-  })
+      format: "A4",
+      orientation: "portrait",
+    },
+  });
 
   return (
     <>
@@ -40,12 +39,15 @@ const QuizSubmit = ({
       {showSubmitPopup && (
         <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Submission</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">
+              Confirm Submission
+            </h3>
             <p className="text-base text-gray-600 mb-2">
               Are you sure you want to submit your exam?
             </p>
             <p className="text-base text-red-600 mb-4 font-bold">
-              You have {quizData.questions.length - Object.keys(answers).length} unanswered question(s). Do you still want to submit?
+              You have {quizData.questions.length - Object.keys(answers).length}{" "}
+              unanswered question(s). Do you still want to submit?
             </p>
             <div className="flex justify-end gap-3">
               <button
@@ -70,11 +72,17 @@ const QuizSubmit = ({
         <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center">
             <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-4xl" />
+              <FontAwesomeIcon
+                icon={faCheckCircle}
+                className="text-green-500 text-4xl"
+              />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Quiz Submitted Successfully!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Quiz Submitted Successfully!
+            </h2>
             <p className="text-sm text-gray-600 mb-6">
-              Thank you, {studentDetails.name}, for taking the quiz. Your responses have been recorded.
+              Thank you, {studentDetails.name}, for taking the quiz. Your
+              responses have been recorded.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
@@ -126,7 +134,7 @@ const QuizSubmit = ({
       {/* Hidden score card for PDF generation */}
       <div className="hidden">
         <div ref={targetRef}>
-          <ScoreCard 
+          <ScoreCard
             quizData={quizData}
             studentDetails={studentDetails}
             answers={answers}
@@ -134,7 +142,7 @@ const QuizSubmit = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default QuizSubmit
+export default QuizSubmit;

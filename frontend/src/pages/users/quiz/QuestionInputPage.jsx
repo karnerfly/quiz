@@ -1,69 +1,72 @@
+import React, { useEffect, useState } from "react";
 import {
-  faCheckCircle,
   faEye,
   faPlus,
   faSave,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { createQuiz } from "@src/api";
+import { useNavigate } from "react-router";
 import SharePopup from "@src/components/dashboard/SharePopup";
-import React, { useCallback, useEffect, useState } from "react";
+import { createQuiz } from "@src/api";
 
 const QuestionInputPage = () => {
-  // Initialize questions from localStorage or with default empty question
-  const initialQuestions = () => {
-    const savedQuestions = localStorage.getItem("Qlist");
-    if (savedQuestions) {
-      try {
-        return JSON.parse(atob(savedQuestions));
-      } catch (e) {
-        return [{ problem: "", options: [""], correct_answer: -1 }];
-      }
-    }
-    return [{ problem: "", options: [""], correct_answer: -1 }];
-  };
-
-  const fetchQuizBasicDetails = () => {
-    const encodedQuizDets = localStorage.getItem("QBDets");
-    if (!encodedQuizDets) {
-      return (window.location.href = `${window.location.pathname}?section=dts`);
-    }
-
-    try {
-      const decodedQuizDets = atob(encodedQuizDets);
-      return JSON.parse(decodedQuizDets);
-    } catch (e) {
-      window.location.href = `${window.location.pathname}?section=dts`;
-    }
-  };
-
-  const [basicDetails] = useState(fetchQuizBasicDetails());
-  const [questions, setQuestions] = useState(initialQuestions());
+  const [basicDetails, setBasicDetails] = useState({
+    title: "",
+    subject: "",
+    duration: 0,
+    questionCount: 0,
+  });
+  const [questions, setQuestions] = useState([
+    { problem: "", options: [""], correct_answer: -1 },
+  ]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  const [inputsDisabled, setInputsDisabled] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [shareCode, setShareCode] = useState("");
-
   const currentQuestion = questions[activeQuestionIndex] || {
     problem: "",
     options: [""],
     correct_answer: -1,
   };
 
+  const navigate = useNavigate();
+
+  // fetch and decode the quiz basic details
+  useEffect(() => {
+    const fetchQuizBasicDetails = () => {
+      const encodedQuizDets = localStorage.getItem("QBDets");
+
+      try {
+        return JSON.parse(atob(encodedQuizDets));
+      } catch (e) {
+        return navigate("?section=dts", { replace: true, relative: true });
+      }
+    };
+
+    setBasicDetails(fetchQuizBasicDetails());
+  }, []);
+
+  // fetch and decode the saved questions
+  useEffect(() => {
+    const fetchInitialQuestions = () => {
+      const savedQuestions = localStorage.getItem("Qlist");
+      if (savedQuestions) {
+        try {
+          return JSON.parse(atob(savedQuestions));
+        } catch (e) {
+          return [{ problem: "", options: [""], correct_answer: -1 }];
+        }
+      }
+      return [{ problem: "", options: [""], correct_answer: -1 }];
+    };
+    setQuestions(fetchInitialQuestions());
+  }, []);
+
   // Save questions to localStorage whenever they change
   useEffect(() => {
     const encodedQuestions = btoa(JSON.stringify(questions));
     localStorage.setItem("Qlist", encodedQuestions);
   }, [questions]);
-
-  useEffect(() => {
-    const completedQuestions = questions.filter(isQuestionComplete).length;
-    setInputsDisabled(
-      completedQuestions >= basicDetails.questionCount &&
-        activeQuestionIndex >= basicDetails.questionCount
-    );
-  }, [questions, basicDetails.questionCount, activeQuestionIndex]);
 
   const isQuestionComplete = (question) => {
     return (
@@ -83,13 +86,6 @@ const QuestionInputPage = () => {
       );
       return;
     }
-
-    // createQuizRequest().then((code) => {
-    //   if (code) {
-    //     setShareCode(code);
-    //     setShowPopup(true);
-    //   }
-    // });
 
     try {
       const resp = await createQuiz({
@@ -112,8 +108,6 @@ const QuestionInputPage = () => {
   };
 
   const updateCurrentQuestion = (updates) => {
-    if (inputsDisabled) return;
-
     setQuestions((prev) => {
       const newQuestions = [...prev];
       newQuestions[activeQuestionIndex] = {
@@ -125,21 +119,16 @@ const QuestionInputPage = () => {
   };
 
   const handleOptionChange = (index, value) => {
-    if (inputsDisabled) return;
-
     const newOptions = [...currentQuestion.options];
     newOptions[index] = value;
     updateCurrentQuestion({ options: newOptions });
   };
 
   const addOption = () => {
-    if (inputsDisabled) return;
     updateCurrentQuestion({ options: [...currentQuestion.options, ""] });
   };
 
   const removeOption = (index) => {
-    if (inputsDisabled || currentQuestion.options.length <= 2) return;
-
     const newOptions = [...currentQuestion.options];
     newOptions.splice(index, 1);
 
@@ -157,8 +146,6 @@ const QuestionInputPage = () => {
   };
 
   const saveQuestion = () => {
-    if (inputsDisabled) return;
-
     if (!isQuestionComplete(currentQuestion)) {
       alert(
         "Please complete all required fields (question text, at least 2 options, and correct answer)"
@@ -181,7 +168,7 @@ const QuestionInputPage = () => {
   };
 
   const deleteQuestion = (index) => {
-    if (inputsDisabled || questions.length <= 1) return;
+    if (questions.length <= 1) return;
 
     setQuestions((prev) => {
       const newQuestions = [...prev];
@@ -208,7 +195,7 @@ const QuestionInputPage = () => {
         duration={basicDetails.duration}
         totalQuestions={basicDetails.questionCount}
         link={`${window.location.origin}/quizreal?code=${shareCode}`}
-        copyShareLink={null}
+        onClose={() => setShowPopup(false)}
       />
     );
   }
@@ -227,7 +214,15 @@ const QuestionInputPage = () => {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() =>
-                (window.location.href = `${window.location.pathname}?section=prvw`)
+                navigate("?section=dts", { relative: true, replace: true })
+              }
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200 cursor-pointer"
+            >
+              Back to Details
+            </button>
+            <button
+              onClick={() =>
+                navigate("?section=prvw", { relative: true, replace: true })
               }
               className="px-4 py-2 rounded-lg flex items-center text-sm font-medium transition-colors duration-200 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
             >
@@ -259,7 +254,6 @@ const QuestionInputPage = () => {
                   <button
                     onClick={() => deleteQuestion(index)}
                     className="ml-1 text-red-500 hover:text-red-700 p-1 disabled:opacity-50"
-                    disabled={inputsDisabled}
                   >
                     <FontAwesomeIcon icon={faTrash} size="xs" />
                   </button>
@@ -282,7 +276,6 @@ const QuestionInputPage = () => {
                       ? "ring-2 ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white scale-110"
                       : "bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900 dark:hover:bg-indigo-800 text-indigo-800 dark:text-indigo-200"
                   }`}
-                disabled={inputsDisabled}
               >
                 <FontAwesomeIcon icon={faPlus} />
               </button>
@@ -380,8 +373,7 @@ const QuestionInputPage = () => {
                   <option value={-1}>Select correct answer</option>
                   {currentQuestion.options.map((option, index) => (
                     <option key={index} value={index} disabled={!option.trim()}>
-                      {String.fromCharCode(65 + index)}:{" "}
-                      {option || "[Empty option]"}
+                      {String.fromCharCode(65 + index)}: {option || "[Empty]"}
                     </option>
                   ))}
                 </select>
@@ -392,26 +384,13 @@ const QuestionInputPage = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-center pt-6 gap-4">
-          <button
-            onClick={() =>
-              (window.location.href = `${window.location.pathname}?section=dts`)
-            }
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200 cursor-pointer"
-          >
-            Back to Details
-          </button>
+          <div></div>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             {activeQuestionIndex < basicDetails.questionCount - 1 && (
               <button
                 onClick={saveQuestion}
-                className={`px-6 py-3 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm font-medium transition-colors duration-200 cursor-pointer ${
-                  inputsDisabled
-                    ? "opacity-70 cursor-not-allowed"
-                    : "hover:bg-blue-700"
-                }`}
-                disabled={
-                  inputsDisabled || !isQuestionComplete(currentQuestion)
-                }
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm font-medium transition-colors duration-200 cursor-pointer hover:bg-blue-700"
+                disabled={!isQuestionComplete(currentQuestion)}
               >
                 <FontAwesomeIcon icon={faSave} className="mr-2" />
                 {activeQuestionIndex < basicDetails.questionCount - 1

@@ -5,18 +5,24 @@ import {
   faHistory,
   faChartBar,
   faUsers,
-  faClock,
-  faEdit,
   faTrash,
-  faPlay,
-  faShare,
   faEllipsisVertical,
+  faGlobe,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
 import { useUser } from "@src/context/User";
+import { useState } from "react";
+import SharePopup from "@src/components/dashboard/SharePopup";
 
 const QuizzesPage = () => {
   const { quizzes } = useUser();
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpData, setPopUpData] = useState({
+    duration: 0,
+    title: "",
+    totalQuestions: 0,
+    code: "",
+  });
 
   const calculateTotalSubmissions = () => {
     let submissions = 0;
@@ -28,6 +34,18 @@ const QuizzesPage = () => {
     });
 
     return submissions;
+  };
+
+  const handleShowPopup = (idx) => {
+    const data = quizzes[idx];
+    setPopUpData({
+      title: data.title,
+      duration: data.duration,
+      totalQuestions: data.no_of_questions,
+      code: data.share_code,
+    });
+
+    setShowPopUp(true);
   };
 
   const quizFeatures = [
@@ -62,6 +80,18 @@ const QuizzesPage = () => {
     }
       */
   ];
+
+  if (showPopUp) {
+    return (
+      <SharePopup
+        duration={popUpData.duration / 1e9 / 60}
+        title={popUpData.title}
+        totalQuestions={popUpData.totalQuestions}
+        link={`${window.location.origin}/quizreal?code=${popUpData.code}`}
+        onClose={() => setShowPopUp(false)}
+      />
+    );
+  }
 
   return (
     <main className="flex-1 ml-0 md:ml-6 transition-all duration-300 dark:text-white text-gray-800 px-2 sm:px-0">
@@ -110,9 +140,10 @@ const QuizzesPage = () => {
       <div className="rounded-lg sm:rounded-xl shadow-md sm:shadow-lg p-4 sm:p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
           <h2 className="text-lg sm:text-xl font-bold flex items-center">
-            <FontAwesomeIcon icon={faClock} className="mr-2 text-indigo-500" />
-            Recent Quizzes
+            <FontAwesomeIcon icon={faGlobe} className="mr-2 text-indigo-500" />
+            All Quizzes
           </h2>
+
           <Link
             to="history"
             className="text-indigo-600 hover:text-indigo-800 dark:hover:text-indigo-400 text-xs sm:text-sm"
@@ -174,10 +205,11 @@ const QuizzesPage = () => {
               </tr>
             </thead>
             <tbody>
-              {quizzes.map((quiz) => (
+              {quizzes.map((quiz, index) => (
                 <tr
                   key={quiz?.id}
-                  className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm md:text-base"
+                  className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm md:text-base cursor-pointer"
+                  onClick={() => handleShowPopup(index)}
                 >
                   <td className="py-3 font-medium">{quiz?.title}</td>
                   <td className="py-3">

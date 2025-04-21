@@ -1,6 +1,7 @@
 import { faBook, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const BasicDataInputPage = () => {
   const durationOptions = [
@@ -13,13 +14,25 @@ const BasicDataInputPage = () => {
     "120",
     "180",
   ];
-  const [quizDetails, setQuizDetails] = useState({
-    duration: 0,
-    hasNegativeMarking: false,
-    questionCount: 0,
-    subject: "",
-    title: "",
-  });
+
+  const fetchBasicDetails = () => {
+    const encodedQuizDets = localStorage.getItem("QBDets");
+    try {
+      return JSON.parse(atob(encodedQuizDets));
+    } catch (error) {
+      return {
+        duration: 0,
+        hasNegativeMarking: false,
+        questionCount: 0,
+        subject: "",
+        title: "",
+      };
+    }
+  };
+
+  const [quizDetails, setQuizDetails] = useState(fetchBasicDetails());
+
+  const navigate = useNavigate();
 
   const handleQuizDetailsChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,10 +54,9 @@ const BasicDataInputPage = () => {
   };
 
   const handleQuizDetailsSave = () => {
-    localStorage.removeItem("QBDets");
     const encodedData = btoa(JSON.stringify(quizDetails));
     localStorage.setItem("QBDets", encodedData);
-    window.location.href = `${window.location.pathname}?section=qsi`;
+    navigate("?section=qsi", { relative: true, replace: true });
   };
 
   return (
