@@ -20,6 +20,10 @@ func NewStudentHandler(studentService *services.StudentService, cfg configs.Conf
 	return &StudentHandler{service: studentService, config: cfg}
 }
 
+func (sh *StudentHandler) HandleStartQuiz(ctx *gin.Context) {
+
+}
+
 func (sh *StudentHandler) HandleSubmitQuiz(ctx *gin.Context) {
 	var (
 		payload dto.QuizSubmitPayload
@@ -41,7 +45,7 @@ func (sh *StudentHandler) HandleSubmitQuiz(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie("QID", submissionCode, 2592000, "/api/v1/student", sh.config.Server.Domain, sh.config.Environment == "production", true)
+	ctx.SetCookie("QID", submissionCode, 2592000, "/", "", sh.config.Environment == "production", true)
 
 	resp := SuccessResponse{
 		Code:    http.StatusCreated,

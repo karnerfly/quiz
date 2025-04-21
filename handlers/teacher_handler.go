@@ -13,6 +13,7 @@ import (
 	"github.com/karnerfly/quiz/models/dto"
 	"github.com/karnerfly/quiz/pkg"
 	"github.com/karnerfly/quiz/services"
+	"github.com/karnerfly/quiz/store"
 )
 
 type TeacherHandler struct {
@@ -50,7 +51,7 @@ func (handler *TeacherHandler) HandleCreateTeacherAccount(ctx *gin.Context) {
 	}
 
 	// create user session
-	session := sessions.Default(ctx)
+	session := sessions.DefaultMany(ctx, store.UserSession)
 
 	authToken, err := pkg.GenerateBase64Token(32)
 	if err != nil {
