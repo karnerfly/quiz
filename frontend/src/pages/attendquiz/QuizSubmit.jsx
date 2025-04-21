@@ -1,8 +1,5 @@
-import { useRef } from 'react'
-import { usePDF } from 'react-to-pdf'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
-import ScoreCard from "./ScoreCard"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 const QuizSubmit = ({
   showSubmitPopup,
@@ -25,15 +22,6 @@ const QuizSubmit = ({
   formatTime,
   answers
 }) => {
-  const { toPDF, targetRef } = usePDF({
-    filename: `${studentDetails.name}_${quizData.title}_ScoreCard.pdf`,
-    page: {
-      margin: 20,
-      format: 'A4',
-      orientation: 'portrait'
-    }
-  })
-
   return (
     <>
       {/* Submit Confirmation Popup */}
@@ -48,7 +36,7 @@ const QuizSubmit = ({
               You have {quizData.questions.length - Object.keys(answers).length} unanswered question(s). Do you still want to submit?
             </p>
             <div className="flex justify-end gap-3">
-              <button
+            <button
                 onClick={confirmQuizSubmit}
                 className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm font-medium transition-colors duration-200"
               >
@@ -112,7 +100,6 @@ const QuizSubmit = ({
               </button>
               {isResultAvailable && (
                 <button
-                  onClick={() => toPDF()}
                   className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm font-medium transition-colors duration-200"
                 >
                   Download Score Card
@@ -122,19 +109,8 @@ const QuizSubmit = ({
           </div>
         </section>
       )}
-
-      {/* Hidden score card for PDF generation */}
-      <div className="hidden">
-        <div ref={targetRef}>
-          <ScoreCard 
-            quizData={quizData}
-            studentDetails={studentDetails}
-            answers={answers}
-          />
-        </div>
-      </div>
     </>
-  )
-}
+  );
+};
 
-export default QuizSubmit
+export default QuizSubmit;
