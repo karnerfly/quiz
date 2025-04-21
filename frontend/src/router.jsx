@@ -39,7 +39,6 @@ import Analysis from "./pages/Analysis";
 import Error500Page from "./pages/errors/Error500Page";
 import Error404Page from "./pages/errors/Error404Page";
 
-import AuthProvider from "./context/Auth";
 import UserProvider from "./context/User";
 import SharePopup from "./components/dashboard/SharePopup";
 
@@ -101,7 +100,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "studentquizpage",
-        element: <StudentQuizPage />
+        element: <StudentQuizPage />,
       },
 
       // features sub route
@@ -126,29 +125,24 @@ export const router = createBrowserRouter([
           },
         ],
       },
-    ],
-  },
 
-  // auth routes - needs AuthProvider
-  {
-    path: "auth",
-    element: (
-      <AuthProvider>
-        <Base />
-      </AuthProvider>
-    ),
-    children: [
+      // auth routes - needs AuthProvider
       {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "signup",
-        element: <Signup />,
-      },
-      {
-        path: "forgotpassword",
-        element: <ForgotPassword />,
+        path: "auth",
+        children: [
+          {
+            path: "login",
+            element: <Login />,
+          },
+          {
+            path: "signup",
+            element: <Signup />,
+          },
+          {
+            path: "forgotpassword",
+            element: <ForgotPassword />,
+          },
+        ],
       },
     ],
   },
@@ -157,13 +151,11 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: (
-      <AuthProvider>
-        <Protected>
-          <UserProvider>
-            <Dashboard />
-          </UserProvider>
-        </Protected>
-      </AuthProvider>
+      <Protected>
+        <UserProvider>
+          <Dashboard />
+        </UserProvider>
+      </Protected>
     ),
     children: [
       {
