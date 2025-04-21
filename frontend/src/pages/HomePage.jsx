@@ -12,11 +12,20 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const hasVisited = localStorage.getItem("hasVisited");
+  
+    if (hasVisited) {
       setIsLoading(false);
-    }, 4000);
-    return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+        localStorage.setItem("hasVisited", "true");
+      }, 4000);
+  
+      return () => clearTimeout(timer);
+    }
   }, []);
+  
 
   return (
     <div className="bg-white dark:bg-gray-900 relative">

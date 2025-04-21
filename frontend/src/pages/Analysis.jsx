@@ -17,7 +17,6 @@ const StudentAnalysisPage = () => {
   const { studentId } = useParams();
   const [activeQuestionId, setActiveQuestionId] = useState(null);
   
-  // Sample data - in a real app this would come from API
   const [student, setStudent] = useState({
     id: parseInt(studentId),
     name: "John Doe",
@@ -25,7 +24,7 @@ const StudentAnalysisPage = () => {
     totalQuestions: 50,
     totalCorrect: 32,
     totalWrong: 18,
-    totalScore: 64, // Out of 100
+    totalScore: 64,
     answers: Array.from({ length: 50 }, (_, i) => ({
       questionId: i + 1,
       questionText: `Question ${i + 1}: ${generateSampleQuestion(i)}`,
@@ -36,7 +35,7 @@ const StudentAnalysisPage = () => {
     }))
   });
 
-  // Helper functions to generate sample data
+  // sample data
   function generateSampleQuestion(index) {
     const questions = [
       "What is the correct way to declare a variable in JavaScript?",
