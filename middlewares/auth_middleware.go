@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/karnerfly/quiz/handlers"
+	"github.com/karnerfly/quiz/store"
 )
 
 func Protected() gin.HandlerFunc {
@@ -32,7 +33,7 @@ func Protected() gin.HandlerFunc {
 			return
 		}
 
-		session := sessions.Default(ctx)
+		session := sessions.DefaultMany(ctx, store.UserSession)
 
 		token := session.Get("auth_token")
 		userId := session.Get("user_id")

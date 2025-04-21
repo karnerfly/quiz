@@ -3,7 +3,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const QuizIntro = ({ 
   quizData, 
-  currentSection, // Add this to props
+  currentSection,
   setCurrentSection, 
   studentDetails, 
   setStudentDetails 

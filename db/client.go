@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 
+	"github.com/karnerfly/quiz/pkg/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -20,6 +21,8 @@ func CreateDatabaseClient(dsn string, maxConn int) (*gorm.DB, error) {
 		return nil, err
 	}
 	sqlDb.SetMaxIdleConns(maxConn)
+
+	log.Println("Database connected")
 
 	return gormDb, nil
 }

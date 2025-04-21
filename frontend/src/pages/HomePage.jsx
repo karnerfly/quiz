@@ -11,7 +11,7 @@ import FaqSection from "@src/components/FaqSection";
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+ useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited");
   
     if (hasVisited) {
