@@ -62,8 +62,8 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 	session.Set("auth_token", authToken)
 	session.Options(sessions.Options{
 		Path:     "/",
-		Domain:   ah.config.Cookie.Domain,
-		MaxAge:   ah.config.Cookie.MaxAge,
+		Domain:   ah.config.UserSessionCookie.Domain,
+		MaxAge:   ah.config.UserSessionCookie.MaxAge,
 		Secure:   ah.config.Environment == "production",
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,

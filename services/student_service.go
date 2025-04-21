@@ -21,11 +21,7 @@ func NewStudentService(studentStore *store.Store) *StudentService {
 }
 
 func (service *StudentService) CreateNewSubmission(ctx context.Context, payload dto.QuizSubmitPayload) (string, error) {
-	submissionCode, err := pkg.GenerateBase64Token(16)
-	if err != nil {
-		return "", err
-	}
-
+	submissionCode := pkg.GenerateShareCode()
 	questionIds := make([]uint, len(payload.Answers))
 
 	for i, answer := range payload.Answers {
@@ -59,7 +55,8 @@ func (service *StudentService) CreateNewSubmission(ctx context.Context, payload 
 	submission := models.StudentSubmission{
 		Name:           payload.Name,
 		Phone:          payload.Phone,
-		QuizId:         payload.QuizId,
+		District:       payload.District,
+		QuizCode:       payload.QuizCode,
 		Score:          score,
 		SubmissionCode: submissionCode,
 		Answers:        answers,
