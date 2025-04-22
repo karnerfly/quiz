@@ -14,6 +14,11 @@ type QuizService struct {
 	store *store.Store
 }
 
+type AnalysisQuestionResponse struct {
+	models.Question
+	CorrectAnswer int `json:"correct_answer"`
+}
+
 func NewQuizService(quizStore *store.Store) *QuizService {
 	return &QuizService{store: quizStore}
 }
@@ -55,6 +60,34 @@ func (qs *QuizService) GetQuizById(ctx context.Context, quizId uint) (models.Qui
 	return qs.store.GetQuizById(ctx, quizId)
 }
 
-func (qs *QuizService) GetQuizByCode(ctx context.Context, quizCode string) (models.Quiz, error) {
-	return qs.store.GetQuizByCode(ctx, quizCode)
+func (qs *QuizService) GetQuizByCode(ctx context.Context, quizCode string, isAnalysisMode bool) (any, error) {
+	quiz, err := qs.store.GetQuizByCode(ctx, quizCode)
+	if err != nil {
+		return nil, err
+	}
+
+	var q struct {
+		models.Quiz
+		Questions []AnalysisQuestionResponse `json:"questions"`
+	}
+
+	q.Quiz = quiz
+
+	if isAnalysisMode {
+		for _, question := range quiz.Questions {
+			q.Questions = append(q.Questions, AnalysisQuestionResponse{
+				Question:      question,
+				CorrectAnswer: question.CorrectAnswer,
+			})
+		}
+	} else {
+		for _, question := range quiz.Questions {
+			q.Questions = append(q.Questions, AnalysisQuestionResponse{
+				Question:      question,
+				CorrectAnswer: -1,
+			})
+		}
+	}
+
+	return q, nil
 }

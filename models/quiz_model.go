@@ -17,7 +17,7 @@ type Quiz struct {
 	Subject           string         `json:"subject"`
 	ShareCode         string         `json:"share_code" gorm:"unique"`
 	NoOfQuestions     int            `json:"no_of_questions"`
-	Questions         []Question     `json:"questions" gorm:"foreignKey:QuizId"`
+	Questions         []Question     `json:"questions" gorm:"foreignKey:QuizId;constraint:OnDelete:CASCADE"`
 	TeacherId         uint           `json:"teacher_id"`
 	Teacher           *User          `json:"-" gorm:"foreignKey:TeacherId;constraint:OnDelete:SET NULL"`
 	Status            string         `json:"status" gorm:"type:quiz_status;default:'active'"`

@@ -12,8 +12,8 @@ type StudentSubmission struct {
 	Name           string          `json:"name"`
 	Phone          string          `json:"phone"`
 	District       string          `json:"distrcit"`
-	SubmissionCode string          `json:"submission_code"` // To track without accounts
-	Answers        []StudentAnswer `json:"answers" gorm:"foreignKey:SubmissionId"`
+	SubmissionCode string          `json:"submission_code"`
+	Answers        []StudentAnswer `json:"answers" gorm:"foreignKey:SubmissionId;constraint:OnDelete:CASCADE"`
 	Score          int             `json:"score"`
 	CreatedAt      time.Time       `json:"created_at"`
 	UpdatedAt      time.Time       `json:"updated_at"`

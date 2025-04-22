@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/karnerfly/quiz/configs"
@@ -63,13 +64,26 @@ func (qh *QuizHandler) HandleCreateQuiz(ctx *gin.Context) {
 
 func (qh *QuizHandler) HandleGetQuizByCode(ctx *gin.Context) {
 	env := qh.config.Environment
+	isAnalysisMode := false
+
 	quizCode := ctx.Query("code")
+	aQ := ctx.Query("analysis")
+
+	if aQ != "" {
+		var err error
+		isAnalysisMode, err = strconv.ParseBool(aQ)
+		if err != nil {
+			SendBadRequestError(ctx, "invalid parameter", "invalid analysis query", env)
+			return
+		}
+
+	}
 
 	if quizCode == "" {
 		SendBadRequestError(ctx, "invalid parameter", "quiz code is missing in query parameter", env)
 		return
 	}
-	quiz, err := qh.service.GetQuizByCode(ctx.Request.Context(), quizCode)
+	quiz, err := qh.service.GetQuizByCode(ctx.Request.Context(), quizCode, isAnalysisMode)
 	if err != nil {
 		if errors.Is(err, constants.ErrRecordDoesNotExists) {
 			SendResourceNotFoundError(ctx, "quiz does not exists", "invalid quiz code", env)

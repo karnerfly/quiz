@@ -16,7 +16,7 @@ func initializStudentRoutes(router *gin.RouterGroup, db *gorm.DB, cfg configs.Co
 	service := services.NewStudentService(s)
 	handler := handlers.NewStudentHandler(service, cfg)
 
-	studentRouter.GET("/", handler.HandleGetStudentDetails)
+	studentRouter.GET("", handler.HandleGetStudentDetails)
 	studentRouter.POST("/quiz/start", handler.HandleStartQuiz)
 	studentRouter.POST("/quiz/submit", handler.HandleSubmitQuiz)
 	studentRouter.GET("/result", handler.HandleGetResultBySubmissionCode)
