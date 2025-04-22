@@ -21,7 +21,7 @@ type User struct {
 	IdentityToken string         `json:"-"`
 	Phone         string         `json:"phone"`
 	Role          UserRole       `json:"role" gorm:"type:user_role;default:'teacher'"`
-	Quizzes       []Quiz         `gorm:"foreignKey:TeacherId"`
+	Quizzes       []Quiz         `gorm:"foreignKey:TeacherId;constraint:OnDelete:CASCADE"`
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `json:"-" gorm:"index"`

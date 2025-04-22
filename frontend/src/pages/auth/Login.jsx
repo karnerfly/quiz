@@ -62,7 +62,7 @@ const Login = () => {
     if (validateForm()) {
       login({ email: formData.email, password: formData.password })
         .then((resp) => {
-          const authToken = resp.data?.data?.auth_token;
+          const authToken = resp.data;
           if (authToken) {
             setToken(authToken);
           }

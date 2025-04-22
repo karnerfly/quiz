@@ -34,7 +34,7 @@ func (sh *StudentHandler) HandleStartQuiz(ctx *gin.Context) {
 		return
 	}
 
-	session.Set("payload", payload)
+	session.Set(payload.QuizCode, payload)
 	session.Options(sessions.Options{
 		Path:     "/",
 		Domain:   sh.config.SubmissionSessionCookie.Domain,
@@ -59,7 +59,8 @@ func (sh *StudentHandler) HandleStartQuiz(ctx *gin.Context) {
 func (sh *StudentHandler) HandleSubmitQuiz(ctx *gin.Context) {
 	var (
 		payload struct {
-			Answers []dto.QuizAnswerPayload
+			QuizCode string `json:"quiz_code" validate:"required"`
+			Answers  []dto.QuizAnswerPayload
 		}
 		env = sh.config.Environment
 	)
@@ -70,7 +71,7 @@ func (sh *StudentHandler) HandleSubmitQuiz(ctx *gin.Context) {
 	}
 
 	session := sessions.DefaultMany(ctx, store.StartQuizSession)
-	submissionBasicDetails, ok := session.Get("payload").(dto.StartQuizPayload)
+	submissionBasicDetails, ok := session.Get(payload.QuizCode).(dto.StartQuizPayload)
 
 	if !ok {
 		SendBadRequestError(ctx, "invalid start quiz session", "invalid start quiz session", env)
@@ -94,6 +95,9 @@ func (sh *StudentHandler) HandleSubmitQuiz(ctx *gin.Context) {
 		SendInternalServerError(ctx, err, env)
 		return
 	}
+
+	submissionBasicDetails.Attempted = true
+	session.Set(payload.QuizCode, submissionBasicDetails)
 	session.Set("submission_code", submissionCode)
 	if err := session.Save(); err != nil {
 		SendInternalServerError(ctx, err, env)
@@ -145,10 +149,12 @@ func (sh *StudentHandler) HandleGetResultBySubmissionCode(ctx *gin.Context) {
 
 func (sh *StudentHandler) HandleGetStudentDetails(ctx *gin.Context) {
 	env := sh.config.Environment
+	quizCode := ctx.Query("code")
 	session := sessions.DefaultMany(ctx, store.StartQuizSession)
-	payload := session.Get("payload")
 
-	if payload == nil {
+	payload, ok := session.Get(quizCode).(dto.StartQuizPayload)
+
+	if !ok {
 		SendResourceNotFoundError(ctx, "start quiz session missing", "start quiz session either expired or has not initialize yet", env)
 		return
 	}

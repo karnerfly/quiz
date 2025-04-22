@@ -34,7 +34,7 @@ import Settings from "./pages/users/Settings";
 import Quizzes from "./pages/users/Quizzes";
 import QuizCreateLayout from "./pages/users/quiz/QuizCreateLayout";
 import Result from "./pages/users/Result";
-import Analysis from "./pages/Analysis";
+import Analysis from "./pages/attendquiz/Analysis";
 
 import Error500Page from "./pages/errors/Error500Page";
 import Error404Page from "./pages/errors/Error404Page";
@@ -100,12 +100,17 @@ export const router = createBrowserRouter([
         element: <QuizReal />,
       },
       {
-        path: "analysis",
-        element: <Analysis />,
-      },
-      {
         path: "quiz",
-        element: <QuizAttendLayout />,
+        children: [
+          {
+            path: "",
+            element: <QuizAttendLayout />,
+          },
+          {
+            path: "analysis",
+            element: <Analysis />,
+          },
+        ],
       },
 
       // features sub route

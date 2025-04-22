@@ -46,6 +46,7 @@ type StartQuizPayload struct {
 	Phone     string `json:"phone" validate:"required,min=10,max=10"`
 	District  string `json:"district"`
 	QuizCode  string `json:"quiz_code" validate:"required,min=12"`
+	Attempted bool   `json:"attempted"`
 	TimeStamp int64  `json:"time_stamp" validate:"required"`
 }
 

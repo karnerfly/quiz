@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
 
 const QuizSubmit = ({
   showSubmitPopup,
@@ -20,27 +21,35 @@ const QuizSubmit = ({
   resultCountdown,
   isResultAvailable,
   formatTime,
-  answers
+  answers,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       {/* Submit Confirmation Popup */}
       {showSubmitPopup && (
         <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Submission</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">
+              Confirm Submission
+            </h3>
             <p className="text-base text-gray-600 mb-2">
-              Are you sure you want to submit your exam?
+              Are you sure to submit your exam?
             </p>
-            <p className="text-base text-red-600 mb-4 font-bold">
-              You have {quizData.questions.length - Object.keys(answers).length} unanswered question(s). Do you still want to submit?
-            </p>
+            {Object.keys(answers).length < quizData.no_of_questions && (
+              <p className="text-base text-red-600 mb-4 font-bold">
+                You have{" "}
+                {quizData.no_of_questions - Object.keys(answers).length}{" "}
+                unanswered question(s). Do you still want to submit?
+              </p>
+            )}
             <div className="flex justify-end gap-3">
-            <button
+              <button
                 onClick={confirmQuizSubmit}
                 className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm font-medium transition-colors duration-200"
               >
-                Yes
+                Yes & show result
               </button>
               <button
                 onClick={() => setShowSubmitPopup(false)}
@@ -58,11 +67,17 @@ const QuizSubmit = ({
         <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center">
             <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-4xl" />
+              <FontAwesomeIcon
+                icon={faCheckCircle}
+                className="text-green-500 text-4xl"
+              />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Quiz Submitted Successfully!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Quiz Submitted Successfully!
+            </h2>
             <p className="text-sm text-gray-600 mb-6">
-              Thank you, {studentDetails.name}, for taking the quiz. Your responses have been recorded.
+              Thank you, {studentDetails.name}, for taking the quiz. Your
+              responses have been recorded.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
@@ -88,6 +103,12 @@ const QuizSubmit = ({
               </button>
               <button
                 disabled={!isResultAvailable}
+                onClick={() =>
+                  navigate("analysis", {
+                    relative: true,
+                    replace: true,
+                  })
+                }
                 className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors duration-100 ${
                   isResultAvailable
                     ? "bg-green-500 text-white hover:bg-green-600"
@@ -98,13 +119,6 @@ const QuizSubmit = ({
                   ? "See Result"
                   : `Results in ${formatTime(resultCountdown)}`}
               </button>
-              {isResultAvailable && (
-                <button
-                  className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm font-medium transition-colors duration-200"
-                >
-                  Download Score Card
-                </button>
-              )}
             </div>
           </div>
         </section>
