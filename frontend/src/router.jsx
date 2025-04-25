@@ -48,7 +48,7 @@ import QuizAttendLayout from "./pages/attendquiz/QuizAttendLayout";
 import AuthProvider from "./context/Auth";
 
 export const router = createBrowserRouter([
-  // public routes
+  // public routes needs auth provider
   {
     path: "/",
     element: (
