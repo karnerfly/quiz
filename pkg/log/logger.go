@@ -18,7 +18,7 @@ var defaultLogger logger
 func init() {
 	defaultLogger = logger{
 		stdout: log.New(os.Stdout, constants.LogInfoPrefix, log.LstdFlags),
-		stderr: log.New(os.Stderr, fmt.Sprintf("%s%s", constants.LogColorRed, constants.LogErrorPrefix), log.LstdFlags),
+		stderr: log.New(os.Stderr, fmt.Sprintf("%s%s%s", constants.LogColorRed, constants.LogErrorPrefix, constants.LogColorReset), log.LstdFlags),
 	}
 }
 
@@ -47,7 +47,7 @@ func Fatal(v ...any) {
 }
 
 func Fatalf(format string, v ...any) {
-	defaultLogger.stderr.Fatalf(fmt.Sprintf("%s%s", format, constants.LogColorReset), v...)
+	defaultLogger.stderr.Fatalf(format, v...)
 }
 
 func Fatalln(v ...any) {

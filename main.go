@@ -22,29 +22,33 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
+	for _, env := range os.Environ() {
+		fmt.Println("ENV:", env)
+	}
+
 	cfg := configs.New()
 
 	router := gin.Default()
 
 	if err := store.InitializeSession(router, cfg); err != nil {
-		log.Fatalf("session initialization error", err)
+		log.Fatalf("session initialization error: %v", err)
 	}
 
 	dbClient, err := db.CreateDatabaseClient(cfg.Db.Url, cfg.Db.MaxConnections)
 	if err != nil {
-		log.Fatalf("database connection error", err)
+		log.Fatalf("database connection error: %v", err)
 	}
 
 	if err = db.CreateEnums(dbClient); err != nil {
-		log.Fatalf("create enums error", err)
+		log.Fatalf("create enums error: %v", err)
 	}
 
 	if err = db.Migrate(dbClient, &models.User{}, &models.Quiz{}, &models.Question{}, &models.StudentSubmission{}, &models.StudentAnswer{}); err != nil {
-		log.Fatalf("database migration error", err)
+		log.Fatalf("database migration error: %v", err)
 	}
 
 	if err = db.CreateConstrains(dbClient); err != nil {
-		log.Fatalf("create constrains error", err)
+		log.Fatalf("create constrains error: %v", err)
 	}
 
 	// Initialize routes
