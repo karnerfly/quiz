@@ -27,24 +27,24 @@ func main() {
 	router := gin.Default()
 
 	if err := store.InitializeSession(router, cfg); err != nil {
-		log.Fatalf("session initialization error: %w", err)
+		log.Fatalf("session initialization error", err)
 	}
 
 	dbClient, err := db.CreateDatabaseClient(cfg.Db.Url, cfg.Db.MaxConnections)
 	if err != nil {
-		log.Fatalf("database connection error: %w", err)
+		log.Fatalf("database connection error", err)
 	}
 
 	if err = db.CreateEnums(dbClient); err != nil {
-		log.Fatalf("create enums error: %w", err)
+		log.Fatalf("create enums error", err)
 	}
 
 	if err = db.Migrate(dbClient, &models.User{}, &models.Quiz{}, &models.Question{}, &models.StudentSubmission{}, &models.StudentAnswer{}); err != nil {
-		log.Fatalf("database migration error: %w", err)
+		log.Fatalf("database migration error", err)
 	}
 
 	if err = db.CreateConstrains(dbClient); err != nil {
-		log.Fatalf("create constrains error: %w", err)
+		log.Fatalf("create constrains error", err)
 	}
 
 	// Initialize routes
