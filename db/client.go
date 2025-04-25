@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 
+	"github.com/karnerfly/quiz/pkg/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -20,6 +21,8 @@ func CreateDatabaseClient(dsn string, maxConn int) (*gorm.DB, error) {
 		return nil, err
 	}
 	sqlDb.SetMaxIdleConns(maxConn)
+
+	log.Println("Database connected")
 
 	return gormDb, nil
 }
@@ -44,7 +47,7 @@ func CreateConstrains(db *gorm.DB) error {
 	result := db.Exec(`
 		DO $$ BEGIN
 			CREATE UNIQUE INDEX IF NOT EXISTS idx_submission_question ON student_answers(submission_id, question_id);
-			CREATE UNIQUE INDEX IF NOT EXISTS idx_quiz_submission ON student_submissions(quiz_id, submission_code);
+			CREATE UNIQUE INDEX IF NOT EXISTS idx_quiz_submission ON student_submissions(quiz_code, submission_code);
 		END$$;
 	`)
 

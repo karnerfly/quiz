@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/handlers"
@@ -15,6 +16,7 @@ import (
 func InitializeV1(engine *gin.Engine, db *gorm.DB, cfg configs.Config) {
 
 	engine.Use(middlewares.CORSMiddleware(cfg))
+	engine.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	engine.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path

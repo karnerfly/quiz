@@ -1,6 +1,13 @@
 package dto
 
-import "time"
+import (
+	"encoding/gob"
+	"time"
+)
+
+func init() {
+	gob.Register(StartQuizPayload{})
+}
 
 type CreateTeacherPayload struct {
 	Name     string `json:"name" validate:"required,min=4,max=30"`
@@ -34,11 +41,21 @@ type QuestionPayload struct {
 	CorrectAnswer *int     `json:"correct_answer" validate:"required,gte=0"`
 }
 
+type StartQuizPayload struct {
+	Name      string `json:"name" validate:"required,min=3,max=30"`
+	Phone     string `json:"phone" validate:"required,min=10,max=10"`
+	District  string `json:"district"`
+	QuizCode  string `json:"quiz_code" validate:"required,min=12"`
+	Attempted bool   `json:"attempted"`
+	TimeStamp int64  `json:"time_stamp" validate:"required"`
+}
+
 type QuizSubmitPayload struct {
-	Name    string              `json:"name" validate:"required,min=4,max=30"`
-	Phone   string              `json:"phone" validate:"required"`
-	QuizId  uint                `json:"quiz_id" validate:"required,gt=0"`
-	Answers []QuizAnswerPayload `json:"answers" validate:"required,min=1,max=100,dive"`
+	Name     string              `json:"name" validate:"required,min=4,max=30"`
+	Phone    string              `json:"phone" validate:"required"`
+	District string              `json:"district" validate:"required"`
+	QuizCode string              `json:"quiz_id" validate:"required,min=12"`
+	Answers  []QuizAnswerPayload `json:"answers" validate:"required,min=1,max=100,dive"`
 }
 
 type QuizAnswerPayload struct {

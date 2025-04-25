@@ -27,7 +27,8 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    const regex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     return regex.test(password);
   };
 
@@ -54,7 +55,7 @@ const Signup = () => {
       validatePassword(formData.password) &&
       formData.password === formData.confirmPassword &&
       Object.values(errors).every((error) => error === "");
-    
+
     setIsFormValid(isValid);
   }, [formData, errors]);
 
@@ -166,7 +167,7 @@ const Signup = () => {
       phone: formData.mobile,
     })
       .then((resp) => {
-        const authToken = resp.data?.data?.auth_token;
+        const authToken = resp.data;
         setToken(authToken);
         navigate("/dashboard", { replace: true });
       })

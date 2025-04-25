@@ -11,6 +11,7 @@ import (
 	"github.com/karnerfly/quiz/models/dto"
 	"github.com/karnerfly/quiz/pkg"
 	"github.com/karnerfly/quiz/services"
+	"github.com/karnerfly/quiz/store"
 )
 
 type AuthHandler struct {
@@ -49,7 +50,7 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 	}
 
 	// create user session
-	session := sessions.Default(ctx)
+	session := sessions.DefaultMany(ctx, store.UserSession)
 
 	authToken, err := pkg.GenerateBase64Token(32)
 	if err != nil {
@@ -61,8 +62,8 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 	session.Set("auth_token", authToken)
 	session.Options(sessions.Options{
 		Path:     "/",
-		Domain:   ah.config.Cookie.Domain,
-		MaxAge:   ah.config.Cookie.MaxAge,
+		Domain:   ah.config.UserSessionCookie.Domain,
+		MaxAge:   ah.config.UserSessionCookie.MaxAge,
 		Secure:   ah.config.Environment == "production",
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
@@ -84,7 +85,7 @@ func (ah *AuthHandler) HandleLoginUser(ctx *gin.Context) {
 }
 
 func (ah *AuthHandler) HandleLogoutUser(ctx *gin.Context) {
-	session := sessions.Default(ctx)
+	session := sessions.DefaultMany(ctx, store.UserSession)
 
 	session.Delete("auth_token")
 	session.Delete("user_id")
@@ -101,7 +102,7 @@ func (ah *AuthHandler) HandleLogoutUser(ctx *gin.Context) {
 }
 
 func (ah *AuthHandler) HandleGetAuthToken(ctx *gin.Context) {
-	session := sessions.Default(ctx)
+	session := sessions.DefaultMany(ctx, store.UserSession)
 
 	authToken := session.Get("auth_token")
 

@@ -34,7 +34,7 @@ import Settings from "./pages/users/Settings";
 import Quizzes from "./pages/users/Quizzes";
 import QuizCreateLayout from "./pages/users/quiz/QuizCreateLayout";
 import Result from "./pages/users/Result";
-import Analysis from "./pages/Analysis";
+import Analysis from "./pages/attendquiz/Analysis";
 
 import Error500Page from "./pages/errors/Error500Page";
 import Error404Page from "./pages/errors/Error404Page";
@@ -44,13 +44,18 @@ import SharePopup from "./components/dashboard/SharePopup";
 
 //Users Quiz Pages
 import QuizReal from "./pages/QuizReal";
-import StudentQuizPage from "./pages/attendquiz/StudentQuizPage";
+import QuizAttendLayout from "./pages/attendquiz/QuizAttendLayout";
+import AuthProvider from "./context/Auth";
 
 export const router = createBrowserRouter([
-  // public routes
+  // public routes needs auth provider
   {
     path: "/",
-    element: <Base />,
+    element: (
+      <AuthProvider>
+        <Base />
+      </AuthProvider>
+    ),
     children: [
       // public routes
       {
@@ -95,12 +100,17 @@ export const router = createBrowserRouter([
         element: <QuizReal />,
       },
       {
-        path: "analysis",
-        element: <Analysis />,
-      },
-      {
-        path: "studentquizpage",
-        element: <StudentQuizPage />,
+        path: "quiz",
+        children: [
+          {
+            path: "",
+            element: <QuizAttendLayout />,
+          },
+          {
+            path: "analysis",
+            element: <Analysis />,
+          },
+        ],
       },
 
       // features sub route
@@ -151,11 +161,13 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: (
-      <Protected>
-        <UserProvider>
-          <Dashboard />
-        </UserProvider>
-      </Protected>
+      <AuthProvider>
+        <Protected>
+          <UserProvider>
+            <Dashboard />
+          </UserProvider>
+        </Protected>
+      </AuthProvider>
     ),
     children: [
       {
@@ -197,19 +209,6 @@ export const router = createBrowserRouter([
     element: <Error500Page />,
   },
   // this route should always at end of all routes
-  {
-    path: "/t",
-    element: (
-      <SharePopup
-        title="hello"
-        duration={10}
-        link="hi"
-        totalQuestions={4}
-        copyShareLink={null}
-        key={"fuck you"}
-      />
-    ),
-  },
   {
     path: "*",
     element: <Error404Page />,

@@ -87,7 +87,7 @@ const QuizzesPage = () => {
         duration={popUpData.duration / 1e9 / 60}
         title={popUpData.title}
         totalQuestions={popUpData.totalQuestions}
-        link={`${window.location.origin}/quizreal?code=${popUpData.code}`}
+        link={`${window.location.origin}/quiz?code=${popUpData.code}`}
         onClose={() => setShowPopUp(false)}
       />
     );

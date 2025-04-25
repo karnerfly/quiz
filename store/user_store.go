@@ -63,7 +63,9 @@ func (store *Store) CreateNewSubmission(ctx context.Context, submission models.S
 	var count int64
 
 	if err := store.client.WithContext(ctx).
-		Model(&models.Quiz{}).First(&models.Quiz{}, submission.QuizId).
+		Model(&models.Quiz{}).
+		Where("share_code = ?", submission.QuizCode).
+		First(&models.Quiz{}).
 		Count(&count).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return 0, constants.ErrRecordDoesNotExists
@@ -114,34 +116,34 @@ func (store *Store) GetAllQuizzesByTeacherId(ctx context.Context, teacherId uint
 		return []models.Quiz{}, nil
 	}
 
-	quizIDs := make([]uint, len(quizzes))
+	quizCodes := make([]string, len(quizzes))
 	for i, q := range quizzes {
-		quizIDs[i] = q.ID
+		quizCodes[i] = q.ShareCode
 	}
 
 	var counts []struct {
-		QuizID uint
-		Count  int
+		QuizCode string
+		Count    int
 	}
 
 	if err = store.client.WithContext(ctx).
 		Model(&models.StudentSubmission{}).
-		Select("quiz_id, COUNT(*) as count").
-		Where("quiz_id IN ?", quizIDs).
-		Group("quiz_id").
+		Select("quiz_code, COUNT(*) as count").
+		Where("quiz_code IN ?", quizCodes).
+		Group("quiz_code").
 		Find(&counts).Error; err != nil {
 		return nil, err
 	}
 
 	// Create a map of quiz ID to submission count
-	countMap := make(map[uint]int)
+	countMap := make(map[string]int)
 	for _, c := range counts {
-		countMap[c.QuizID] = c.Count
+		countMap[c.QuizCode] = c.Count
 	}
 
 	// Assign counts to each quiz
 	for i := range quizzes {
-		quizzes[i].TotalSubmissions = countMap[quizzes[i].ID]
+		quizzes[i].TotalSubmissions = countMap[quizzes[i].ShareCode]
 	}
 
 	return quizzes, nil
@@ -150,7 +152,7 @@ func (store *Store) GetAllQuizzesByTeacherId(ctx context.Context, teacherId uint
 func (store *Store) GetAllSubmissionsByTeacherId(ctx context.Context, teacherId uint) ([]models.StudentSubmission, error) {
 	submissions := []models.StudentSubmission{}
 
-	if err := store.client.Joins("JOIN quizzes ON quizzes.id = student_submissions.quiz_id").
+	if err := store.client.Joins("JOIN quizzes ON quizzes.share_code = student_submissions.quiz_code").
 		Preload("Answers").
 		Where("quizzes.teacher_id = ?", teacherId).
 		Find(&submissions).Error; err != nil {

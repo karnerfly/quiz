@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     fetchToken();
-  }, [fetchToken]);
+  }, [setToken]);
 
   useEffect(() => {
     if (token === undefined) return;

@@ -9,14 +9,21 @@ export async function checkHealth() {
     await apiClient.get("/_health");
     return true;
   } catch (error) {
-    return false;
+    if (
+      (error.code && error.code === "ERR_NETWORK") ||
+      error.code === "ECONNREFUSED" ||
+      error.code === "ETIMEDOUT"
+    ) {
+      return false;
+    }
+    return true;
   }
 }
 
 /**
  *
  * @param {{name:string, email:string, password:string, phone:string}} param0
- * @returns {Promise<{status:number, text:string, data:any}>}
+ * @returns {Promise<{status:number, text:string, data:string}>}
  * @throws {{error:boolean, status:number, message:string}}
  */
 export async function createTeacher({ name, email, password, phone }) {
@@ -30,7 +37,7 @@ export async function createTeacher({ name, email, password, phone }) {
     return {
       status: resp.status,
       text: resp.statusText,
-      data: resp.data?.response,
+      data: resp.data?.response?.data?.auth_token,
     };
   } catch (error) {
     throw {
@@ -44,7 +51,7 @@ export async function createTeacher({ name, email, password, phone }) {
 /**
  *
  * @param {{email:string, password:string}} param0
- * @returns {Promise<{status:number, text:string, data:any}>}
+ * @returns {Promise<{status:number, text:string, data:string}>}
  * @throws {{error:boolean, status:number, message:string}}
  */
 export async function login({ email, password }) {
@@ -53,7 +60,7 @@ export async function login({ email, password }) {
     return {
       status: resp.status,
       text: resp.statusText,
-      data: resp.data?.response,
+      data: resp.data?.response?.data?.auth_token,
     };
   } catch (error) {
     throw {
@@ -130,6 +137,29 @@ export async function getTeacherQuizzes() {
 }
 
 /**
+ *@param {{quiz_id:number}} param0
+ * @returns {Promise<{status:number, text:string, data:{id:number, quiz_code:string, name:string, phone:string, district:string, submission_code:string, answers:{id:number, submission_id:number, question_id:number, selected_index:number, is_correct:boolean, created_at:Date, updated_at:Date}[], score:number, created_at:Date, updated_at:Date}[]}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function getQuizSubmissions({ quiz_id }) {
+  try {
+    const resp = await apiClient.get(`/teacher/quizzes/${quiz_id}/submissions`);
+    const data = resp.data?.response?.data;
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: data,
+    };
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
  *
  * @param {{email:string, password:string}} param0
  * @returns {Promise<{status:number, text:string}>}
@@ -178,7 +208,143 @@ export async function createQuiz({
       data: resp.data?.response?.data?.share_code,
     };
   } catch (error) {
-    console.log("API ERROR: ", error);
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
+ * @param {{share_code:string, analysis_mode:boolean}} param0
+ * @returns {Promise<{status:number, text:string, data:{id:number, title:string, subject:string, share_code:string, no_of_questions:number, questions:{id:number, options:string[], correct_answer:number, problem:string, created_at:Date, updated_at:Date}[], status:string, duration:number, is_negative_marking:boolean, total_submissions:number, created_at:Date, updated_at:Date}}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function getQuizByCode({ share_code, analysis_mode = false }) {
+  try {
+    const resp = await apiClient.get("/quiz", {
+      params: {
+        code: share_code,
+        analysis: analysis_mode,
+      },
+    });
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: resp.data?.response?.data,
+    };
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
+ * @param {{name:string, phone:string, district:string, quiz_code:string, time_stamp:number}} param0
+ * @returns {Promise<{status:number, text:string, data:{name:string, phone:string, district:string, quiz_code:stirng, time_stamp:number}}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function startQuiz({
+  name,
+  phone,
+  district,
+  quiz_code,
+  time_stamp,
+}) {
+  try {
+    const resp = await apiClient.post("/student/quiz/start", {
+      name,
+      phone,
+      district,
+      quiz_code,
+      time_stamp,
+    });
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: resp.data?.response?.data,
+    };
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
+ * @param {{quiz_code:string, answers: {question_id:number, selected_index:number}[]}} param0
+ * @returns {Promise<{status:number, text:string, data:string}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function submitAnswer({ quiz_code, answers }) {
+  try {
+    const resp = await apiClient.post("/student/quiz/submit", {
+      quiz_code: quiz_code,
+      answers: answers,
+    });
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: resp.data?.response?.data?.submission_code,
+    };
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *
+ * @returns {Promise<{status:number, text:string, data:{id:number, quiz_code:string, name:string, phone:string, district:string, submission_code:string, answers:{id:number, submission_id:number, question_id:number, selected_index:number, is_correct:boolean, created_at:Date, updated_at:Date}[], score:number, created_at:Date, updated_at:Date}}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function getStudentResult() {
+  try {
+    const resp = await apiClient.get("/student/result");
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: resp.data?.response?.data,
+    };
+  } catch (error) {
+    throw {
+      error: true,
+      status: error.response?.status,
+      message: "something went wrong",
+    };
+  }
+}
+
+/**
+ *@param {{quiz_code:string}} param0
+ * @returns {Promise<{status:number, text:string, data:{name:string, phone:string, district:string, quiz_code:string, attempted:boolean time_stamp:number}}>}
+ * @throws {{error:boolean, status:number, message:string}}
+ */
+export async function getStudentDetails({ quiz_code }) {
+  try {
+    const resp = await apiClient.get("/student", {
+      params: {
+        code: quiz_code,
+      },
+    });
+    return {
+      status: resp.status,
+      text: resp.statusText,
+      data: resp.data?.response?.data,
+    };
+  } catch (error) {
     throw {
       error: true,
       status: error.response?.status,

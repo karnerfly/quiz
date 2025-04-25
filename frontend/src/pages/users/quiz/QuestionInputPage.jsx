@@ -194,7 +194,7 @@ const QuestionInputPage = () => {
         title={basicDetails.title}
         duration={basicDetails.duration}
         totalQuestions={basicDetails.questionCount}
-        link={`${window.location.origin}/quizreal?code=${shareCode}`}
+        link={`${window.location.origin}/quiz?code=${shareCode}`}
         onClose={() => setShowPopup(false)}
       />
     );

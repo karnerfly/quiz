@@ -93,14 +93,14 @@ export default function Footer() {
               <Link to="/" className="flex items-center">
                 <img src="/quiz.png" alt="Company Logo" className="h-8 mr-3" />
                 <span className="text-2xl font-bold text-blue-600">
-                Quiznity
+                Testnity
                 </span>
               </Link>
               </div>
             </div>
 
             <p className="text-gray-600 max-w-md">
-              Quiznity allows everyone to ask questions, to get clarification
+            Testnity allows everyone to ask questions, to get clarification
               or a clearer understanding on subjects resulting in a more
               fulfilling learning experience.
             </p>
@@ -357,7 +357,7 @@ export default function Footer() {
         <div className="mt-16 flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200">
           <div className="mb-4 md:mb-0">
             <p className="text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} Quiznity. All rights
+              &copy; {new Date().getFullYear()} Testnity. All rights
               reserved.
             </p>
             <p className="text-sm text-gray-500">

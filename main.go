@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/db"
 	"github.com/karnerfly/quiz/models"
@@ -19,34 +18,33 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	cfg := configs.New()
 
 	router := gin.Default()
 
 	if err := store.InitializeSession(router, cfg); err != nil {
-		log.Fatal(err)
+		log.Fatalf("session initialization error: %v", err)
 	}
 
 	dbClient, err := db.CreateDatabaseClient(cfg.Db.Url, cfg.Db.MaxConnections)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("database connection error: %v", err)
 	}
-	log.Println("database connected")
 
 	if err = db.CreateEnums(dbClient); err != nil {
-		log.Fatal(err)
+		log.Fatalf("create enums error: %v", err)
 	}
 
 	if err = db.Migrate(dbClient, &models.User{}, &models.Quiz{}, &models.Question{}, &models.StudentSubmission{}, &models.StudentAnswer{}); err != nil {
-		log.Fatal(err)
+		log.Fatalf("database migration error: %v", err)
 	}
 
 	if err = db.CreateConstrains(dbClient); err != nil {
-		log.Fatal(err)
+		log.Fatalf("create constrains error: %v", err)
 	}
 
 	// Initialize routes
