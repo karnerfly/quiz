@@ -22,10 +22,6 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	for _, env := range os.Environ() {
-		fmt.Println("ENV:", env)
-	}
-
 	cfg := configs.New()
 
 	router := gin.Default()
