@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"github.com/karnerfly/quiz/configs"
 	"github.com/karnerfly/quiz/db"
 	"github.com/karnerfly/quiz/models"
@@ -19,9 +18,9 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	cfg := configs.New()
 
